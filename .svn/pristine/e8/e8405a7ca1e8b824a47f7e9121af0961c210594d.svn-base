@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.customer.InvitationTempMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_invitation_temp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            originType,
+            <if test="customerId != null  and customerId != ''">customerId,</if>
+            <if test="shopId != null  and shopId != ''">shopId,</if>
+            invitedCustomerOpenID,
+            <if test="modelId != null  and modelId != ''">modelId,</if>
+            unsubscribe,
+            <if test="createAt != null">createAt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{originType,jdbcType=INTEGER},
+            <if test="customerId != null  and customerId != ''">#{customerId,jdbcType=INTEGER},</if>
+            <if test="shopId != null  and shopId != ''">#{shopId,jdbcType=INTEGER},</if>
+            #{invitedCustomerOpenID,jdbcType=VARCHAR},
+            <if test="modelId != null  and modelId != ''">#{modelId,jdbcType=VARCHAR},</if>
+            #{unsubscribe,jdbcType=INTEGER},
+            <if test="createAt != null">#{createAt,jdbcType=DATETIME},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_invitation_temp a
+        <set>
+            <if test="customerId != null  and customerId != ''">a.customerId=#{customerId},</if>
+            <if test="originType != null  and originType != ''">a.originType=#{originType},</if>
+            <if test="modelId != null  and modelId != ''">a.modelId=#{modelId},</if>
+            <if test="unsubscribe != null  and status != ''">a.unsubscribe = #{unsubscribe},</if>
+            <if test="shopId != null  and shopId != ''">a.shopId=#{shopId},</if>
+        </set>
+        WHERE 1=1
+        <if test="id != null and id != ''">and a.id = #{id,jdbcType=INTEGER}</if>
+        <if test="invitedCustomerOpenID != null and invitedCustomerOpenID != ''">and a.invitedCustomerOpenID =
+            #{invitedCustomerOpenID}
+        </if>
+    </update>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT * FROM cbh_invitation_temp
+        WHERE 1=1
+        <if test="id != null and id != ''">and id = ${id}</if>
+        <if test="invitedCustomerOpenID != null and invitedCustomerOpenID != ''">and invitedCustomerOpenID =
+            #{invitedCustomerOpenID}
+        </if>
+        <if test="unsubscribe != null and unsubscribe != ''">and unsubscribe = #{unsubscribe}</if>
+    </select>
+</mapper>

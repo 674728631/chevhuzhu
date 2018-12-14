@@ -1,0 +1,234 @@
+<html>
+<head>
+  <title>事件详情</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=8">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/preview.css">
+  <link rel="stylesheet" href="/hfive/css/publicity_detail.css?v=12">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">事件详情</div>
+    <a class="navbar-right fbox-cc hover" href="/hfive/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div class="container nav-top full fsize-14">
+    <script type="text/template" id="main-tpl">
+    <div class="tabbox"><div class="tabbox-layer">
+      <div class="tabbox-tab">
+        <div class="item top">
+          <div class="top-item fbox-ac">
+            <div class="avatar"><img src="${portrait}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div>
+            <div class="minfo fbox-f1">
+              <p class="fsize-16">${nameCarOwner}　<span class="txt-blue fsize-14">${licensePlateNumber}</span></p>
+              <p class="days t3 fbox-ac"><span class="ic-on i2"></span>加入互助：${joinDay}天</p>
+              <div class="fbox-ac spec t3"><span class="ic-on i3"></span><p class="p1">维修价格：${amtAssert}元</p><p class="p2">全员分摊：${amtShare}元</p></div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="mtitle fsize-20">车辆事故前照片</div>
+        <div class="time-box fbox-ac fsize-12"><span class="ic-on i1"></span>{@if carTimeExamine}${carTimeExamine.time|build_time, 'yyyy年MM月dd日'}{@/if}</div>
+        <div class="time-item">
+          <div class="time-line"></div>
+          <div class="item">
+            {@if carReasonSuccess}
+            <p class="title3 txt-blue">平台审核说明：${carReasonSuccess}</p>
+            {@/if}
+            {@if carPhotos.length > 0}
+            <div class="photo-box fbox wrap no-bdr">
+              {@each carPhotos as cpImg}
+              <div class="photo-item">
+                <a class="photo-img hover" href="javascript:;"><img src="${cpImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+              </div>
+              {@/each}
+            </div>
+            {@/if}
+          </div>
+        </div>-->
+        <div class="mtitle fsize-20">车辆事故照片</div>
+        <div class="time-box fbox-ac fsize-12"><span class="ic-on i1"></span>{@if timeApply}${timeApply.time|build_time, 'yyyy年MM月dd日'}{@/if}</div>
+        <div class="time-item">
+          <div class="time-line"></div>
+          <div class="item">
+            {@if reasonSuccess}
+            <p class="title3 txt-blue">平台审核说明：${reasonSuccess}</p>
+            <p class="title3" style="padding-top:.1rem;">车主事故描述：${accidentDescription}</p>
+            {@else}
+            <p class="title3">车主事故描述：${accidentDescription}</p>
+            {@/if}
+            {@if accidentImg.length > 0}
+            <div class="photo-box fbox wrap no-bdr">
+              {@each accidentImg as cpImg}
+              <div class="photo-item">
+                <a class="photo-img hover" href="javascript:;"><img src="${cpImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+              </div>
+              {@/each}
+            </div>
+            {@/if}
+          </div>
+        </div>
+        {@if statusEvent == 31 || statusEvent == 41 || statusEvent == 51 || statusEvent == 52 || statusEvent == 61 || statusEvent == 71 || statusEvent == 81 || statusEvent == 100}
+        <div class="mtitle fsize-20">车辆定损</div>
+        <div class="time-box fbox-ac fsize-12"><span class="ic-on i1"></span>{@if assertEndTime}${assertEndTime.time|build_time, 'yyyy年MM月dd日'}{@/if}</div>
+        <div class="time-item">
+          <div class="time-line"></div>
+          <div class="item">
+            <div class="content">
+              <div class="info fbox-ac avatar-box">
+                <div class="avatar"><img src="{@if maintenanceshopName1}${img2}{@else}/hfive/img/manager_6.jpg{@/if}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div>
+                <p>理赔管家 ${maintenanceshopEmployeename1}</p>
+              </div>
+              <div class="info txt single fbox t3">
+                <span class="point p1"></span><p class="t1">定损方　</p><p class="fbox-f1">{@if maintenanceshopName1}${maintenanceshopName1}{@else}佳佳{@/if}</p>
+              </div>
+              <div class="info txt single fbox t3">
+                <span class="point p2"></span><p class="t1">订单号　</p><p class="fbox-f1">${eventNo}</p>
+              </div>
+              <div class="info txt single fbox t3">
+                <span class="point p3"></span><p class="t1">定损价格</p><p class="fbox-f1">${amtAssert}元</p>
+              </div>
+              <div class="info txt single fbox t3">
+                <span class="point p4"></span><p class="t1">受损程度</p><p class="fbox-f1">${damageExtent}</p>
+              </div>
+              <div class="info txt single fbox t3">
+                <span class="point p1"></span><p class="t1">受损部位</p><p class="fbox-f1">${damagePosition}</p>
+              </div>
+              <div class="info txt single fbox t3">
+                <span class="point p2"></span><p class="t1">受损描述</p><p class="fbox-f1">${description}</p>
+              </div>
+            </div>
+            {@if assertImg.length > 0}
+            <div class="photo-box fbox wrap">
+              {@each assertImg as asImg}
+              <div class="photo-item">
+                <a class="photo-img hover" href="javascript:;"><img src="${asImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+              </div>
+              {@/each}
+            </div>
+            {@/if}
+          </div>
+        </div>
+        {@/if}
+        {@if statusEvent == 61 || statusEvent == 71 || statusEvent == 81 || statusEvent == 100}
+        <div class="mtitle fsize-20">维修报告</div>
+        <div class="time-box fbox-ac fsize-12"><span class="ic-on i1"></span>{@if repairEndTime}${repairEndTime.time|build_time, 'yyyy年MM月dd日'}{@/if}</div>
+        <div class="time-item">
+          <div class="time-line"></div>
+          <div class="item">
+            {@if repDescription}<p class="title3 t2">${repDescription}</p>{@/if}
+            {@if repairImg.length > 0}
+            <div class="photo-box fbox wrap">
+              {@each repairImg as rpImg}
+              <div class="photo-item">
+                <a class="photo-img hover" href="javascript:;"><img src="${rpImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+              </div>
+              {@/each}
+            </div>
+            {@/if}
+          </div>
+          {@if statusEvent == 71}
+          <div class="time-receivecar">
+            <div class="receivecar">
+              <p>{@if timeReceiveCar}${timeReceiveCar.time|build_time, 'yyyy-MM-dd hh:mm:ss'}<br>{@/if}维修中心交车</p>
+            </div>
+          </div>
+          {@/if}
+        </div>
+        {@/if}
+        {@if statusEvent == 100}
+        <div class="mtitle fsize-20">车主评价</div>
+        <div class="time-box fbox-ac fsize-12"><span class="ic-on i1"></span>{@if commentTime}${commentTime.time|build_time, 'yyyy年MM月dd日'}{@/if}</div>
+        <div class="time-item">
+          <div class="time-line"></div>
+          <div class="item">
+            <div class="content2">
+              <div class="spec fbox-ac">
+                <div class="avatar"><img src="${img1}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div>
+                <p class="fsize-16 t2 p3">${maintenanceshopName2}</p>
+                <!--<div class="fbox">
+                  <div class="avatar"><img src="${img3}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div>
+                  <div>
+                    <p class="p1 fbox-ac"><span class="ic-on i4"></span>维修技师：${maintenanceshopEmployeename2}</p>
+                    <p class="p2 fbox-ac"><span class="ic-on i5"></span>从业年限：${workYear2}年</p>
+                  </div>
+                </div>-->
+              </div>
+              <div id="star-box" class="fbox-ac t2">
+                <p>服务评分：</p>
+                <span class="i-star"></span>
+                <span class="i-star{@if commentScore < 2} empty{@/if}"></span>
+                <span class="i-star{@if commentScore < 3} empty{@/if}"></span>
+                <span class="i-star{@if commentScore < 4} empty{@/if}"></span>
+                <span class="i-star{@if commentScore < 5} empty{@/if}"></span>
+                <p>　${commentScore}星</p>
+              </div>
+              <div class="fbox t2"><p>车主评价：</p><p class="fbox-f1">{@if commentContent}${commentContent}{@else}无{@/if}</p></div>
+              {@if commentLabelContent}
+              <div id="tag-box" class="fbox wrap">
+                {@each commentLabelContent as it}
+                <a class="active" href="javascript:;">${it}</a>
+                {@/each}
+              </div>
+              {@/if}
+            </div>
+          </div>
+        </div>
+        {@/if}
+      </div>
+    </div></div>
+    {@if btn_join.num > 0}
+    <a id="btn-join" class="btn strong inhover close btn-join btn-join2" href="/hfive/view/share.html"><p>升级成1500元额度</p></a>
+    {@else}
+    <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car_add.html?from=index"><p>加入互助</p></a>
+    {@/if}
+    </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=40"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js?v=1"></script>
+  <script src="/hfive/lib/preview.js"></script>
+  <script src="/hfive/js/publicity_detail.js?v=7"></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+.ttile {
+  margin: 70px 0 0;
+  font-size: 18px;
+  color: #333232;
+}
+/* 顶部时间选择栏 */
+.datebox-pick {
+  margin-top: 30px;
+  padding: 10px;
+  background-color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.datebox-title {
+  float: left;
+  line-height: 34px;
+  zoom: 1;
+}
+.datebox-btn {
+  position: relative;
+  float: left;
+  zoom: 1;
+}
+.datebox-btn .btn-title {
+  display: inline-block;
+  width: 90px;
+  text-align: center;
+}
+/* 基础统计栏 */
+.base-count {
+  padding: 40px 0;
+  margin-top: 2px;
+  background-color: #fff;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.base-list li {
+  position: relative;
+  width: 14.28%;
+  float: left;
+  text-align: center;
+}
+.base-list li:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid #eef3f9;
+}
+.base-list li:first-child:before {
+  display: none;
+}
+.base-num {
+  font-size: 20px;
+}
+.base-desc:before {
+  position: relative;
+  content: "●";
+  color: #f8af44;
+  top: -1px;
+}
+.base-list li:nth-of-type(6n+2) .base-desc:before {
+  color: #0097e6;
+}
+.base-list li:nth-of-type(6n+3) .base-desc:before {
+  color: #00aca7;
+}
+.base-list li:nth-of-type(6n+4) .base-desc:before {
+  color: #a4d18f;
+}
+.base-list li:nth-of-type(6n+5) .base-desc:before {
+  color: #f95467;
+}
+.base-list li:nth-of-type(6n+6) .base-desc:before {
+  color: #0097e6;
+}
+.base-data {
+  margin-bottom: 20px;
+}
+.base-data li {
+  position: relative;
+  float: left;
+  width: 11.4%;
+  margin-top: 20px;
+  margin-left: 1.1%;
+  padding: 8px 4px 10px 15px;
+  background-color: #fff;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+.base-data li:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background-color: #fdab22;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.base-data .p2 {
+  margin-top: 4px;
+  font-size: 18px;
+  color: #434141;
+  line-height: 18px;
+  height: 20px;
+  vertical-align: bottom;
+}
+.base-data .p1 {
+  font-size: 12px;
+  color: #434141;
+}
+@media screen and (max-width:870px){
+  .base-data li {
+    width: 104px;
+    margin-left: 10px;
+  }
+}
+/* 表格统计 */
+.user-count {
+  position: relative;
+  margin-top: 10px;
+  background-color: #bddbff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 10px;
+}
+.user-arr {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+}
+.user-arr .a1 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+.user-arr .a2 {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+.user-type {
+  display: inline-block;
+  padding: 12px 10px;
+  color: #333;
+  background-color: #bddbff;
+}
+.user-type:first-child {
+  border-top-left-radius: 10px;
+}
+a.user-type.active {
+  background-color: #fff;
+  color: #333;
+}
+a.user-type:hover,
+a.user-type:active {
+  color: #000;
+}
+a.user-type.active:hover,
+a.user-type.active:active {
+  color: #999;
+}
+.user-table table {
+  width: 100%;
+  text-align: center;
+}
+.user-table table tr {
+  border-top: 1px solid #eef3f9;
+  background-color: #fff;
+}
+.user-table table tr:hover,
+.user-table table tr:active {
+  background-color: #e4f0ff;
+}
+.user-table table th {
+  height: 44px;
+  font-size: 14px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #fff;
+}
+.user-table table tr:last-child td:first-child,
+.user-table table th:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.user-table table tr:last-child td:last-child,
+.user-table table th:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+.user-table table td {
+  height: 44px;
+  vertical-align: middle;
+}
+.user-table-title {
+  border-top: none !important;
+  border-bottom: 3px solid #eef3f9;
+  background: none !important;
+}
+/* 表格 */
+.chart-box {
+  position: relative;
+  margin-top: 15px;
+  padding: 50px 20px 20px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+.chart-box.b2 {
+  padding: 0;
+}
+.chart-title {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 18px;
+  color: #434141;
+}
+.chart-title-sub {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 16px;
+  color: #434141;
+}
+.chart-title-sub.s2 {
+  margin: -9px 0 0 -40px;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  text-align: center;
+  line-height: 18px;
+}
+.chart-legend {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-size: 12px;
+  color: #6e6e6e;
+}
+.chart-legend p {
+  float: left;
+  margin-left: 10px;
+}
+.chart-legend-icon {
+  position: relative;
+  display: inline-block;
+  top: 1px;
+  width: 10px;
+  height: 10px;
+  margin-right: 3px;
+  border-radius: 3px;
+  background-color: #000;
+}
+.chart-legend-icon.i1 {
+  background-color: #fdab22;
+}
+.chart-legend-icon.i2 {
+  background-color: #eef3f9;
+}
+.chart-legend-icon.i3 {
+  background-color: #5799f6;
+}
+.chart-legend-sub {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 14px;
+  color: #6e6e6e;
+}
+.chart-body {
+  position: relative;
+  border: 2px solid #f3f2f7;
+  border-radius: 10px;
+}
+.chart-body.chart2,
+.chart-body.chart3,
+.chart-body.chart4 {
+  float: left;
+  width: 30%;
+  margin-left: 2.4%;
+  border: none;
+}
+.chart-body.chart5 {
+  float: left;
+  width: 42%;
+}
+.chart-body.chart6 {
+  float: left;
+  margin-left: 5.9%;
+  width: 52%;
+}
+.chart-content>div {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+}
+.chart-content:before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+.chart-body.chart1 .chart-content:before {
+  padding-top: 30%;
+}
+.chart-body.chart6 .chart-content:before {
+  padding-top: 80.76%;
+}

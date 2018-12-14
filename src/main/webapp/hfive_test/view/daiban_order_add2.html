@@ -1,0 +1,70 @@
+<html>
+<head>
+  <title>代办理赔</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/css/base.css?v=6">
+<script type="application/javascript" src="/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/css/preview.css">
+  <link rel="stylesheet" href="/css/order_add2.css?v=2">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">代办理赔</div>
+    <a class="navbar-right fbox-cc hover" href="/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div class="container nav full fsize-14">
+    <script type="text/template" id="main-tpl">
+    <div class="step-box fbox-cc">
+      <div class="point active"><p class="fbox-cc"><span>审核</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>定损</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>交车</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>维修</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>接车</span></p></div>
+    </div>
+    <div class="main">
+      <div class="info-box shadow">
+        <p class="title fsize-16">事故描述<a class="btn-tt hover fsize-14" href="/view/manager.html">理赔管家></a></p>
+        <div id="desc-box"><textarea id="desc" class="fsize-12" maxlength="200" placeholder="亲，请认真描述您车辆事故的情况，方便工作人员了解事故原因，及时为您处理互助理赔申请！">{@if accidentDescription}${accidentDescription}{@/if}</textarea><p id="desc-status" class="tr">0/200</p></div>
+      </div>
+      <div class="info-box shadow">
+        <p class="title fsize-16">事故照片<span class="fsize-12 txt-lv3">(至少3张)<span><a id="btn-rule" class="btn-tt hover fsize-14" href="javascript:;">拍照规则></a></p>
+        <div id="upload-area" class="fbox wrap">
+          <div id="btn-upload" class="btn-upload hover"><p class="upload-img"><span class="fbox-cc"></span></p></div>
+        </div>
+      </div>
+      <div class="service fsize-12 tc"><a class="hover txt-lv3" href="tel:4000812868">联系客服 <font class="underline">400-0812-868</font></a></div>
+    </div>
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <div class="btn fbox-cc fbox-f2 txt-lv3 fsize-14">认真填写有助于审核通过</div>
+        <a id="btn-confirm" class="btn fbox-f1 strong hover" href="javascript:;">提交</a>
+      </div>
+    </div>
+    </script>
+  </div>
+  <script src="/lib/zepto.js"></script>
+<script src="/lib/juicer.js"></script>
+<script src="/js/common.js?v=18"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/lib/preview.js"></script>
+  <script src="/js/daiban_order_add2.js"></script>
+</body>
+</html>

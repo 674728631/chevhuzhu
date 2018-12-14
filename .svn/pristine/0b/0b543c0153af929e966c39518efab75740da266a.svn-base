@@ -1,0 +1,76 @@
+<html>
+<head>
+  <title>车V互助</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/verify.css?v=2">
+  <link rel="stylesheet" href="/hfive/css/vkeyboard.css">
+</head>
+<body>
+  <div class="navbar-top transparent"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left"></span></a>
+  </div></div>
+  <div class="container nav full">
+    <script type="text/template" id="main-tpl">
+      <p id="t1">验证码已发送至　${phone}</p>
+      <div id="t2" class="fbox-ac fsize-16">
+        <p class="fbox-f1">请输入验证码</p>
+        <a id="btn-code" class="hover fbox-cc disabled" href="javascript:;"></a>
+      </div>
+      <div id="code-box" class="fbox-cc fsize-20">
+        <p class="code-item fbox-cc hover"></p>
+        <p class="code-item fbox-cc hover"></p>
+        <p class="code-item fbox-cc hover"></p>
+        <p class="code-item fbox-cc hover"></p>
+      </div>
+      <a id="btn-confirm" class="hover btn weak" href="javascript:;">注册/登录</a>
+      <div class="fsize-12 tc">注册即表示您已阅读，并同意<a class="hover txt-blue" href="/hfive/view/rule_user.html">《车V互助用户协议》</a></div>
+    </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/vkeyboard.js?v=2"></script>
+  <script src="/hfive/js/verify.js?v=11"></script>
+</body>
+</html>

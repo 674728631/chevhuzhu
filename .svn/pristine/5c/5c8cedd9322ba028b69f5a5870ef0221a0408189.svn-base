@@ -1,0 +1,244 @@
+<html>
+<head>
+  <title>车V互助</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+    window.addEventListener('resize', function(){
+      var deviceWidth = document.documentElement.clientWidth;
+      if(deviceWidth > 750) deviceWidth = 750;
+      document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+    });
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/index2.css">
+</head>
+<body>
+  <div class="container ffull">
+    <script type="text/template" id="main-tpl">
+    <div class="tabbox"><div class="tabbox-layer">
+      <div class="tabbox-tab">
+        <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+        <div id="newer-box" class="fsize-14 txt-white">
+          <div id="newer-item" class="fbox-ac">
+            <div class="avatar"><img id="newer-avatar" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div>
+            <p id="newer-desc"></p>
+          </div>
+          <a id="msg-item" class="fbox-ac fsize-14 inhover shadow" href="javascript:;"><p id="msg-content" class="fbox-f1"></p><span class="arr3 arr-gray arr-right"></span></a>
+        </div>
+        <div id="banner-box"><img src="/hfive/img/index_banner.jpg?2" width="100%"></div>
+        <div id="info1" class="info top fbox-ac tc">
+          <a class="fbox-f1" href="javascript:;"><span class="txt-blue fsize-22">{@if userCount}${userCount}{@else}0{@/if}</span><br><span class="txt-lv3 fsize-14">互助成员</span></a>
+          <a class="fbox-f1" href="javascript:;"><span class="txt-blue fsize-22">{@if amtBalance}${amtBalance|build_round}{@else}0{@/if}</span><br><span class="txt-lv3 fsize-14">互助金</span></a>
+          <a class="fbox-f1" href="javascript:;"><span class="txt-blue fsize-22">{@if eventCount}${eventCount}{@else}0{@/if}</span><br><span class="txt-lv3 fsize-14">互助事件</span></a>
+        </div>
+        <div id="info4">
+          {@if head}
+          <img src="/hfive/img/index_top_1.jpg?3" width="100%">
+          <div class="avatar-box"><div class="avatar"><img src="${head}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div></div>
+            {@if nickname}
+            <div class="txt-blue tc fsize-16 p1">${nickname}</div>
+            {@/if}
+          {@else if wxHead}
+          <img src="/hfive/img/index_top_1.jpg?3" width="100%">
+          <div class="avatar-box"><div class="avatar"><img src="${wxHead}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div></div>
+            {@if wxNickname}
+            <div class="txt-blue tc fsize-16 p1">${wxNickname}</div>
+            {@/if}
+          {@else}
+          <img src="/hfive/img/index_top_2.jpg?3" width="100%">
+          {@/if}
+          <div class="tc fsize-14 p2">例：1000元维修费=1万人×0.1元/次分摊</div>
+        </div>
+        <div id="info2" class="info top fbox-ac" style="background:#eee;">
+          {@if carList && carList.length > 0}
+          <div id="car-box" class="fbox-f1"><div id="car-content">
+            {@each carList as it}
+            <a class="car-item fbox-ac hover{@if it.status == 20} keep{@/if}" href="/hfive/view/car.html">
+              <div class="fbox-vc fbox-f1 ver ellipsis">
+                <div class="fbox-ac txt-lv2">
+                  <p class="fbox-f1 fsize-16 fstrong">{@if it.nameCarOwner}${it.nameCarOwner}{@else}　{@/if}</p>
+                  {@if it.status != 20}<p class="fsize-14">${it.status|build_carStatus}</p>{@/if}
+                </div>
+                <p class="fsize-12 txt-lv2 ellipsis">${it.licensePlateNumber} {@if it.model}(${it.model}){@/if}</p>
+              </div>
+              <span class="arr arr-right arr-darkgray"></span>
+            </a>
+            {@/each}
+          </div></div>
+          <!--<a id="car-btn" class="hover fsize-16 btn strong" href="/hfive/view/car.html">我的车辆</a>-->
+          {@else}
+          <div id="car-desc" class="fbox-f1 fsize-16 txt-lv2">9元起加入爱车互助社群，立享每年1000元维修互助金，85%车主一致的选择！</div>
+          <a id="car-btn" class="hover fsize-16 btn strong btn-join" href="/hfive/view/car_add.html?from=index">立即加入</a>
+          {@/if}
+        </div>
+        <a id="chev" name="chev" class="anchor"></a>
+        <div id="road" class="hide"><img id="car" src="/hfive/img/ani_car.gif"></div>
+        <div class="info top">
+          <div class="title2 fsize-18">加入规则</div>
+          <div class="intro-list2">
+            <div class="intro-item">
+              <div class="intro-btn fbox-ac hover">
+                <p class="intro-title fstrong fsize-16">互助资格</p>
+                <p class="fbox-f1 fsize-16 txt-lv2">9元起加入维修互助</p>
+                <p class="intro-ar fbox-cc"><span class="arr arr-bottom arr-darkgray"></span></p>
+              </div>
+              <div class="intro-info fsize-14 txt-lv2"><p>您充值的金额将用于车主互助，存于您个人账户中，并由农业银行成都金融城支行进行第三方托管，每次事故均摊≤0.1元，全年充值上限99元；账户余额低于0元，自动退出保障。费改后，互助是车险的完美补充！</p></div>
+            </div>
+            <div class="intro-item">
+              <div class="intro-btn fbox-ac hover">
+                <p class="intro-title fstrong fsize-16">互助范围</p>
+                <p class="fbox-f1 fsize-16 txt-lv2">擦刮 玻璃破碎 爆胎等</p>
+                <p class="intro-ar fbox-cc"><span class="arr arr-bottom arr-darkgray"></span></p>
+              </div>
+              <div class="intro-info fsize-14 txt-lv2"><p>互助期间内，因意外事故造成会员车直接损失。具体包含：碰撞损坏\车辆擦刮\玻璃破碎\轮胎损坏\倒车镜擦刮，车辆旧伤不享受互助。特别说明：划痕不在理赔范围。</p></div>
+            </div>
+            <div class="intro-item">
+              <div class="intro-btn fbox-ac hover">
+                <p class="intro-title fstrong fsize-16">加入条件</p>
+                <p class="fbox-f1 fsize-16 txt-lv2">常驻地在大成都范围内私家车</p>
+                <p class="intro-ar fbox-cc"><span class="arr arr-bottom arr-darkgray"></span></p>
+              </div>
+              <div class="intro-info fsize-14 txt-lv2"><p>大成都市范围（含外地长期行驶地在成都），上年度出险次数不超过3次，车龄限8年以内的私家车。</p></div>
+            </div>
+            <div class="intro-item">
+              <div class="intro-btn fbox-ac hover">
+                <p class="intro-title fstrong fsize-16">保障额度</p>
+                <p class="fbox-f1 fsize-16 txt-lv2">1000元/年</p>
+                <p class="intro-ar fbox-cc"><span class="arr arr-bottom arr-darkgray"></span></p>
+              </div>
+              <div class="intro-info fsize-14 txt-lv2"><p>平台承担90%维修费用，剩余10%由车主自行承担（如：维修费用定损价为1000元，平台补贴900元，为规避道德风险车主自付10%即100元）。</p></div>
+            </div>
+            <div class="intro-item">
+              <div class="intro-btn fbox-ac hover">
+                <p class="intro-title fstrong fsize-16">维修标准</p>
+                <p class="fbox-f1 fsize-16 txt-lv2">4S店或一二类维修厂</p>
+                <p class="intro-ar fbox-cc"><span class="arr arr-bottom arr-darkgray"></span></p>
+              </div>
+              <div class="intro-info fsize-14 txt-lv2"><p>覆盖全成都，平台联手68家维修网点，对30多个主流汽车品牌提供专业维修服务。</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="title2 fsize-18">运营保障</div>
+          <div id="scroll-box" class="no-scroll">
+            <div class="intro-fbox fbox-cc">
+              <div class="intro-box b3 fsize-16 tc">
+                <div id="scroll-panel" class="intro-list fbox-ac">
+                  <a class="intro-item active" href="javascript:;"><span class="i-con i19"></span><p>资金安全</p></a>
+                  <a class="intro-item" href="javascript:;"><span class="i-con i20"></span><p>阳光运作</p></a>
+                  <a class="intro-item" href="javascript:;"><span class="i-con i21"></span><p>严格审核</p></a>
+                  <a class="intro-item" href="javascript:;"><span class="i-con i22"></span><p>管家服务</p></a>
+                </div>
+              </div>
+            </div>
+            <div class="intro-desc fsize-14 txt-lv2 no-scroll">
+              <span class="intro-arr"></span>
+              <p class="p1 show">车V互助平台已委托农业银行成都金融城支行开设第三方存管账户，专款专用。</p>
+              <p class="p2">事故全程公示，接受全员监督，平台资金账目每月公示。</p>
+              <p class="p3">权威大数据审查，保险核心系统审核车主信用，审核透明化。</p>
+              <p class="p4">平台采用就近维修原则，仅需联系我们，平台将安排10公里内4S店或维修厂提供服务，免费接送车。</p>
+            </div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="title2 fsize-18">互助流程</div>
+          <div class="fbox-cc"><div class="intro-box b2 fsize-16 tc">
+            <div class="intro-list fbox-ac">
+              <a class="intro-item" href="javascript:;"><span class="i-con i23"></span><p>提交申请</p></a>
+              <span class="intro-arr2"></span>
+              <a class="intro-item" href="javascript:;"><span class="i-con i24"></span><p>车辆定损</p></a>
+              <span class="intro-arr2"></span>
+              <a class="intro-item" href="javascript:;"><span class="i-con i25"></span><p>维修验收</p></a>
+              <span class="intro-arr2"></span>
+              <a class="intro-item" href="javascript:;"><span class="i-con i26"></span><p>全员分摊</p></a>
+            </div>
+          </div></div>
+        </div>
+        <div id="info3" class="info tc">
+          <p class="fsize-16" style="color:#d8d6d6;">——<font class="txt-lv1">媒体追踪</font>——</p>
+          <div class="partner">
+            <a href="http://zhongshan.auto.qq.com/a/20180408/018976.htm" class="hover"><img src="/hfive/img/partner_1.jpg"></a><a href="http://sz.auto.sina.com.cn/2018-04-08/detail-ifyvtmxc7997290.shtml" class="hover"><img src="/hfive/img/partner_2.jpg"></a><a href="http://auto.ifeng.com/nanjing/xinwen/2018/0404/27351.shtml" class="hover"><img src="/hfive/img/partner_3.jpg"></a><a href="https://www.sohu.com/a/226295037_100126095" class="hover"><img src="/hfive/img/partner_4.jpg"></a>
+          </div>
+        </div>
+        <div class="hint txt-blue fsize-14 tc">
+          <p class="txt-lv2 fsize-14">* 温馨提示：互助不是保险 *</p>
+        </div>
+      </div>
+    </div></div>
+    {@if btn_join.num == 1}
+      {@if btn_join.car.status == 1}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car_add_pay.html?id=${btn_join.car.id}"><p>加入互助</p></a>
+      {@else if btn_join.car.status == 2}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car_add2.html?id=${btn_join.car.id}"><p>加入互助</p></a>
+      {@else if btn_join.car.status == 10}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car.html"><p>加入互助</p></a>
+      {@else if btn_join.car.status == 12}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car_add.html?id=${btn_join.car.id}"><p>加入互助</p></a>
+      {@else if btn_join.car.status == 13 || btn_join.car.status == 20}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/share.html"><p>邀请朋友加入</p></a>
+      {@else if btn_join.car.status == 30}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car_add.html?id=${btn_join.car.id}&rejoin=1"><p>加入互助</p></a>
+      {@/if}
+    {@else if btn_join.num > 1}
+      {@if btn_join.all_clear}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/share.html"><p>邀请朋友加入</p></a>
+      {@else}
+      <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car.html"><p>加入互助</p></a>
+      {@/if}
+    {@else}
+    <a id="btn-join" class="btn strong inhover close btn-join" href="/hfive/view/car_add.html?from=index"><p>加入互助</p></a>
+    {@/if}
+    <a id="btn-manager" class="close" href="/hfive/view/manager.html"><img src="/hfive/img/icon_manager.png"></a>
+    </script>
+  </div>
+  <div class="navbar-bottom"><ul class="navbar-content fbox">
+    <li class="fbox-cc fbox-f1"><a class="hover active" href="/hfive/view/index.html"><span class="navbar-icon i1"></span>加入互助</a></li>
+    <li class="fbox-cc fbox-f1"><a class="hover" href="/hfive/view/publicity.html"><span class="navbar-icon i2"></span>互助公示</a></li>
+    <li class="fbox-cc fbox-f1"><a class="hover" href="/hfive/view/profile.html"><span class="navbar-icon i3"></span>我的会员卡</a></li>
+  </ul></div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js?v=1"></script>
+  <script src="/hfive/js/index2.js"></script>
+</body>
+</html>

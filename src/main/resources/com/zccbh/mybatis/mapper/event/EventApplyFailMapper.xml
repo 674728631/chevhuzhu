@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zccbh.demand.mapper.event.EventApplyFailMapper" >
+     <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_event_apply_fail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventNo != null and eventNo != ''">eventNo,</if>
+            <if test="accidentDescription != null and accidentDescription != ''">accidentDescription,</if>
+            <if test="accidentImg != null and accidentImg != ''">accidentImg,</if>
+            <if test="timeApply != null">timeApply,</if>
+            <if test="timeExamine != null">timeExamine,</if>
+            <if test="reasonFailure != null and reasonFailure != ''">reasonFailure,</if>
+            <if test="reasonSuccess != null and reasonSuccess != ''">reasonSuccess,</if>
+            <if test="createAt != null">createAt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eventNo != null and eventNo != ''">#{eventNo,jdbcType=VARCHAR},</if>
+            <if test="accidentDescription != null and accidentDescription != ''">#{accidentDescription,jdbcType=VARCHAR},</if>
+            <if test="accidentImg != null and accidentImg != ''">#{accidentImg,jdbcType=VARCHAR},</if>
+            <if test="timeApply != null">#{timeApply,jdbcType=DATE},</if>
+            <if test="timeExamine != null">#{timeExamine,jdbcType=DATE},</if>
+            <if test="reasonFailure != null and reasonFailure != ''">#{reasonFailure,jdbcType=VARCHAR},</if>
+            <if test="reasonSuccess != null and reasonSuccess != ''">#{reasonSuccess,jdbcType=VARCHAR},</if>
+            <if test="createAt != null">now(),</if>
+        </trim>
+    </insert>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+    
+        SELECT e.eventNo,e.statusEvent,e.eventQrcode,a.timeApply,a.timeExamine,a.reasonFailure AS applyFailure,a.reasonSuccess AS applySuccess,a.accidentDescription,
+          a.accidentImg,c.customerPN,car.compensateNum,car.nameCarOwner,car.licensePlateNumber,car.model,car.amtCompensation,car.drivingLicense,car.carPhotos
+		FROM cbh_event e
+            LEFT JOIN cbh_event_apply_fail a ON a.eventNo = e.eventNo
+            LEFT JOIN cbh_car car ON car.id = e.carId
+            LEFT JOIN cbh_user_customer c ON c.id = e.customerId
+        WHERE e.eventNo = #{eventNo,jdbcType=VARCHAR} order by a.createAt desc limit 1 
+    </select>
+</mapper>

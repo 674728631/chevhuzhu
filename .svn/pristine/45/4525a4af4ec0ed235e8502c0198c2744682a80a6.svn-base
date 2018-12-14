@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"   
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/task  
+		http://www.springframework.org/schema/task/spring-task-3.1.xsd  ">
+
+
+	<!-- 启用task 注解 -->
+	<task:annotation-driven />  
+    <!-- 启用spring mvc 注解 -->
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="com.zccbh.demand.controller"/>
+    <!-- 全局异常处理  自定义实现spring的全局异常解析器HandlerExceptionResolver -->
+    <bean id="exceptionResolver" class="com.zccbh.test.exception.CustomExceptionResolver"></bean>
+    <mvc:interceptors>
+            <mvc:interceptor>
+                <!--匹配的是url路径， 如果不配置或/**,将拦截所有的Controller-->
+                <!--<mvc:mapping path="/merchants/business/**" />-->
+                <mvc:mapping path="/appBackstage/**" />
+                <bean class="com.zccbh.demand.service.weChat.BaseInterceptor"/>
+            </mvc:interceptor>
+            <!--当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法-->
+        </mvc:interceptors>
+
+    <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+    <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list><value>text/html;charset=UTF-8</value></list>
+        </property>
+    </bean>
+
+    <!-- 完成请求和注解POJO的映射 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" p:ignoreDefaultModelOnRedirect="true" >
+        <property name="messageConverters">
+            <list><ref bean="mappingJacksonHttpMessageConverter" /></list>
+        </property>
+    </bean>
+
+    <!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!-- 配置多文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- 上传文件大小限制为1M，1*1024*1024 -->
+        <property name="maxUploadSize" value="1000048576"/>
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>
+
+    <!--开启aop注解支持-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <!--切面-->
+    <bean id="systemLogAspect" class="com.zccbh.demand.controller.LogAspect"></bean>
+</beans>

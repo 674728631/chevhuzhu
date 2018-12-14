@@ -1,0 +1,137 @@
+<html>
+<head>
+  <title>保险理赔免费代办</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  var _hmt = _hmt || [];(function(){var hm = document.createElement("script");hm.src="https://hm.baidu.com/hm.js?074bb24e94cc1a14248e7f87f21b34f2";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+    window.addEventListener('resize', function(){
+      var deviceWidth = document.documentElement.clientWidth;
+      if(deviceWidth > 750) deviceWidth = 750;
+      document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+    });
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/order_add2.css?v=5">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">保险理赔免费代办</div>
+    <a class="navbar-right fbox-cc hover" href="/hfive/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div class="container nav full fsize-14">
+    <script type="text/template" id="main-tpl">
+    <div class="step-box fbox-cc">
+      <div class="point active"><p class="fbox-cc"><span>审核</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>接车</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>定损</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>维修</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>交车</span></p></div>
+    </div>
+    <div class="main">
+      <div id="upload-box">
+        <a id="upload-car" class="btn-upload default inhover fsize-14 txt-lv1" href="javascript:;">
+          <p class="default-info fsize-24">点击上传行驶证照片</p>
+          <span id="img1" class="upload-img"></span>
+          <!--<input id="upload" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp,image/gif">-->
+          <div class="reupload-box hide"><label id="btn-reupload" class="hover fsize-14" for="upload">重新上传行驶证</label></div>
+        </a>
+      </div>
+      <div id="driver-info2" class="shadow hide">
+        <div class="content">
+          <div class="driver-item fbox-ac"><p class="fbox-f1">车牌号</p><p id="d-plate2"></p></div>
+          <div class="driver-item fbox-ac"><p class="fbox-f1">所有人</p><p id="d-owner2"></p></div>
+          <div class="driver-item fbox-ac"><p class="fbox-f1">品牌型号</p><p id="d-model2"></p></div>
+        </div>
+        <a id="btn-edit" class="hover" href="javascript:;">修改</a>
+      </div>
+      <div id="driver-info" class="shadow hide">
+        <div id="driver-sub">
+          <div class="driver-item fbox-ac top">
+            <p class="fbox-ac fstrong">所有人　　　</p>
+            <div class="ibox fbox-f1"><input id="d-owner" type="text" maxlength="50" placeholder="请输入车主姓名"></div>
+          </div>
+          <div class="driver-item fbox-ac hide">
+            <p class="fbox-ac fstrong">车牌号　　　</p>
+            <div class="ibox fbox-f1"><input id="d-plate" type="text" maxlength="50" placeholder="请输入车牌号"></div>
+          </div>
+          <div class="driver-item fbox-ac">
+            <p class="fbox-ac fstrong">品牌型号　　</p>
+            <div class="ibox fbox-f1"><input id="d-model" type="text" maxlength="50" placeholder="请输入车辆品牌型号"></div>
+          </div>
+          <div class="driver-item fbox-ac hide">
+            <p class="fbox-ac fstrong">车辆识别代码</p>
+            <div class="ibox fbox-f1"><input id="d-vin" type="text" maxlength="30" placeholder="请输入车辆识别代码"></div>
+          </div>
+          <div class="driver-item fbox-ac hide">
+            <p class="fbox-ac fstrong">发动机号　　</p>
+            <div class="ibox fbox-f1"><input id="d-engine" type="text" maxlength="20"></div>
+          </div>
+          <div class="driver-item fbox-ac hide">
+            <p class="fbox-ac fstrong">注册日期　　</p>
+            <div class="ibox fbox-f1"><input id="d-register" type="date" maxlength="20"></div>
+          </div>
+          <div class="driver-item fbox-ac hide">
+            <p class="fbox-ac fstrong">发证日期　　</p>
+            <div class="ibox fbox-f1"><input id="d-issue" type="date" maxlength="20"></div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="input-area fbox-ac top">
+        <span class="i-con i15"></span>
+        <p class="iname txt-blue">行驶城市</p>
+        <a id="city-picker" class="ibox hover fbox-ac fbox-f1"><input id="city" type="text" maxlength="100" placeholder="请选择城市" readonly><span class="arr arr-right arr-blue"></span></a>
+      </div>-->
+      <!--<p class="desc fsize-12"><span class="meihua"></span>因维修覆盖范围，目前互助只针对大成都（都江堰 、简阳 、眉山 、资阳除外）范围车主</p>-->
+    </div>
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <div class="btn fbox-cc fbox-f2 txt-lv3 fsize-14">请认真核对页面信息</div>
+        <a id="btn-pay" class="btn fbox-f1 strong hover" href="javascript:;">确定</a>
+      </div>
+    </div>
+    </script>
+  </div>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="/hfive/js/baoxian_order_add2.js?v=8"></script>
+</body>
+</html>

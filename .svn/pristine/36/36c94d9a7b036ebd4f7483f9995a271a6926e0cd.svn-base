@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zccbh.demand.mapper.merchants.CbhEventReceivecarMapper" >
+  <resultMap id="BaseResultMap" type="com.zccbh.demand.pojo.merchants.CbhEventReceivecar" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="eventNo" property="eventNo" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="nameCarOwner" property="nameCarOwner" jdbcType="VARCHAR" />
+    <result column="telCarOwner" property="telCarOwner" jdbcType="VARCHAR" />
+    <result column="licensePlateNumber" property="licensePlateNumber" jdbcType="VARCHAR" />
+    <result column="place" property="place" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="nameCarReceive" property="nameCarReceive" jdbcType="VARCHAR" />
+    <result column="telCarReceive" property="telCarReceive" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="timeReceiveCar" property="timeReceiveCar" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

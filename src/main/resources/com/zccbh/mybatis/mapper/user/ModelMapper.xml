@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.user.ModelMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="adminId != null and adminId != ''">adminId,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="isDel != null and isDel != ''">isDel,</if>
+            <if test="delTime != null and delTime != ''">delTime,</if>
+            <if test="createTime != null and createTime != ''">createTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="adminId != null and adminId != ''">#{adminId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="isDel != null and isDel != ''">#{isDel},</if>
+            <if test="delTime != null and delTime != ''">#{delTime},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_model
+        <set>
+            <if test="adminId != null and adminId != ''">adminId = #{adminId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="isDel != null and isDel != ''">isDel = #{isDel},</if>
+            <if test="delTime != null and delTime != ''">delTime = #{delTime},</if>
+            <if test="createTime != null and createTime != ''">createTime = #{createTime},</if>
+        </set>
+        WHERE id IN
+        <foreach collection="modelId" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="findModelList" resultType="java.util.Map">
+        SELECT m.id AS modelId,m.title,m.content FROM cbh_model m WHERE isDel = 0 ORDER BY m.createTime desc
+    </select>
+</mapper>

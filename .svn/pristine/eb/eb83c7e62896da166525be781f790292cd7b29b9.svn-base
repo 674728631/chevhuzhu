@@ -1,0 +1,1 @@
+"use strict";!function(){getUrlPar("id"),getUrlPar("rejoin");var r=checkLogin(!0);r&&showConfirm({str:"该页面已失效",btn_yes:{str:"返回上一页",href:"javascript:history.go(-1);"},btn_no:{str:"回到首页",href:"/hfive/view/index.html"}})}();

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.customer.RecordRechargeMapper">
+<insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_record_recharge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null and customerId != ''">customerId,</if>
+            <if test="carId != null">carId,</if>
+            <if test="amt != null and amt != ''">amt,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="type != null">type,</if>
+            <if test="eventType != null">eventType,</if>
+            <if test="timeRecharge != null">timeRecharge,</if>
+            <if test="status != null">status,</if>
+            <if test="eventNo != null">eventNo,</if>
+            <if test="createAt != null">createAt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="customerId != null and customerId != ''">#{customerId},</if>
+            <if test="carId != null">#{carId},</if>
+            <if test="amt != null and amt != ''">#{amt},</if>
+            <if test="description != null and description != ''">#{description,jdbcType=VARCHAR},</if>
+            <if test="type != null">#{type},</if>
+            <if test="eventType != null">#{eventType},</if>
+            <if test="timeRecharge != null">#{timeRecharge},</if>
+            <if test="status != null">#{status},</if>
+            <if test="eventNo != null">#{eventNo},</if>
+            <if test="createAt != null">now(),</if>
+        
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_record_recharge
+        <set>
+            <if test="customerId != null and customerId != ''">customerId=#{customerId},</if>
+            <if test="carId != null">carId=#{carId},</if>
+            <if test="amt != null and amt != ''">amt=#{amt},</if>
+            <if test="description != null and description != ''">description=#{description,jdbcType=VARCHAR},</if>
+            <if test="type != null">type=#{type},</if>
+            <if test="eventType != null">eventType=#{eventType},</if>
+            <if test="timeRecharge != null">timeRecharge=#{timeRecharge},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="eventNo != null">eventNo=#{eventNo},</if>
+            <if test="flag != null">flag=#{flag},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <select id="findMore" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT r.*,c.licensePlateNumber,m.id AS shopId,m.name AS shopName,cus.customerPN
+        FROM cbh_record_recharge r
+            LEFT JOIN cbh_car c ON c.id = r.carId
+            LEFT JOIN cbh_user_customer cus ON cus.id = r.customerId
+            LEFT JOIN middle_customer_maintenanceshop cm ON cm.openId = cus.openId
+            LEFT JOIN cbh_maintenanceshop m ON m.id = cm.maintenanceshopId
+        WHERE r.status = 1
+        <if test="customerId != null and customerId != ''"> AND r.customerId = #{customerId,jdbcType=INTEGER}</if>
+        <if test="carId != null and carId != ''"> AND r.carId = #{carId,jdbcType=INTEGER}</if>
+        <if test="licensePlateNumber != null and licensePlateNumber != ''"> and c.licensePlateNumber like concat('%',#{licensePlateNumber,jdbcType=VARCHAR},'%')</if>
+        <if test="shopId != null and shopId != ''"> AND m.id = #{shopId,jdbcType=INTEGER}</if>
+        ORDER BY timeRecharge DESC
+    </select>
+
+     <select id="selectCreatTime" parameterType="java.util.Map" resultType="java.util.Map">
+       select r.createAt ctime,r.id,r.flag from cbh_record_recharge r where r.carId=#{carId} and r.status=1  and r.eventType!=3 ORDER BY r.createAt limit 1
+    </select>
+
+    <select id="selectAmt" parameterType="java.util.Map" resultType="java.util.Map">
+       select SUM(r.amt) sum,DATE_FORMAT(min(r.createAt),'%Y-%m-%d %T') minT from cbh_record_recharge r where r.carId=#{carId} and r.status=1  and r.eventType!=3  and r.createAt>=#{time}
+    </select>
+
+    <select id="chartFoundation" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT datelist,IFNULL(amt,0) AS amt FROM
+            (SELECT * FROM sys_calendar WHERE datelist BETWEEN #{beginTime} AND #{endTime}) AS date
+        LEFT JOIN
+            (SELECT DATE_FORMAT(createAt,'%Y-%m-%d') AS createAt,SUM(r.amt) AS amt
+            FROM cbh_record_recharge r
+            WHERE r.eventType IN(1,2) AND r.type IN(1,2) AND r.status=1 AND createAt BETWEEN #{beginTime} AND #{endTime}
+            GROUP BY DATE_FORMAT(createAt,'%Y-%m-%d')) AS result
+        ON result.createAt = date.datelist
+        ORDER BY datelist
+    </select>
+
+    <select id="chartTwiceRecharge" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT datelist,IFNULL(num,0) AS num FROM
+            (SELECT * FROM sys_calendar WHERE datelist BETWEEN #{beginTime} AND #{endTime}) AS date
+        LEFT JOIN
+            (SELECT DATE_FORMAT(timeRecharge,'%Y-%m-%d') AS timeRecharge,COUNT(id) AS num
+              FROM cbh_record_recharge
+              WHERE `status`=1 AND eventType=2 AND type != 4 AND timeRecharge BETWEEN #{beginTime} AND #{endTime}
+              GROUP BY DATE_FORMAT(timeRecharge,'%Y-%m-%d')) AS result
+        ON result.timeRecharge = date.datelist
+        ORDER BY datelist
+    </select>
+
+    <select id="findRecharge" resultType="java.util.Map">
+        SELECT * FROM `cbh_record_recharge` r
+          LEFT JOIN cbh_car c ON c.id = r.carId
+        WHERE r.`status` = 1 AND r.eventType BETWEEN 1 AND 2 AND c.`status` BETWEEN 13 AND 20
+    </select>
+
+    <select id="findRechargeNum" resultType="java.util.Map">
+        SELECT * FROM `cbh_record_recharge`  WHERE `status`=1 AND type=1 AND eventType IN (1,2,3);
+    </select>
+    <select id="findRechargeByCarId"  parameterType="java.util.Map" resultType="java.math.BigDecimal">
+        SELECT sum(amt) AS  amt FROM
+        cbh_record_recharge
+        where carId=#{carId,jdbcType=INTEGER}
+        AND timeRecharge &gt;= #{timeBegin,jdbcType=VARCHAR} AND timeRecharge &lt;=#{yearDate,jdbcType=VARCHAR}
+        and status=1 and eventType BETWEEN 1 and 2
+    </select>
+
+    <select id="customerRecord" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT r.*,c.licensePlateNumber,cus.source AS shopName,cus.customerPN
+        FROM cbh_record_recharge r
+        LEFT JOIN cbh_car c ON c.id = r.carId
+        LEFT JOIN cbh_user_customer cus ON cus.id = r.customerId
+        WHERE r.status = 1
+        <if test="type != null and type != ''"> AND r.type IN  (${type})</if>
+        <if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+        ORDER BY timeRecharge DESC
+    </select>
+    <select id="findAllRecordByLicensePlateNumber" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            rr.amt,
+            rr.carId,
+            cc.licensePlateNumber,
+            cc.customerId
+        FROM
+            cbh_record_recharge rr
+        LEFT JOIN cbh_car cc ON rr.carId = cc.id
+        WHERE
+            cc.licensePlateNumber = #{licensePlateNumber}
+        AND rr.`status` = 1
+    </select>
+    
+    <select id="findRechargeDate" parameterType="java.util.Map" resultType="java.util.Map">
+    	select 
+			(select sum(amt) FROM cbh_record_recharge r 
+				where r.eventType in ('1','2') and r.status = 1
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			) as rechargeAmt,
+			(SELECT COUNT(1) FROM cbh_record_recharge r 
+			where r.eventType in ('1','2') and r.status = 1
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			) AS rechargeNum,
+			(SELECT COUNT(1) FROM cbh_record_recharge r 
+				where r.eventType in ('1') AND r.amt = '1.2' and r.status = 1
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			) AS amt1Total,
+			(SELECT COUNT(1) FROM cbh_record_recharge r 
+				where r.eventType in ('1','2') AND r.amt = '9' and r.status = 1
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			) AS amt9Total,
+			(SELECT COUNT(1) FROM cbh_record_recharge r 
+				where r.eventType in ('1','2') AND r.amt = '99' and r.status = 1
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			) AS amt99Total,
+			(SELECT COUNT(1) FROM cbh_record_recharge r 
+				where r.eventType in ('1','2') and r.amt not in ('1.2','9','99') and r.status = 1
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			) AS otherAmtNum,
+			(SELECT COUNT(1) FROM cbh_record_recharge r 
+				where r.eventType in ('3') and r.status = 1
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			) AS rescueTotal
+		from cbh_record_recharge GROUP BY rechargeAmt
+    </select>
+    
+    <select id="findRechargeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT r.*,c.licensePlateNumber,cus.source AS shopName,cus.customerPN
+        FROM cbh_record_recharge r
+        LEFT JOIN cbh_car c ON c.id = r.carId
+        LEFT JOIN cbh_user_customer cus ON cus.id = r.customerId
+        WHERE r.status = 1
+        <if test="type != null and type != ''"> AND r.type IN  (${type})</if>
+        <if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+        ORDER BY timeRecharge DESC
+    </select>
+    
+    <select id="marketingRecharge" parameterType="java.util.Map" resultType="java.util.Map">
+    	  select 
+ 			IFNULL((
+ 			select sum(amt) as amtRcharge FROM cbh_record_recharge r 
+ 				where r.eventType in ('1','2') and r.status = 1 
+ 				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			),0) as rechargeAmt,
+			IFNULL((
+			SELECT COUNT(1) rechargeNum FROM cbh_record_recharge r 
+				where r.eventType in ('1','2') and r.status = 1	
+				<if test="beginTime != null and endTime != null and beginTime != '' and endTime != ''">AND r.createAt BETWEEN #{beginTime} AND #{endTime}</if>
+			),0) AS rechargeNum			
+		from cbh_record_recharge GROUP BY rechargeAmt
+    </select>
+    
+    <select id="selectNine" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT amt, count(*) as num from cbh_record_recharge r where r.eventType in (1 ,2) and r.amt = '9' and r.status = 1
+    </select>
+    
+    <select id="selectTwoNine" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT amt ,count(*) as num from cbh_record_recharge r where r.eventType in (1 ,2) and r.amt = '99' and r.status = 1 
+    </select>
+    
+    <select id="selectTotalReEnter" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT COUNT(1) as total FROM (
+    		SELECT r.carId ,COUNT(*) total FROM cbh_record_recharge r WHERE r.type = 1 AND r.eventType IN (2) AND r.status = 1 GROUP BY r.carId HAVING total > 0
+   			) a
+    </select>
+    
+    <select id="selectNaturalReEnter" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT COUNT(1) as total FROM (SELECT r.carId ,COUNT(*) total FROM cbh_record_recharge r WHERE r.type = 1 AND r.eventType IN (2) AND r.status = 1 GROUP BY r.carId HAVING total &gt; 0 ) a 
+		where a.carId in (SELECT carId FROM  cbh_record_recharge WHERE `type` = 1 AND eventType = 1 AND `status` = 1 GROUP BY carId ORDER BY carId)
+    </select>
+    
+    <!-- 总补贴金额 -->
+    <select id="selectSubsidy" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT SUM(r.amt) as total from cbh_record_recharge r
+			where r.type in (3,4,10) and r.eventType in (1,2) and r.status = 1
+    </select>
+    
+    <!-- 总互助金额 -->
+    <select id="selectEventMoney" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT sum(a.amtAssert) as total from cbh_event e
+			LEFT JOIN cbh_event_assert a on e.eventNo = a.eventNo
+			where statusEvent &gt; 40
+    </select>
+    
+    <!-- 总理赔次数 -->
+    <select id="selectEventTotal" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT COUNT(1) as total from cbh_event where statusEvent &gt; 40
+    </select>
+    
+    <!-- 各渠道补贴和互助统计 -->
+    <select id="listShop" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT * from 
+			(
+				SELECT m.id as id, m.name as shopName, SUM(r.amt) as shopTotal from cbh_record_recharge r
+				LEFT JOIN middle_coupon_customer cc on cc.customerId = r.customerId
+				LEFT JOIN cbh_coupon c on c.couponNo = cc.couponNo
+				LEFT JOIN cbh_maintenanceshop m on m.id = c.shopId
+				where r.type in (3,4,10) and r.eventType in (1,2) and r.`status` = 1 and m.id is not null
+				GROUP BY m.id ORDER BY shopTotal desc LIMIT 10
+			)result1
+			LEFT JOIN 
+			(
+					SELECT SUM(result.amtAssert) as shopEventTotal, m.id as id, COUNT(1) countEvent  from (SELECT u.id as id , sum(a.amtAssert) as amtAssert from cbh_event e
+				LEFT JOIN cbh_event_assert a on e.eventNo = a.eventNo
+				LEFT join cbh_user_customer u on u.id = e.customerId
+				where statusEvent &gt; 40 GROUP BY u.id) result 
+				LEFT JOIN middle_coupon_customer cu on cu.customerId = result.id
+				LEFT JOIN cbh_coupon cc on cc.couponNo = cu.couponNo
+				LEFT JOIN cbh_maintenanceshop m on m.id = cc.shopId
+				where m.id in (
+					SELECT shopId from (
+							SELECT m.id as shopId, SUM(r.amt) as shopTotal, m.name as shopName  from cbh_record_recharge r
+							LEFT JOIN middle_coupon_customer cc on cc.customerId = r.customerId
+							LEFT JOIN cbh_coupon c on c.couponNo = cc.couponNo
+							LEFT JOIN cbh_maintenanceshop m on m.id = c.shopId
+							where r.type in (3,4,10) and r.eventType in (1,2) and r.`status` = 1 and m.id is not null
+							GROUP BY m.id ORDER BY shopTotal desc LIMIT 10
+						)result
+				)GROUP BY m.id ORDER BY shopEventTotal DESC
+			)result2 on result1.id = result2.id
+			GROUP BY shopName ORDER BY shopTotal DESC
+    </select>
+</mapper>

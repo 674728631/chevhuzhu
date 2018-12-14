@@ -1,0 +1,86 @@
+<html>
+<head>
+  <title>收银台</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=8">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/car_pay.css?v=7">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">收银台</div>
+    <a class="navbar-right fbox-cc hover" href="/hfive/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div class="container nav full">
+    <script type="text/template" id="main-tpl">
+    <div id="card-box">
+      <div class="car-card v${car.level}">
+        <p class="pnum fsize-22">${car.licensePlateNumber}</p>
+        <p class="amt fsize-18">擦刮救助额度{@if car.amtCompensation}${car.amtCompensation}{@else}1000{@/if}元</p>
+      </div>
+    </div>
+    <div id="main" class="fsize-16 txt-lv1 shadow">
+      <div class="fbox-ac info top no-bdr">选择支付金额</div>
+      <div id="level-box" class="fbox tc">
+        {@each amountList as it, index}
+        <a class="level-item fbox-cc hover txt-lv2{@if index === '0'} active{@/if}" href="javascript:;" data-value="${it.id}"><div><p class="fsize-14 fstrong">${it.amount}元</p><p class="fsize-12">${it.remark}</p><span class="i-check fbox-cc"></span></div></a>
+        {@/each}
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="tc"><a class="hover fsize-14 txt-lv3" href="/hfive/view/publicity.html">查看救助案件></a></div>
+    <br>
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <a id="btn-pay" class="btn strong hover" href="javascript:;">确认支付</a>
+      </div>
+    </div>
+    </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=40"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/js/car_pay.js?v=9"></script>
+</body>
+</html>

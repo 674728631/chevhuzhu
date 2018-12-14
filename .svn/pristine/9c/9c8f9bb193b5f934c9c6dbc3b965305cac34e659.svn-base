@@ -1,0 +1,97 @@
+<html>
+<head>
+  <title>互助记录</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+    window.addEventListener('resize', function(){
+      var deviceWidth = document.documentElement.clientWidth;
+      if(deviceWidth > 750) deviceWidth = 750;
+      document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+    });
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/wallet_history.css?v=1">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">互助记录</div>
+  </div></div>
+  <div class="container nav-top ffull">
+    <div class="tabbox fsize-14"><div class="tabbox-layer">
+      <div class="tabbox-tab">
+        <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+        <div id="list-area"></div>
+        <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_noorder.png"><p class="fsize-20">暂无互助记录</p></div></div>
+      </div>
+    </div></div>
+  </div>
+  <script type="text/template" id="list-tpl">
+  {@each list as it}
+  <div class="main fsize-14 txt-lv1">
+    <div class="title">
+      <p class="dt fsize-16">${it.yearMonth}</p>
+      <div class="fbox-ac fsize-16">
+        <p class="fbox-f1">充值：${it.income}</p>
+        <p class="fbox-f2">支出：${it.outcome}</p>
+      </div>
+    </div>
+    {@each it.dataList as li}
+    <a class="fbox-ac info txt-lv1" href="javascript:;">
+      <!--<span class="i-con i${li.type}"></span>-->
+      <p class="ic-on fbox-cc ${li.amt|build_color}">${li.amt|build_txt}</p>
+      <div class="fbox-f1 text">
+        <p class="fsize-14">${li.content}</p>
+        <div class="fbox-ac date fsize-14 txt-lv2"><p class="fbox-f1">{@if li.time}${li.time|build_time, 'M月d日 hh:mm'}{@else}${it.yearMonth|build_replace, '年0', '年'}{@/if}</p><p class="txt-${li.amt|build_color}">${li.amt}</p></div>
+      </div>
+    </a>
+    {@/each}
+  </div>
+  {@/each}
+  </script>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js?v=2"></script>
+  <script src="/hfive/js/wallet_history.js?v=5"></script>
+</body>
+</html>

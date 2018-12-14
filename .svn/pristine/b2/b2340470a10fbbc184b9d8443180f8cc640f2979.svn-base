@@ -1,0 +1,416 @@
+package com.zccbh.demand.controller.weChat.util;
+
+
+import com.zccbh.demand.controller.weChat.response.Image;
+import com.zccbh.demand.controller.weChat.response.ImageMessage;
+import com.zccbh.demand.controller.weChat.response.TextMessage;
+import com.zccbh.demand.mapper.business.MaintenanceshopMapper;
+import com.zccbh.demand.mapper.business.MiddleCustomerMaintenanceshopMapper;
+import com.zccbh.demand.mapper.merchants.CbhMaintenanceshopMapper;
+import com.zccbh.demand.service.weChat.WeiXinUtils;
+import com.zccbh.util.base.Base64;
+import com.zccbh.util.collect.Constant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+
+/**
+ * 核心服务类 
+ *
+ * @author luoyuangang
+ * @date 2017/12/13
+ */
+@Controller
+public class CoreService {
+    @Autowired
+    private WeiXinUtils weiXinUtils;
+    @Autowired
+    MiddleCustomerMaintenanceshopMapper middleCustomerMaintenanceshopMapper;
+    @Autowired
+    MaintenanceshopMapper maintenanceshopMapper;
+    
+    @Autowired
+    private CbhMaintenanceshopMapper cbhMaintenanceshopMapper;
+//    @Autowired
+//    private WechatAttentionMapper wechatAttentionMapper;
+    /** 
+     * 处理微信发来的请求 
+     *  
+     * @param request 
+     * @return 
+     */  
+    public  String processRequest(HttpServletRequest request) {
+        String respMessage = null;  
+        try {  
+            // xml请求解析  
+            Map<String, String> requestMap = MessageUtil.parseXml(request);
+            System.out.println("requestMap = " + requestMap);
+            // 发送方帐号（open_id）-----用户
+            String fromUserName = requestMap.get("FromUserName");
+            request.getSession().setAttribute("fromUserName", fromUserName);
+            // 公众帐号  
+            String toUserName = requestMap.get("ToUserName");  
+            // 消息类型  
+            String msgType = requestMap.get("MsgType");
+            String FromUserName = requestMap.get("FromUserName"); //用户openid
+            String Event = requestMap.get("Event");
+            // 默认回复此文本消息  
+            TextMessage textMessage = new TextMessage();
+            textMessage.setToUserName(fromUserName);  
+            textMessage.setFromUserName(toUserName);  
+            textMessage.setCreateTime(new Date().getTime());  
+            textMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+            textMessage.setFuncFlag(0);
+            Map<String, String> nicknameMap = weiXinUtils.getNickname(fromUserName);
+            String nickname = nicknameMap.get("nickname");
+//            System.out.println("nickname1+++++" + nickname);
+            if (Constant.toEmpty(nickname)) {
+                nickname= Base64.getFromBase64(nickname);
+//                System.out.println("nickname2+++++" + nickname);
+            }
+//            WechatAttention wechatAttention = wechatAttentionMapper.selectAll().get(0);
+            String EventKey = requestMap.get("EventKey");
+            if (!Constant.toEmpty(nickname)){
+            	if ("subscribe".equals(Event) && EventKey!=null&&!"".equals(EventKey.trim())) {
+					String[] arr = EventKey.split("_");
+					String maintenanceshopId = arr[1];
+					Map<String,Object> pm = new HashMap<String, Object>();
+        			pm.put("id", maintenanceshopId);
+        			Map<String, Object> shopMap = cbhMaintenanceshopMapper.getMaintenanceShopDetail(pm);
+        			textMessage.setContent("您好，终于等到您~~恭喜您获得由" + shopMap.get("name") + "送出的1000元擦刮维修补贴！完成最后一步即刻到账。" +
+    	                    "<a href=\""+Constant.toReadPro("realURL")+"hfive/view/index.html?sid="+shopMap.get("id")+"\">猛戳  >></a>");
+				}else{
+                // 由于href属性值必须用双引号引起，这与字符串本身的双引号冲突，所以要转义
+            	textMessage.setContent("你好，终于等到您~~1000元擦刮救助额度已到账！小擦刮不用走保险，不增加保险理赔次数。现在" +
+                    "<a href=\""+Constant.toReadPro("realURL")+"hfive/view/index.html\">去领取 >></a>");
+//             		textMessage.setContent(wechatAttention.getCreateUser());
+				}
+            }else {
+            	
+            	if ("subscribe".equals(Event) && EventKey!=null&&!"".equals(EventKey.trim())) {
+					String[] arr = EventKey.split("_");
+					String maintenanceshopId = arr[1];
+					Map<String,Object> pm = new HashMap<String, Object>();
+        			pm.put("id", maintenanceshopId);
+        			Map<String, Object> shopMap = cbhMaintenanceshopMapper.getMaintenanceShopDetail(pm);
+        			textMessage.setContent(nickname+"，终于等到您~~恭喜您获得由" + shopMap.get("name") + "送出的1000元擦刮维修补贴！完成最后一步即刻到账。" +
+    	                    "<a href=\""+Constant.toReadPro("realURL")+"hfive/view/index.html?sid="+shopMap.get("id")+"\">猛戳  >></a>");
+				}else{
+					 // 由于href属性值必须用双引号引起，这与字符串本身的双引号冲突，所以要转义
+	            	textMessage.setContent(nickname+"，终于等到您~~1000元擦刮救助额度已到账！小擦刮不用走保险，不增加保险理赔次数。现在" +
+	                    "<a href=\""+Constant.toReadPro("realURL")+"hfive/view/index.html\">去领取 >></a>");
+//	                textMessage.setContent(wechatAttention.getContent());
+				}
+            }
+            // 将文本消息对象转换成xml字符串
+            
+
+            respMessage = MessageUtil.textMessageToXml(textMessage);
+
+
+//            // 文本消息
+            if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
+            	// 接收用户发送的文本消息内容
+                String content = String.valueOf(requestMap.get("Content"));
+                System.out.println("content-----------------------"+content);
+                Map<String,Object> map = new HashMap<>();
+                map.put("openId", FromUserName);
+                List<Map<String,Object>> list = middleCustomerMaintenanceshopMapper.findMore(map);
+                if(list!=null&&list.size()>0){
+                    Map<String, Object> objectMap = list.get(0);
+                    Integer responseNumber = (Integer) objectMap.get("responseNumber");
+                    if (responseNumber == 1) {
+                        if (content.equals("92.5")) {
+//                            创建图片消息
+                            ImageMessage imageMessage = new ImageMessage();
+                            imageMessage.setToUserName(fromUserName);
+                            imageMessage.setFromUserName(toUserName);
+                            imageMessage.setCreateTime(new Date().getTime());
+                            imageMessage.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_IMAGE);
+                            Image image = new Image();
+                            image.setMediaId("sGBCKR4aYbvHOgmIjf34c6g-ACLU4kJaskGXdnc197E");
+                            imageMessage.setImage(image);
+                            respMessage = MessageUtil.imageMessageToXml(imageMessage);
+                        }else if(content.equals("我不是车神")){
+                            TextMessage textMessage1 = new TextMessage();
+                            textMessage1.setToUserName(fromUserName);
+                            textMessage1.setFromUserName(toUserName);
+                            textMessage1.setCreateTime(new Date().getTime());
+                            textMessage1.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+                            textMessage1.setFuncFlag(0);
+                            textMessage1.setContent("邀请好友升级成1500元互助特权!\n"
+                                    +"<a href=\""+Constant.toReadPro("realURL")+"hfive/view/share.html\">猛戳 >></a>");
+                            respMessage = MessageUtil.textMessageToXml(textMessage1);
+                        }else {
+//                             默认回复此文本消息
+                            TextMessage textMessage2 = new TextMessage();
+                            textMessage2.setToUserName(fromUserName);
+                            textMessage2.setFromUserName(toUserName);
+                            textMessage2.setCreateTime(new Date().getTime());
+                            textMessage2.setMsgType("transfer_customer_service");
+                            respMessage = MessageUtil.textMessageToXml(textMessage2);
+                        }
+                    }else{
+//                          创建图片消息
+                        if(content.equals("我不是车神")){
+                            TextMessage textMessage1 = new TextMessage();
+                            textMessage1.setToUserName(fromUserName);
+                            textMessage1.setFromUserName(toUserName);
+                            textMessage1.setCreateTime(new Date().getTime());
+                            textMessage1.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+                            textMessage1.setFuncFlag(0);
+                            textMessage1.setContent("邀请好友升级成1500元互助特权!\n"
+                                    +"<a href=\""+Constant.toReadPro("realURL")+"hfive/view/share.html\">猛戳 >></a>");
+                            respMessage = MessageUtil.textMessageToXml(textMessage1);
+                        }else {
+                            ImageMessage imageMessage = new ImageMessage();
+                            imageMessage.setToUserName(fromUserName);
+                            imageMessage.setFromUserName(toUserName);
+                            imageMessage.setCreateTime(new Date().getTime());
+                            imageMessage.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_IMAGE);
+                            Image image = new Image();
+//                        image.setMediaId("sGBCKR4aYbvHOgmIjf34c9akfx-h4859YocGyRDjsf0");
+                            image.setMediaId("sGBCKR4aYbvHOgmIjf34c2BMbgpDsOmUkwHb44ajRHk");
+                            imageMessage.setImage(image);
+                            respMessage = MessageUtil.imageMessageToXml(imageMessage);
+                        }
+                        map.put("responseNumber", 1);
+                        middleCustomerMaintenanceshopMapper.updateModel(map);
+                    }
+                }
+                // 回复管理端和商家端的链接
+                if (content.equals("管理端")){
+                    TextMessage textMessage1 = new TextMessage();
+                    textMessage1.setToUserName(fromUserName);
+                    textMessage1.setFromUserName(toUserName);
+                    textMessage1.setCreateTime(new Date().getTime());
+                    textMessage1.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+                    textMessage1.setFuncFlag(0);
+                    textMessage1.setContent("<a href=\""+Constant.toReadPro("realURL")+"app/android/chevhuzhugld.apk\">点击此条消息，立即下载安卓版管理端 </a>");
+                    respMessage = MessageUtil.textMessageToXml(textMessage1);
+                }
+                if (content.equals("商家端")){
+                    TextMessage textMessage1 = new TextMessage();
+                    textMessage1.setToUserName(fromUserName);
+                    textMessage1.setFromUserName(toUserName);
+                    textMessage1.setCreateTime(new Date().getTime());
+                    textMessage1.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+                    textMessage1.setFuncFlag(0);
+                    textMessage1.setContent("<a href=\""+Constant.toReadPro("realURL")+"app/android/chevhuzhu.apk\">点击此条消息，立即下载安卓版商家端 </a>");
+                    respMessage = MessageUtil.textMessageToXml(textMessage1);
+                }
+//                *********************************************************
+//                // 创建图文消息
+//                NewsMessage newsMessage = new NewsMessage();
+//                newsMessage.setToUserName(fromUserName);
+//                newsMessage.setFromUserName(toUserName);
+//                newsMessage.setCreateTime(new Date().getTime());
+//                newsMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
+//                newsMessage.setFuncFlag(0);
+//
+//                List<Article> articleList = new ArrayList<Article>();
+//                // 单图文消息
+////                if ("1".equals(content)) {
+//                    Article article = new Article();
+//                    article.setTitle("客服热线 400-6858-158");
+//                    article.setDescription("客服佳佳妹");
+//                    article.setPicUrl("http://www.chevdian.com/img/associator/774455536016245505.png");
+//                    article.setUrl("");
+//                    articleList.add(article);
+//                    // 设置图文消息个数
+//                    newsMessage.setArticleCount(articleList.size());
+//                    // 设置图文消息包含的图文集合
+//                    newsMessage.setArticles(articleList);
+//                    // 将图文消息对象转换成xml字符串
+//                    respMessage = MessageUtil.newsMessageToXml(newsMessage);
+//                }
+//            }
+//                // 单图文消息---不含图片
+//                else if ("2".equals(content)) {
+//                    Article article = new Article();
+//                    article.setTitle("微信公众帐号开发教程Java版");
+//                    // 图文消息中可以使用QQ表情、符号表情
+//                    article.setDescription("柳峰，80后，" + emoji(0x1F6B9)
+//                            + "，微信公众帐号开发经验4个月。为帮助初学者入门，特推出此系列连载教程，也希望借此机会认识更多同行！\n\n目前已推出教程共12篇，包括接口配置、消息封装、框架搭建、QQ表情发送、符号表情发送等。\n\n后期还计划推出一些实用功能的开发讲解，例如：天气预报、周边搜索、聊天功能等。");
+//                    // 将图片置为空
+//                    article.setPicUrl("");
+//                    article.setUrl("http://blog.csdn.net/lyq8479");
+//                    articleList.add(article);
+//                    newsMessage.setArticleCount(articleList.size());
+//                    newsMessage.setArticles(articleList);
+//                    respMessage = MessageUtil.newsMessageToXml(newsMessage);
+//                }
+//                // 多图文消息
+//                else if ("3".equals(content)) {
+//                    Article article1 = new Article();
+//                    article1.setTitle("微信公众帐号开发教程\n引言");
+//                    article1.setDescription("");
+//                    article1.setPicUrl("http://0.xiaoqrobot.duapp.com/images/avatar_liufeng.jpg");
+//                    article1.setUrl("http://blog.csdn.net/lyq8479/article/details/8937622");
+//
+//                    Article article2 = new Article();
+//                    article2.setTitle("第2篇\n微信公众帐号的类型");
+//                    article2.setDescription("");
+//                    article2.setPicUrl("http://avatar.csdn.net/1/4/A/1_lyq8479.jpg");
+//                    article2.setUrl("http://blog.csdn.net/lyq8479/article/details/8941577");
+//
+//                    Article article3 = new Article();
+//                    article3.setTitle("第3篇\n开发模式启用及接口配置");
+//                    article3.setDescription("");
+//                    article3.setPicUrl("http://avatar.csdn.net/1/4/A/1_lyq8479.jpg");
+//                    article3.setUrl("http://blog.csdn.net/lyq8479/article/details/8944988");
+//
+//                    articleList.add(article1);
+//                    articleList.add(article2);
+//                    articleList.add(article3);
+//                    newsMessage.setArticleCount(articleList.size());
+//                    newsMessage.setArticles(articleList);
+//                    respMessage = MessageUtil.newsMessageToXml(newsMessage);
+//                }
+//                // 多图文消息---首条消息不含图片
+//                else if ("4".equals(content)) {
+//                    Article article1 = new Article();
+//                    article1.setTitle("微信公众帐号开发教程Java版");
+//                    article1.setDescription("");
+//                    // 将图片置为空
+//                    article1.setPicUrl("");
+//                    article1.setUrl("http://blog.csdn.net/lyq8479");
+//
+//                    Article article2 = new Article();
+//                    article2.setTitle("第4篇\n消息及消息处理工具的封装");
+//                    article2.setDescription("");
+//                    article2.setPicUrl("http://avatar.csdn.net/1/4/A/1_lyq8479.jpg");
+//                    article2.setUrl("http://blog.csdn.net/lyq8479/article/details/8949088");
+//
+//                    Article article3 = new Article();
+//                    article3.setTitle("第5篇\n各种消息的接收与响应");
+//                    article3.setDescription("");
+//                    article3.setPicUrl("http://avatar.csdn.net/1/4/A/1_lyq8479.jpg");
+//                    article3.setUrl("http://blog.csdn.net/lyq8479/article/details/8952173");
+//
+//                    Article article4 = new Article();
+//                    article4.setTitle("第6篇\n文本消息的内容长度限制揭秘");
+//                    article4.setDescription("");
+//                    article4.setPicUrl("http://avatar.csdn.net/1/4/A/1_lyq8479.jpg");
+//                    article4.setUrl("http://blog.csdn.net/lyq8479/article/details/8967824");
+//
+//                    articleList.add(article1);
+//                    articleList.add(article2);
+//                    articleList.add(article3);
+//                    articleList.add(article4);
+//                    newsMessage.setArticleCount(articleList.size());
+//                    newsMessage.setArticles(articleList);
+//                    respMessage = MessageUtil.newsMessageToXml(newsMessage);
+//                }
+//                // 多图文消息---最后一条消息不含图片
+//                else if ("5".equals(content)) {
+//                    Article article1 = new Article();
+//                    article1.setTitle("第7篇\n文本消息中换行符的使用");
+//                    article1.setDescription("");
+//                    article1.setPicUrl("http://0.xiaoqrobot.duapp.com/images/avatar_liufeng.jpg");
+//                    article1.setUrl("http://blog.csdn.net/lyq8479/article/details/9141467");
+//
+//                    Article article2 = new Article();
+//                    article2.setTitle("第8篇\n文本消息中使用网页超链接");
+//                    article2.setDescription("");
+//                    article2.setPicUrl("http://avatar.csdn.net/1/4/A/1_lyq8479.jpg");
+//                    article2.setUrl("http://blog.csdn.net/lyq8479/article/details/9157455");
+//
+//                    Article article3 = new Article();
+//                    article3.setTitle("如果觉得文章对你有所帮助，请通过博客留言或关注微信公众帐号xiaoqrobot来支持柳峰！");
+//                    article3.setDescription("");
+//                    // 将图片置为空
+//                    article3.setPicUrl("");
+//                    article3.setUrl("http://blog.csdn.net/lyq8479");
+//
+//                    articleList.add(article1);
+//                    articleList.add(article2);
+//                    articleList.add(article3);
+//                    newsMessage.setArticleCount(articleList.size());
+//                    newsMessage.setArticles(articleList);
+//                    respMessage = MessageUtil.newsMessageToXml(newsMessage);
+//                }
+            }
+            //openid
+//        	String EventKey = requestMap.get("EventKey");
+        	System.out.println("FromUserName----------:"+FromUserName+",EventKey------:"+EventKey);
+        	if("subscribe".equals(Event)){
+        		Map<String,Object> map = new HashMap<String, Object>();
+        		map.put("openId", FromUserName);
+        		List<Map<String,Object>> list = middleCustomerMaintenanceshopMapper.findMore(map);
+        		System.out.println("关注进来了---------------，list为:"+list);
+        		if(EventKey!=null&&!"".equals(EventKey.trim())){ //有内容表示通过渠道或者维修厂
+        			String[] arr = EventKey.split("_");
+            		if(arr.length>1){
+            			String maintenanceshopId = arr[1];
+            			System.out.println("++++++++++++++++++"+maintenanceshopId);
+            			Map<String,Object> pm = new HashMap<String, Object>();
+            			pm.put("id", maintenanceshopId);
+            			Map<String,Object> rm = maintenanceshopMapper.findSingle(pm);
+            			String type = String.valueOf(rm==null?"-1":rm.get("type"));
+            			maintenanceshopId = type.equals("10")?"-1":maintenanceshopId;
+            				map.put("maintenanceshopId", maintenanceshopId);
+                    		if(list!=null&&list.size()>0){
+                    			Map<String,Object> map1 = new HashMap<String, Object>();
+                        		map1.put("openId", FromUserName);
+                        		map1.put("status", 1);
+                        		middleCustomerMaintenanceshopMapper.updateModel(map1);
+                        		System.out.println("更新状态成功---------");
+                        		
+                    		}else{
+                    			map.put("status", 1);
+                    			middleCustomerMaintenanceshopMapper.saveSingle(map);
+                        		System.out.println("保存维修厂id成功---------");
+                    		}
+            		}
+        		}else{
+        			if(list!=null&&list.size()>0){
+        				Map<String,Object> map1 = new HashMap<String, Object>();
+                		map1.put("openId", FromUserName);
+                		map1.put("status", 1);
+                		middleCustomerMaintenanceshopMapper.updateModel(map1);
+                		System.out.println("更新状态成功---------");
+            		}else{
+            			map.put("maintenanceshopId", -1);
+            			map.put("status", 1);
+                		middleCustomerMaintenanceshopMapper.saveSingle(map);
+                		System.out.println("保存openid成功---------");
+            		}
+        		}
+        	}/*else if("SCAN".equals(Event)&&EventKey!=null){
+        		Map<String,Object> map = new HashMap<String, Object>();
+        		map.put("openId", FromUserName);
+        		map.put("maintenanceshopId", EventKey);
+        		middleCustomerMaintenanceshopMapper.updateModel(map);
+        		System.out.println("更新维修厂id成功---------");
+        	}*/else if("unsubscribe".equals(Event)){
+        		Map<String,Object> map = new HashMap<String, Object>();
+        		map.put("openId", FromUserName);
+        		map.put("status", 0);
+        		map.put("responseNumber", 0);
+        		middleCustomerMaintenanceshopMapper.updateModel(map);
+        		System.out.println("更新状态成功---------");
+        	}
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+        return respMessage;  
+    }  
+  
+    /** 
+     * emoji表情转换(hex -> utf-16) 
+     *  
+     * @param hexEmoji 
+     * @return 
+     */  
+    public static String emoji(int hexEmoji) {  
+        return String.valueOf(Character.toChars(hexEmoji));  
+    }  
+}  

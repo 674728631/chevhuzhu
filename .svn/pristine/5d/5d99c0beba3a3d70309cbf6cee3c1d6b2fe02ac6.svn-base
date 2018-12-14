@@ -1,0 +1,13 @@
+### 配置根Logger 级别为DEBUG ，输出地方为stdout
+log4j.rootLogger=DEBUG, stdout
+
+### 配置ibatis级别为DEBUG
+log4j.logger.org.apache.ibatis=DEBUG
+
+### 配置stdout
+### 输出目的地为控制台
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+### 布局类型为自定义布局
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+### %5p 指日志级别输出右对齐，左边以空格填充；%t 指输出产生该日志事件的线程名；%m 输出代码中指定的消息；%n 输出一个回车换行符
+log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zccbh.demand.mapper.merchants.CbhEventMapper" >
+  <resultMap id="BaseResultMap" type="com.zccbh.demand.pojo.merchants.CbhEvent" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="eventNo" property="eventNo" jdbcType="VARCHAR" />
+    <result column="customerId" property="customerId" jdbcType="INTEGER" />
+    <result column="carId" property="carId" jdbcType="INTEGER" />
+    <result column="maintenanceshopId" property="maintenanceshopId" jdbcType="INTEGER" />
+    <result column="timePay" property="timePay" jdbcType="TIMESTAMP" />
+    <result column="amtPay" property="amtPay" jdbcType="DECIMAL" />
+    <result column="amtCooperation" property="amtCooperation" jdbcType="DECIMAL" />
+    <result column="amtShare" property="amtShare" jdbcType="DECIMAL" />
+    <result column="timeReceiveOrder" property="timeReceiveOrder" jdbcType="TIMESTAMP" />
+    <result column="timeComplete" property="timeComplete" jdbcType="TIMESTAMP" />
+    <result column="statusEvent" property="statusEvent" jdbcType="INTEGER" />
+    <result column="cancellationsReason" property="cancellationsReason" jdbcType="VARCHAR" />
+    <result column="cancellationsInstructions" property="cancellationsInstructions" jdbcType="VARCHAR" />
+    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selectByEventNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from cbh_event
+        WHERE eventNo = #{eventNo,jdbcType=VARCHAR}
+  </select>
+  <select id="getOrderDetailByEventNo" parameterType="java.lang.String" resultType="java.util.Map">
+  SELECT
+    cc.drivingLicense,#行驶证照片
+	cc.licensePlateNumber,#车牌号
+	cc.reasonSuccess as carReasonSuccess,#加入互助审核通过说明
+	cc.carPhotos AS carImgList,
+	ca.reasonSuccess AS applyReasonSuccess,#申请理赔审核通过说明
+	cc.model AS brand,#品牌
+	cer.nameCarOwner,#联系人
+	cer.place,#接车地址
+	ca.accidentDescription,#事故描述
+	ca.accidentImg AS accidentImgList,#车损照片
+	cer.createAt,#申请定损时间
+	ce.timeReceiveOrder AS receiveOrderTime,#接单时间
+	cer.longitude,
+	cer.latitude,
+    cer.reciveCarTime AS reciveCarTime,
+	ce.statusEvent,#时间状态
+	ce.eventNo AS orderNo
+    FROM
+        cbh_event AS ce
+    LEFT JOIN cbh_car AS cc ON ce.carId = cc.id
+    LEFT JOIN cbh_event_apply AS ca ON ce.eventNo = ca.eventNo
+    LEFT JOIN cbh_event_receivecar AS cer ON ce.eventNo = cer.eventNo
+    LEFT JOIN cbh_maintenanceshop AS cm ON cm.id = ce.maintenanceshopId
+    LEFT JOIN middle_business_maintenanceshop AS mbm ON mbm.maintenanceshopId = cm.id
+    LEFT JOIN cbh_user_business AS cub ON cub.id = mbm.businessId
+    WHERE
+    ce.eventNo= #{eventNo,jdbcType=VARCHAR}
+    AND cub.toKen = #{toKen,jdbcType=VARCHAR}
+    AND cer.status=1
+    GROUP BY ce.eventNo
+  </select>
+  <select id="getOrderDetailByStatus21" parameterType="java.lang.String" resultType="java.util.Map">
+  SELECT
+      cc.drivingLicense,#行驶证照片
+      cc.licensePlateNumber, #车牌号
+      cc.reasonSuccess as carReasonSuccess,#加入互助审核通过说明
+      cc.carPhotos AS carImgList,
+      ca.reasonSuccess AS applyReasonSuccess,#申请理赔审核通过说明
+      cea.reasonAssert AS assertReasonSuccess,#定损通过说明
+      cc.model AS brand, #品牌
+      cer.nameCarOwner, #联系人
+      cer.telCarOwner, #电话
+      cme. NAME AS name, #定损员
+      cer.place, #接车地址
+      ca.accidentDescription, #事故描述
+      ca.accidentImg AS accidentImgList, #车损照片
+      cer.createAt,
+      cer.longitude,
+	  cer.latitude, #申请定损时间
+      cea.timeAssert, #完成定损时间
+      cea.amtAssert, #定损价格
+      cea.damageExtent,#受损程度
+      cea.damagePosition,#受损部位
+      cea.description, #定损描述
+      cea.assertImg AS assertImgList, #定损照片
+      ce.statusEvent,#事件状态
+      ce.timeReceiveOrder AS receiveOrderTime,#接单时间
+      cer.reciveCarTime AS reciveCarTime,
+      cer.timeReceiveCar AS timeReceiveCar,#接车时间
+      ce.eventNo AS orderNo
+      FROM
+          cbh_event AS ce
+      LEFT JOIN cbh_car AS cc ON ce.carId = cc.id
+      LEFT JOIN cbh_event_apply AS ca ON ce.eventNo = ca.eventNo
+      LEFT JOIN cbh_event_receivecar AS cer ON ce.eventNo = cer.eventNo
+      LEFT JOIN cbh_event_assert AS cea ON cea.eventNo = ce.eventNo
+      LEFT JOIN cbh_maintenanceshop_employee AS cme ON cea.maintenanceshopEmployeeId = cme.id
+      LEFT JOIN cbh_maintenanceshop AS cm ON cm.id = ce.maintenanceshopId
+      LEFT JOIN middle_business_maintenanceshop AS mbm ON mbm.maintenanceshopId = cm.id
+      LEFT JOIN cbh_user_business AS cub ON cub.id = mbm.businessId
+      WHERE
+      ce.eventNo= #{eventNo,jdbcType=VARCHAR}
+      AND cub.toKen = #{toKen,jdbcType=VARCHAR}
+      AND cer.status=1
+      GROUP BY ce.eventNo
+  </select>
+    <select id="getOrderDetailByStatus52" parameterType="java.lang.String" resultType="java.util.Map">
+  SELECT
+        cc.drivingLicense,#行驶证照片
+        cc.licensePlateNumber,#车牌号
+        cc.reasonSuccess as carReasonSuccess,#加入互助审核通过说明
+        cc.model AS brand,#品牌
+        cer.nameCarOwner,#联系人
+        cer.telCarOwner,#电话
+        ce.statusEvent,
+        ce.timeReceiveOrder AS receiveOrderTime,#接单时间
+        ce.timePay as timeReceiveCar,
+        ca.accidentDescription, #事故描述
+        ca.accidentImg AS accidentImgList, #车损照片
+        ca.reasonSuccess AS applyReasonSuccess,#申请理赔审核通过说明
+        cer.longitude,
+        cer.latitude,
+        cea.amtAssert,#定损价格
+        cea.reasonAssert AS assertReasonSuccess,#定损说明
+        cea.damageExtent,#定损程度
+        cea.damagePosition,#定损部位
+        cea.description,#定损描述
+        cea.assertImg AS assertImgList,#定损照片
+        cme.name AS maintenanceName,#维修人员
+        cmee.name ,#定损人员
+        cr.timeBegin, #开始维修时间
+        cr.img AS repairImgList,#维修照片
+        cr.description AS maintenanceDescription,
+        cr.timeEnd,
+      ce.eventNo AS orderNo
+      FROM
+          cbh_event AS ce
+      LEFT JOIN cbh_car AS cc ON ce.carId = cc.id
+      LEFT JOIN cbh_event_apply AS ca ON ce.eventNo = ca.eventNo
+      LEFT JOIN cbh_event_receivecar AS cer ON ce.eventNo = cer.eventNo
+      LEFT JOIN cbh_event_assert AS cea ON ce.eventNo = cea.eventNo
+      LEFT JOIN cbh_maintenanceshop_employee AS cmee ON cmee.id = cea.maintenanceshopEmployeeId
+      LEFT JOIN cbh_event_repair AS cr ON cr.eventNo = ce.eventNo
+      LEFT JOIN cbh_maintenanceshop_employee AS cme ON cr.repairmanId = cme.id
+      LEFT JOIN cbh_maintenanceshop AS cm ON cm.id = ce.maintenanceshopId
+      LEFT JOIN middle_business_maintenanceshop AS mbm ON mbm.maintenanceshopId = cm.id
+      LEFT JOIN cbh_user_business AS cub ON cub.id = mbm.businessId
+      WHERE
+      ce.eventNo= #{eventNo,jdbcType=VARCHAR}
+      AND cub.toKen = #{toKen,jdbcType=VARCHAR}
+      AND cer.status=1
+      GROUP BY ce.eventNo
+    </select>
+    <select id="getOrderDetailByStatus81"  parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT
+        cc.drivingLicense,#行驶证照片
+        cc.licensePlateNumber,#车牌号
+        cc.reasonSuccess as carReasonSuccess,#加入互助审核通过说明
+        cc.model AS brand, #品牌
+        cer.nameCarOwner,#联系人
+        cer.telCarOwner,#电话
+        ce.statusEvent,
+        cer.timeReceiveEnd as timeReceiveCar,#接车时间
+        ce.timePay as timeReceiveCars,#接车时间
+        ce.timeReceiveOrder AS receiveOrderTime,#接单时间
+        cer.longitude,
+        cer.latitude,
+        cea.amtAssert,#定损价格
+        ca.accidentDescription, #事故描述
+        ca.accidentImg AS accidentImgList, #车损照片
+        ca.reasonSuccess AS applyReasonSuccess,#申请理赔审核通过说明
+        cea.reasonAssert AS assertReasonSuccess,
+        cea.damageExtent,#定损程度
+        cea.damagePosition,#定损部位
+        cea.description,#定损描述
+        cea.assertImg AS assertImgList,#定损照片
+        cme.name AS maintenanceName,#维修人员
+        cmee.name,#定损人员
+        cr.img AS repairImgList,#维修照片
+        cr.timeBegin,
+        cr.description AS maintenanceDescription,
+        cec.content, #投诉详情
+        cec.timeComplaint, #投诉时间
+        cec.timeUnComplaint,#撤销时间
+        ce.eventNo AS orderNo
+        FROM
+        cbh_event AS ce
+        LEFT JOIN cbh_car AS cc ON ce.carId = cc.id
+        LEFT JOIN cbh_event_apply AS ca ON ce.eventNo = ca.eventNo
+        LEFT JOIN cbh_event_receivecar AS cer ON ce.eventNo = cer.eventNo
+        LEFT JOIN cbh_event_assert AS cea ON ce.eventNo = cea.eventNo
+        LEFT JOIN cbh_maintenanceshop_employee AS cmee ON cmee.id = cea.maintenanceshopEmployeeId
+        LEFT JOIN cbh_event_repair AS cr ON cr.eventNo = ce.eventNo
+        LEFT JOIN cbh_event_complaint AS cec ON cec.eventNo = ce.eventNo
+        LEFT JOIN cbh_maintenanceshop_employee AS cme ON cr.repairmanId = cme.id
+        LEFT JOIN cbh_maintenanceshop AS cm ON cm.id = ce.maintenanceshopId
+        LEFT JOIN middle_business_maintenanceshop AS mbm ON mbm.maintenanceshopId = cm.id
+        LEFT JOIN cbh_user_business AS cub ON cub.id = mbm.businessId
+      WHERE
+      ce.eventNo= #{eventNo,jdbcType=VARCHAR}
+      AND cub.toKen = #{toKen,jdbcType=VARCHAR}
+      <choose>
+          <when test="type==1">
+              AND cer.status=1
+          </when>
+          <when test="type==3">
+              AND cer.status=3
+          </when>
+      </choose>
+      GROUP BY ce.eventNo
+    </select>
+    <select id="getOrderDetailByStatus100" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+        cc.drivingLicense,#行驶证照片
+        cc.licensePlateNumber,#车牌号
+        cc.reasonSuccess as carReasonSuccess,#加入互助审核通过说明
+        cc.model AS brand,#品牌
+        cer.nameCarOwner,#联系人
+        cer.telCarOwner,#电话号码
+        cer.longitude,
+        cer.latitude,
+        ca.accidentDescription, #事故描述
+        ca.accidentImg AS accidentImgList, #车损照片
+        ca.reasonSuccess AS applyReasonSuccess,#申请理赔审核通过说明
+        ce.statusEvent,#状态
+        ce.timeReceiveOrder AS receiveOrderTime,#接单时间
+        cea.amtAssert,#定损价格
+        cea.damageExtent,#定损程度
+        cea.damagePosition,#定损部位
+        cea.description,#定损描述
+        cea.assertImg AS assertImgList,#定损照片
+        cea.reasonAssert AS assertReasonSuccess,#定损说明
+        cmm.name,#定损名字
+        cme.name AS maintenanceName,#维修人员
+        cr.img AS repairImgList,#维修照片
+        cr.description AS maintenanceDescription,
+        cec.score,
+        cec.labelContent,
+        cec.content AS  commentContent,
+        cec.createAt AS ceoCreateAt,
+      ce.eventNo AS orderNo
+      FROM
+          cbh_event AS ce
+      LEFT JOIN cbh_car AS cc ON ce.carId = cc.id
+      LEFT JOIN cbh_event_apply AS ca ON ce.eventNo = ca.eventNo
+      LEFT JOIN cbh_event_receivecar AS cer ON ce.eventNo = cer.eventNo
+      LEFT JOIN cbh_event_assert AS cea ON ce.eventNo = cea.eventNo
+      LEFT JOIN cbh_maintenanceshop_employee AS cmm ON cea.maintenanceshopEmployeeId = cmm.id
+      LEFT JOIN cbh_event_repair AS cr ON cr.eventNo = ce.eventNo
+      LEFT JOIN cbh_maintenanceshop_employee AS cme ON cr.repairmanId = cme.id
+      LEFT JOIN cbh_maintenanceshop AS cm ON cm.id = ce.maintenanceshopId
+      LEFT JOIN cbh_event_comment AS cec ON ce.eventNo = cec.eventNo
+      LEFT JOIN middle_business_maintenanceshop AS mbm ON mbm.maintenanceshopId = cm.id
+      LEFT JOIN cbh_user_business AS cub ON cub.id = mbm.businessId
+      WHERE
+      ce.eventNo= #{eventNo,jdbcType=VARCHAR}
+      AND cub.toKen = #{toKen,jdbcType=VARCHAR}
+      GROUP BY ce.eventNo
+    </select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.system.RightsMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_rights
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">roleId,</if>
+            <if test="rightsMenu != null and rightsMenu != ''">rightsMenu,</if>
+            <if test="rightsResource != null and rightsResource != ''">rightsResource,</if>
+            <if test="status != null">status,</if>
+            <if test="createAt != null">createAt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">#{roleId,jdbcType=INTEGER},</if>
+            <if test="rightsMenu != null and rightsMenu != ''">#{rightsMenu,jdbcType=VARCHAR},</if>
+            <if test="rightsResource != null and rightsResource != ''">#{rightsResource,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=INTEGER},</if>
+            <if test="createAt != null">#{createAt,jdbcType=DATE},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE sys_rights
+        <set>
+            <if test="roleId != null">roleId = #{roleId,jdbcType=INTEGER},</if>
+            <if test="rightsMenu != null and rightsMenu != ''">rightsMenu = #{rightsMenu,jdbcType=VARCHAR},</if>
+            <if test="rightsResource != null and rightsResource != ''">rightsResource = #{rightsResource,jdbcType=VARCHAR},</if>
+            <if test="status != null">status = #{status,jdbcType=INTEGER},</if>
+            <if test="createAt != null">createAt = #{createAt,jdbcType=DATE},</if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByRoleId" parameterType="java.util.Map">
+        UPDATE sys_rights
+        <set>
+            <if test="rightsMenu != null and rightsMenu != ''">rightsMenu = #{rightsMenu,jdbcType=VARCHAR},</if>
+            <if test="rightsResource != null and rightsResource != ''">rightsResource = #{rightsResource,jdbcType=VARCHAR},</if>
+            <if test="status != null">status = #{status,jdbcType=INTEGER},</if>
+            <if test="createAt != null">createAt = #{createAt,jdbcType=DATE},</if>
+        </set>
+        WHERE roleId = #{roleId,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteModel" parameterType="java.lang.Integer">
+        delete from sys_rights where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="findMore" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT id,roleId,rightsMenu,rightsResource,status,createAt FROM sys_rights
+        WHERE 1 = 1
+        <if test="roleId != null"> and roleId = #{roleId,jdbcType=VARCHAR}</if>
+        <if test="status != null"> and status = #{status,jdbcType=VARCHAR}</if>
+        ORDER BY createAt DESC
+    </select>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT id,roleId,rightsMenu,rightsResource,status,createAt FROM sys_rights
+        WHERE status = 1
+        <if test="roleId != null"> and roleId = #{roleId,jdbcType=VARCHAR}</if>
+    </select>
+    
+    <select id="selectByRoleId" parameterType="Integer" resultType="com.zccbh.demand.pojo.system.Rights">
+        SELECT * FROM sys_rights
+        WHERE roleId = #{roleId}
+    </select>
+</mapper>

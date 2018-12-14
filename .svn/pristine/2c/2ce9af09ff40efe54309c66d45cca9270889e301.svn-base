@@ -1,0 +1,114 @@
+### \u9A8C\u8BC1\u6570\u636E\u5E93\u8FDE\u63A5
+validationQuery=SELECT 1
+
+### \u6570\u636E\u5E93\u914D\u7F6E
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://106.14.223.21:3306/chevhuzhutest?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
+#jdbc.url=jdbc:mysql://106.14.223.21:3306/chevhuzhu1.0?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
+jdbc.username=zccbh
+jdbc.password=Zccbh123!@#
+
+jwtSK=aAbBcCdD
+
+### \u91D1\u989D\u52A0\u5BC6
+OFTEN_DES=DES
+orKey=~!@#$%^&*
+
+### \u963F\u91CC\u4E91oss\u50A8\u5B58\u56FE\u7247
+accessKeyId=LTAIocJnw9YCKcBy
+accessKeySecret=AW2mZEPHpLcCLOgskdgZKTfeD5DCcq
+endpoint=http://oss-cn-beijing.aliyuncs.com
+bucketName=chevhuzhu
+
+### redis\u914D\u7F6E
+redis.host=127.0.0.1
+redis.port=6379
+redis.maxWait=500
+redis.testOnBorrow=true
+redis.dbIndex=1
+redis.maxIdle=1000
+redis.maxActive=2000
+
+# -------------------------------------\u7535\u8BDD\u53F7\u7801
+#\u8D22\u52A1\u7535\u8BDD
+financeMobileNumber=15208296603
+#\u540E\u53F0\u7BA1\u7406\u5458
+administratorCall=18030559603
+# -------------------------------------\u9AD8\u5FB7\u5730\u56FEkey
+gaoDeKey=60809b6d4774c8a722556bbae1228507
+#--------------------------------- \u963F\u91CC\u4E91\u79FB\u52A8App
+iOSAppKey=24831094
+AndroidAppKey=24831528
+# \u7BA1\u7406\u7AEF
+iOSAppManagerKey=25012202
+AndroidAppManagerKey=25012201
+iosEnvironment=DEV
+
+
+#--------------------------------- \u8F66\u5988\u5988\u5546\u6237code
+merchantCode=100001
+cheMaMaIP=127.0.0.1_116.62.157.131_116.62.157.131
+#--------------------------------- \u5FAE\u4FE1\u63A8\u9001\u7684URL\u94FE\u63A5
+realURL=http://test.chevhuzhu.com/
+#--------------------------------- \u89C2\u5BDF\u8005\u5929\u6570
+observerDayNumber=30
+
+
+#weixin
+appId=wx6d24b8007f94f503
+appSecret=c2dfad34f931c59ff1baa83ab000bfb7
+#--------------------------------- zhenshi/ceshi
+partner=1501002061
+partnerKey=qoFp2FykGBUzXRrrB2qX3XBZ7GCqfKmn
+chevhuzhuUrl=http://test.chevhuzhu.com/
+
+#\u8425\u9500\u6D3B\u52A8\u7F51\u9875
+address1=http://test.chevhuzhu.com/hfive/view/event_join.html
+
+#\u5206\u4EAB\u62A5\u4EF7\u7F51\u9875
+shareUrl=http://test.chevhuzhu.com/hfive/view/baojia.html
+
+# -------------------------------------\u5FAE\u4FE1\u63A8\u9001\u6A21\u677Fid
+# -------------------------------------\u5BA1\u6838\u901A\u8FC7\u901A\u77E5
+auditNotification=HLlOh5qPHqV81gdZcNYH7wkWPa0fn2Tmb4ru0LmhSdo
+# -------------------------------------\u8BA2\u5355\u672A\u652F\u4ED8\u901A\u77E5
+paymentNotice=SEqO5meRvpQEXArnRd4u8TA070RhKhIydFmVUgbWvo8
+# -------------------------------------\u7EF4\u4FEE\u5B8C\u6210\u901A\u77E5
+maintenanceNotification=jas9KOXflvoxxeMM9Ai4DC5J6wWTrlquFsIqtEtYowE
+# -------------------------------------\u4F59\u989D\u4E0D\u8DB3\u63D0\u9192
+lackBalance=4AMhJmTTXGw85v75ChzQZb_jkrJNk3Yc7BZ8fROPiJ4
+# -------------------------------------\u5206\u644A\u63A8\u9001\u901A\u77E5\u6A21\u677F\u6D88\u606F
+shareMoney=HSplg09-ZbLP7QvPPV4UC92oKX6NixPT5rZ2ha8PioA
+# -------------------------------------\u5FD7\u613F\u8005\u6D3B\u52A8\u901A\u77E5
+activitiesPush=eOS-6yiPZqLvBAJ3XWbM8TbmG-Vl66nlIACyceDoueU
+# -------------------------------------\u52A0\u5165\u4E92\u52A9\u652F\u4ED8\u901A\u77E5\u6A21\u677F\u6D88\u606F
+paymentHelp=SEqO5meRvpQEXArnRd4u8TA070RhKhIydFmVUgbWvo8
+# -------------------------------------\u8D44\u6599\u8865\u5145\u901A\u77E5
+addCarImg=4zObGZ5qo3ye2lt__61hdA27iMkTKWRrGWoS11HxZ1c
+# -------------------------------------\u5BA1\u6838\u672A\u901A\u8FC7\u63D0\u9192
+examineFail=GV-viT8kBKbygPWnzvBFk0JopR9E8j3mD8NGXzjlObE
+# -------------------------------------\u8BA2\u5355\u72B6\u6001\u66F4\u65B0
+orderUpdate=0bdJvmLtMpyZvFBquwmVAo4U0CL7yDzKKBNatPO1KsU
+# -------------------------------------\u8F66\u8F86\u8FDB\u5165\u89C2\u5BDF\u671F\u901A\u77E5
+carObservationInform=zpnKjYLENIm1JrnBSv_Ubh4XSLAVR1-0BRHwUslcSSE
+# -------------------------------------\u8D26\u5355\u751F\u6210\u901A\u77E5
+billNotifications=zhe2pXNbQl8APGEalN0Y21N0IXjGJ95Rb91ovLiqU4E
+# -------------------------------------\u8F66\u8F86\u4FDD\u969C\u4E2D\u901A\u77E5
+carGuaranteeNotice=GJjq3AIx-Hea6SlmZSMmkRujyGk8oaCyw3XHmfORRho
+# -------------------------------------\u9000\u51FA\u4E92\u52A9\u8BA1\u5212\u901A\u77E5
+quitRescue=kvje79p1Wk-jN4ZJWNSPbuiWT0k4WLHQxmTEQTgbxmA
+#--------------------------------------\u62A5\u544A\u751F\u6210\u901A\u77E5
+createNotice=OAKd19JoPxlCLL0mO7mb-9aC5KtDecFg3EZlV6bMrNE
+#--------------------------------------\u7406\u8D54\u989D\u5EA6\u4E0D\u8DB3
+lackAmount=6EcuOko2i_8MBWpxZ8iekC7hvKb7GRdiFjQZX3rt354
+#--------------------------------------\u5145\u503C\u6210\u529F\u63D0\u9192
+rechargeSuccess=McTJlEQpq6WdgLf8WR0OKGVYdkJ3qe0-nMgPJRd7UFg
+#---------------------------------------\u6708\u8D26\u5355
+monthBill=KdJlw5QsJj2ckj_4nE3HomRAMfkmzKzZSXM0a8MoKUo
+#---------------------------------------\u9080\u8BF7\u6210\u529F\u6A21\u677F
+invitationSuccess=bh-FzHYofin3C6IkouxTiA1tlN8KNj5Ikhr5xwTTycQ
+#----------------------------------------
+
+
+# \u4E34\u65F6\u6D3B\u52A8 \u63A8\u9001\u6A21\u677F\u6D88\u606F \u5F00\u5173
+invitationActivityPushMsg = true

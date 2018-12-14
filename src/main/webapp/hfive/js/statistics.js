@@ -1,0 +1,1 @@
+"use strict";!function t(){showLoad(),goAPI({url:_api.index,success:function(t){$(".container").html(juicer($("#main-tpl").html(),t.data))},error:function(n){showConfirm({str:n,btn_yes:{str:"重新加载",event_click:t}})},complete:function(){hideLoad()}})}();

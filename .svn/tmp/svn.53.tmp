@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 配置连接池 -->
+    <bean id="quartzDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="username" value="zccbh"></property>
+        <property name="password" value="Zccbh123!@#"></property>
+        <!-- <property name="url" value="jdbc:mysql://106.14.223.21:3306/chevhuzhu_quartz?characterEncoding=utf-8"></property> -->
+        <property name="url" value="jdbc:mysql://106.14.223.21:3306/local_quartz?characterEncoding=utf-8"></property>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+    </bean>
+    <!-- quartz持久化存储 -->
+    <bean name="quartzScheduler"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean" >
+        <property name="dataSource">
+            <ref bean="quartzDataSource" />
+        </property>
+        <property name="applicationContextSchedulerContextKey" value="applicationContext" />
+        <property name="taskExecutor" ref="taskExecutor" />
+        <!--  也可以在quartz.properties中配置   -->
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.scheduler.instanceName">AIGOUscheduler</prop>
+                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+                <!-- JobStore 配置   -->
+                <prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+                <!--  集群配置   -->
+                <prop key="org.quartz.jobStore.isClustered">true</prop>
+                <prop key="org.quartz.jobStore.clusterCheckinInterval">15000</prop>
+                <prop key="org.quartz.jobStore.maxMisfiresToHandleAtATime">1</prop>
+                <!--   数据表设置   -->
+                <prop key="org.quartz.jobStore.tablePrefix">CHEVHUZHU_</prop>
+                <prop key="org.quartz.jobStore.dataSource">qzDS</prop>
+            </props>
+        </property>
+        <!--   可选，QuartzScheduler启动时更新己存在的Job，这样就不用每次修改targetObject后删除qrtz_job_details表对应记录了   -->
+        <property name="overwriteExistingJobs" value="true" />
+        <!-- 设置自动启动   -->
+        <property name="autoStartup" value="true" />
+        <!--可以在web关闭的时候关闭线程-->
+        <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+    </bean>
+
+    <!--   线程池配置   -->
+    <bean id="taskExecutor"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数，默认为1 -->
+        <property name="corePoolSize" value="1" />
+        <!-- 最大线程数，默认为Integer.MAX_VALUE -->
+        <property name="maxPoolSize" value="100" />
+        <!--队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE-->
+        <property name="queueCapacity" value="1000" />
+        <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+        <property name="keepAliveSeconds" value="300" />
+        <!-- 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 -->
+        <property name="rejectedExecutionHandler">
+            <!-- AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 -->
+            <!-- CallerRunsPolicy:主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 -->
+            <!-- DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+            <!-- DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+        </property>
+    </bean>
+</beans>

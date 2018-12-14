@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.activities.PackYearsCodeMapper">
+
+    <sql id="SELECT_ALL">
+        SELECT id,uuid,carId,customerId,use_status,use_time, create_time FROM cbh_packyears_code WHERE 1=1
+    </sql>
+
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cbh_packyears_code
+          (uuid,carId,customerId,use_status,)
+        VALUES (#{uuid},#{carId},#{customerId},#{use_status})
+    </insert>
+
+    <select id="queryByCode" parameterType="Map" resultType="Map">
+        <include refid="SELECT_ALL"/>
+        AND uuid = #{uuid}
+    </select>
+
+    <update id="updateCode4Use" parameterType="String">
+        UPDATE cbh_packyears_code SET customerId = #{customerId} AND carId = #{carId} AND use_status = #{use_status} AND use_time = sysdate()
+        WHERE uuid = #{uuid}
+    </update>
+
+</mapper>

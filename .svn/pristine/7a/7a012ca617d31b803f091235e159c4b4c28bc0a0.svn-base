@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.foundation.FoundationDetailMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_foundation_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="practitioner != null and practitioner != ''">practitioner,</if>
+            <if test="category != null and category != ''">category,</if>
+            <if test="amt != null and amt != ''">amt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="practitioner != null and practitioner != ''">#{practitioner,jdbcType=VARCHAR},</if>
+            <if test="category != null and category != ''">#{category,jdbcType=VARCHAR},</if>
+            <if test="amt != null and amt != ''">#{amt,jdbcType=DECIMAL},</if>
+        </trim>
+    </insert>
+
+	<update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_foundation_detail
+        <set>
+            <if test="practitioner != null and practitioner != ''">practitioner = #{practitioner},</if>
+            <if test="category != null and category != ''">category = #{category},</if>
+            <if test="amt != null and amt != ''">amt = #{amt},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findMore" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT * FROM cbh_foundation_detail
+        ORDER BY createAt DESC
+    </select>
+</mapper>

@@ -1,0 +1,41 @@
+.container {
+  background-color: #4c07b0; }
+
+#phone-box {
+  position: relative;
+  padding-top: 65%;
+  background: url(/hfive/img/event_cdcyh_2.png) center top/7.1rem auto no-repeat; }
+
+#phone {
+  position: absolute;
+  top: 2rem;
+  left: 1.2rem;
+  width: 3.5rem;
+  height: .86rem;
+  color: #813deb;
+  border-radius: 0; }
+  #phone::-webkit-input-placeholder {
+    font-weight: normal; }
+  #phone:-ms-input-placeholder {
+    font-weight: normal; }
+  #phone::-ms-input-placeholder {
+    font-weight: normal; }
+  #phone::placeholder {
+    font-weight: normal; }
+
+#btn-confirm {
+  position: absolute;
+  top: 1.68rem;
+  right: 1.1rem;
+  width: 1.44rem;
+  height: 1.44rem;
+  background: url(/hfive/img/event_cdcyh_3.png) center/100% 100% no-repeat; }
+
+#txt1 {
+  position: absolute;
+  top: 2.86rem;
+  left: 1.2rem;
+  width: 5.9rem;
+  text-align: left;
+  color: #fff;
+  line-height: 2.5; }

@@ -1,0 +1,136 @@
+<html>
+<head>
+  <title>我的优惠券</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/coupon.css">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">洗车券优惠活动</div>
+    <a class="navbar-right fbox-cc hover" href="/hfive/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div class="container nav full">
+    <script type="text/template" id="main-tpl">
+    {@if list.length > 0}
+    <div id="list">
+      {@each list as item}
+        {@if item.couponStatus == 2}
+        <div class="coupon used fbox-ac">
+          <img class="img" src="/hfive/img/washcar_coupon_off.png">
+          <img class="stamp" src="/hfive/img/washcar_coupon_used.png">
+          <div class="main">
+            <p class="p1 fsize-20">上门洗车</p>
+            <p class="p3 fsize-14">原价30元</p>
+            <p class="p2 fsize-12">使用有效期截至{@if item.validTime}${item.validTime.time|build_time, 'yyyy-MM-dd'}{@/if}</p>
+          </div>
+          <p class="bot fsize-12">由<img src="/hfive/img/washcar_logo_off.png">第三方提供服务</p>
+        </div>
+        {@else}
+        <div class="coupon fbox-ac">
+          <img class="img" src="/hfive/img/washcar_coupon_on.png">
+          <div class="main">
+            <p class="p1 fsize-20">上门洗车</p>
+            <p class="p3 fsize-14">原价30元</p>
+            <p class="p2 fsize-12">使用有效期截至{@if item.validTime}${item.validTime.time|build_time, 'yyyy-MM-dd'}{@/if}</p>
+          </div>
+          <p class="bot fsize-12">由<img src="/hfive/img/washcar_logo_on.png">第三方提供服务</p>
+          <div class="btn-box">
+            <a class="btn-use hover fsize-14" href="javascript:;">去使用</a><br><a class="btn-rule hover fsize-12" href="javascript:;">使用说明</a>
+          </div>
+        </div>
+        {@/if}
+      {@/each}
+      {@if number > 0}
+      <div class="btn-wrap">
+        <div class="btn-box fbox-ac">
+          <a class="btn strong hover" href="/hfive/view/washcar.html">1元购买洗车券</a>
+        </div>
+      </div>
+      {@/if}
+    </div>
+    {@else}
+      {@if number > 0}
+      <div class="no-result">
+        <p class="p1 fsize-16">主人，您还没有优惠券</p>
+      </div>
+      <div class="btn-wrap">
+        <div class="btn-box fbox-ac">
+          <a class="btn strong hover" href="/hfive/view/washcar.html">1元购买洗车券</a>
+        </div>
+      </div>
+      {@else}
+      <div class="no-result">
+        <p class="p1 fsize-16">主人，您还没有优惠券</p>
+        <p class="p2 fsize-14">参与邀请好友获得1元购买洗车活动</p>
+      </div>
+        {@if car && car.status == 1}
+        <div class="btn-wrap">
+          <div class="btn-box fbox-ac">
+            <a class="btn strong hover" href="/hfive/view/car_add.html?id=${car.id}">加入互助</a>
+          </div>
+        </div>
+        {@else if car && car.status != 1}
+        <div class="btn-wrap">
+          <div class="btn-box fbox-ac">
+            <a class="btn strong hover" href="/hfive/view/share.html">去邀请好友</a>
+          </div>
+        </div>
+        {@else}
+        <div class="btn-wrap">
+          <div class="btn-box fbox-ac">
+            <a class="btn strong hover" href="/hfive/view/car_add.html">加入互助</a>
+          </div>
+        </div>
+        {@/if}
+      {@/if}
+    {@/if}
+    </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/js/coupon.js?v=4"></script>
+</body>
+</html>

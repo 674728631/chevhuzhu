@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.event.EventReceivecarMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_event_receivecar
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventNo != null and eventNo != ''">eventNo,</if>
+            <if test="type != null">type,</if>
+            <if test="nameCarOwner != null and nameCarOwner != ''">nameCarOwner,</if>
+            <if test="telCarOwner != null and telCarOwner != ''">telCarOwner,</if>
+            <if test="licensePlateNumber != null and licensePlateNumber != ''">licensePlateNumber,</if>
+            <if test="place != null and place != ''">place,</if>
+            <if test="longitude != null  and longitude != ''">longitude,</if>
+            <if test="latitude != null  and latitude != ''">latitude,</if>
+            <if test="nameCarReceive != null and nameCarReceive != ''">nameCarReceive,</if>
+            <if test="telCarReceive != null and telCarReceive != ''">telCarReceive,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="timeReceiveCar != null">timeReceiveCar,</if>
+            <if test="timeReceiveEnd != null">timeReceiveEnd,</if>
+            <if test="reciveCarTime != null">reciveCarTime,</if>
+            <if test="status != null">status,</if>
+            <if test="createAt != null">createAt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eventNo != null and eventNo != ''">#{eventNo,jdbcType=VARCHAR},</if>
+            <if test="type != null">#{type,jdbcType=INTEGER},</if>
+            <if test="nameCarOwner != null and nameCarOwner != ''">#{nameCarOwner,jdbcType=VARCHAR},</if>
+            <if test="telCarOwner != null and telCarOwner != ''">#{telCarOwner,jdbcType=VARCHAR},</if>
+            <if test="licensePlateNumber != null and licensePlateNumber != ''">#{licensePlateNumber,jdbcType=VARCHAR},</if>
+            <if test="place != null and place != ''">#{place,jdbcType=VARCHAR},</if>
+            <if test="longitude != null and longitude != ''">#{longitude,jdbcType=VARCHAR},</if>
+            <if test="latitude != null and latitude != ''">#{latitude,jdbcType=VARCHAR},</if>
+            <if test="nameCarReceive != null and nameCarReceive != ''">#{nameCarReceive,jdbcType=VARCHAR},</if>
+            <if test="telCarReceive != null and telCarReceive != ''">#{telCarReceive,jdbcType=VARCHAR},</if>
+            <if test="remark != null and remark != ''">#{remark,jdbcType=VARCHAR},</if>
+            <if test="timeReceiveCar != null">#{timeReceiveCar,jdbcType=DATE},</if>
+             <if test="timeReceiveEnd != null">#{timeReceiveEnd,jdbcType=DATE},</if>
+            <if test="reciveCarTime != null">#{reciveCarTime,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=INTEGER},</if>
+            <if test="createAt != null">#{createAt,jdbcType=DATE},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_event_receivecar
+        <set>
+            <if test="eventNo != null and eventNo != ''">eventNo = #{eventNo,jdbcType=VARCHAR},</if>
+            <if test="type != null">type = #{type,jdbcType=INTEGER},</if>
+            <if test="nameCarOwner != null and nameCarOwner != ''">nameCarOwner = #{nameCarOwner,jdbcType=VARCHAR},</if>
+            <if test="telCarOwner != null and telCarOwner != ''">telCarOwner = #{telCarOwner,jdbcType=VARCHAR},</if>
+            <if test="licensePlateNumber != null and licensePlateNumber != ''">licensePlateNumber = #{licensePlateNumber,jdbcType=VARCHAR},</if>
+            <if test="place != null and place != ''">place = #{place,jdbcType=VARCHAR},</if>
+            <if test="longitude != null and longitude != ''">longitude = #{place,jdbcType=VARCHAR},</if>
+            <if test="latitude != null and latitude != ''">place = #{latitude,jdbcType=VARCHAR},</if>
+            <if test="nameCarReceive != null and nameCarReceive != ''">nameCarReceive = #{nameCarReceive,jdbcType=VARCHAR},</if>
+            <if test="telCarReceive != null and telCarReceive != ''">telCarReceive = #{telCarReceive,jdbcType=VARCHAR},</if>
+            <if test="remark != null and remark != ''">remark = #{remark,jdbcType=VARCHAR},</if>
+            <if test="timeReceiveCar != null">timeReceiveCar = #{timeReceiveCar,jdbcType=DATE},</if>
+            <if test="timeReceiveEnd != null">timeReceiveEnd = #{timeReceiveEnd,jdbcType=DATE},</if>
+            <if test="reciveCarTime != null">reciveCarTime = #{reciveCarTime,jdbcType=VARCHAR},</if>
+            <if test="status != null">status = #{status,jdbcType=INTEGER},</if>
+            <if test="createAt != null">createAt = #{createAt,jdbcType=DATE},</if>
+        </set>
+        WHERE eventNo = #{eventNo,jdbcType=VARCHAR}
+    </update>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            e.eventNo,e.cancellationsReason,e.cancellationsInstructions,a.accidentDescription,a.accidentImg,
+            r.nameCarOwner,r.telCarOwner,r.longitude,r.latitude,car.licensePlateNumber,r.place,car.model,m.NAME AS shopName,r.longitude,r.latitude
+        FROM cbh_event e
+            LEFT JOIN cbh_event_apply a ON a.eventNo = e.eventNo
+            LEFT JOIN cbh_event_receivecar r ON r.eventNo = e.eventNo
+            LEFT JOIN cbh_car car ON car.id = e.carId
+            LEFT JOIN cbh_maintenanceshop m ON m.id = e.maintenanceshopId
+        WHERE r.status = 1 AND e.eventNo = #{eventNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findReceivecar" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT e.eventNo,e.statusEvent,e.eventQrcode,e.cancellationsInstructions,e.cancellationsReason,a.timeApply,a.reasonSuccess AS applySuccess,a.accidentDescription,
+        a.accidentImg,r.nameCarOwner AS receiveManName,r.telCarOwner,r.place,r.longitude,r.latitude,r.createAt,c.customerPN,car.nameCarOwner,car.licensePlateNumber,car.model,
+        car.amtCompensation,car.drivingLicense,car.carPhotos,m.id AS shopId,m.name AS shopName,m.tel,m.address
+        FROM cbh_event e
+            LEFT JOIN cbh_event_apply a ON a.eventNo = e.eventNo
+            LEFT JOIN cbh_event_receivecar r ON r.eventNo = e.eventNo
+            LEFT JOIN cbh_car car ON car.id = e.carId
+            LEFT JOIN cbh_user_customer c ON c.id = e.customerId
+            LEFT JOIN cbh_maintenanceshop m ON m.id = e.maintenanceshopId
+        WHERE r.status = 1 AND e.eventNo = #{eventNo,jdbcType=VARCHAR}
+            ORDER BY r.createAt DESC
+        LIMIT 1
+    </select>
+</mapper>

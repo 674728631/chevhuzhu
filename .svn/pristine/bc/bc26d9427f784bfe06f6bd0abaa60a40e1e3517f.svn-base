@@ -1,0 +1,80 @@
+<html>
+<head>
+  <title>维修网点</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=7">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  var _hmt = _hmt || [];(function(){var hm = document.createElement("script");hm.src="https://hm.baidu.com/hm.js?074bb24e94cc1a14248e7f87f21b34f2";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/shop.css?v=2">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">维修网点</div>
+  </div></div>
+  <div id="container" class="container nav-top ffull">
+  <script type="text/template" id="main-tpl">
+    <div id="main">
+      <!-- <div id="menu-box" class="fbox"> -->
+        <!-- <a class="fbox-cc fsize-16 txt-lv2 inhover" href="javascript:;" data-value="1"><p>离我近-远</p></a> -->
+        <!-- <a class="fbox-cc fsize-16 txt-lv2 inhover" href="javascript:;" data-value="2"><p>好评度高-低</p></a> -->
+        <!-- <a class="fbox-cc fsize-16 txt-lv2 inhover" href="javascript:;" data-value="3"><p>销量高-低</p></a> -->
+      <!-- </div> -->
+      <div class="tabbox fsize-14"><div class="tabbox-layer">
+        <div class="tabbox-tab">
+          <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+          <ul class="list-box"></ul>
+          <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_noshop.png"><p class="fsize-20">暂无网点</p></div></div>
+        </div>
+        <!--<div class="tabbox-tab">
+          <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+          <ul class="list-box"></ul>
+          <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_noshop.png"><p class="fsize-20">暂无网点</p></div></div>
+        </div>
+        <div class="tabbox-tab">
+          <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+          <ul class="list-box"></ul>
+          <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_noshop.png"><p class="fsize-20">暂无网点</p></div></div>
+        </div>-->
+      </div></div>
+    </div>
+  </script>
+  </div>
+  <div id="map-main"></div>
+  <script type="text/template" id="list-tpl">
+    {@each list as it}
+    <li><a class="shop-item fbox hover" href="/hfive/view/shop_detail.html?id=${it.id}">
+      <div class="avatar-box vip"><div class="avatar"><img src="${it.logo}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_shop_1.png')"></div></div>
+      <div class="content fbox-f1">
+        <div class="fbox"><p class="fbox-f1 txt fsize-16 txt-lv1">${it.name}</p></div>
+        <div class="fbox-ac"><p class="txt2 fsize-12 txt-yellow">{@if it.servicePoints}${it.servicePoints}{@else}0{@/if}分</p></div>
+        <div class="desc fsize-12 txt-lv3">${it.address}</div>
+      </div>
+    </a></li>
+    {@/each}
+  </script>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=39"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js"></script>
+  <script src="/hfive/js/shop.js?v=6"></script>
+</body>
+</html>

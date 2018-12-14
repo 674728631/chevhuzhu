@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zccbh.demand.mapper.merchants.CbhCarMapper" >
+  <resultMap id="BaseResultMap" type="com.zccbh.demand.pojo.merchants.CbhCar" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customerId" property="customerId" jdbcType="INTEGER" />
+    <result column="nameCarOwner" property="nameCarOwner" jdbcType="VARCHAR" />
+    <result column="telCarOwner" property="telCarOwner" jdbcType="VARCHAR" />
+    <result column="licensePlateNumber" property="licensePlateNumber" jdbcType="VARCHAR" />
+    <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="carType" property="carType" jdbcType="VARCHAR" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="drvingCity" property="drvingCity" jdbcType="VARCHAR" />
+    <result column="drivingLicense" property="drivingLicense" jdbcType="VARCHAR" />
+    <result column="carPhotos" property="carPhotos" jdbcType="VARCHAR" />
+    <result column="VIN" property="VIN" jdbcType="VARCHAR" />
+    <result column="amtCompensation" property="amtCompensation" jdbcType="DECIMAL" />
+    <result column="amtCooperation" property="amtCooperation" jdbcType="DECIMAL" />
+    <result column="typeGuarantee" property="typeGuarantee" jdbcType="INTEGER" />
+    <result column="timeBegin" property="timeBegin" jdbcType="TIMESTAMP" />
+    <result column="timeEnd" property="timeEnd" jdbcType="TIMESTAMP" />
+    <result column="timeSignout" property="timeSignout" jdbcType="TIMESTAMP" />
+    <result column="reasonFailure" property="reasonFailure" jdbcType="VARCHAR" />
+    <result column="failureNum" property="failureNum" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selectByCarId" resultType="java.util.Map">
+    SELECT c.model,c.licensePlateNumber,c.amtCooperation AS money,
+    cuc.openId,c.status,c.id,c.createAt,cuc.customerPN
+    FROM cbh_car AS c
+    LEFT JOIN cbh_user_customer AS cuc ON c.customerId=cuc.id
+    where (c.status BETWEEN 1 AND 2) AND c.messageFlag IS NULL
+  </select>
+  <update id="updateBycarId" parameterType="java.lang.Integer">
+    UPDATE cbh_car set messageFlag=#{messageFlag,jdbcType=INTEGER}
+    where id=#{id,jdbcType=INTEGER};
+  </update>
+</mapper>

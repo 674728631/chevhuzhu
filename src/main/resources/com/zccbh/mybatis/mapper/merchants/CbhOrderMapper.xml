@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zccbh.demand.mapper.merchants.CbhOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.zccbh.demand.pojo.merchants.CbhOrder" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="customerId" property="customerId" jdbcType="INTEGER" />
+    <result column="carId" property="carId" jdbcType="INTEGER" />
+    <result column="maintenanceshopId" property="maintenanceshopId" jdbcType="INTEGER" />
+    <result column="assertmanId" property="assertmanId" jdbcType="INTEGER" />
+    <result column="repairmanId" property="repairmanId" jdbcType="INTEGER" />
+    <result column="amtAssert" property="amtAssert" jdbcType="DECIMAL" />
+    <result column="amtBusiness" property="amtBusiness" jdbcType="DECIMAL" />
+    <result column="accidentDescription" property="accidentDescription" jdbcType="VARCHAR" />
+    <result column="accidentImg" property="accidentImg" jdbcType="VARCHAR" />
+    <result column="carOwnerName" property="carOwnerName" jdbcType="VARCHAR" />
+    <result column="carOwnerTel" property="carOwnerTel" jdbcType="VARCHAR" />
+    <result column="deliverPlace" property="deliverPlace" jdbcType="VARCHAR" />
+    <result column="deliverLongitude" property="deliverLongitude" jdbcType="VARCHAR" />
+    <result column="deliverLatitude" property="deliverLatitude" jdbcType="VARCHAR" />
+    <result column="takePlace" property="takePlace" jdbcType="VARCHAR" />
+    <result column="takeLongitude" property="takeLongitude" jdbcType="VARCHAR" />
+    <result column="takeLatitude" property="takeLatitude" jdbcType="VARCHAR" />
+    <result column="reasonCancellations" property="reasonCancellations" jdbcType="VARCHAR" />
+    <result column="explanationCancellations" property="explanationCancellations" jdbcType="VARCHAR" />
+    <result column="damageExtent" property="damageExtent" jdbcType="VARCHAR" />
+    <result column="damagePosition" property="damagePosition" jdbcType="VARCHAR" />
+    <result column="assertImg" property="assertImg" jdbcType="VARCHAR" />
+    <result column="assertDescription" property="assertDescription" jdbcType="VARCHAR" />
+    <result column="explanationAssert" property="explanationAssert" jdbcType="VARCHAR" />
+    <result column="examineExplanation" property="examineExplanation" jdbcType="VARCHAR" />
+    <result column="explanationRepair" property="explanationRepair" jdbcType="VARCHAR" />
+    <result column="repairImg" property="repairImg" jdbcType="VARCHAR" />
+    <result column="labelContent" property="labelContent" jdbcType="VARCHAR" />
+    <result column="commentContent" property="commentContent" jdbcType="VARCHAR" />
+    <result column="commentScore" property="commentScore" jdbcType="INTEGER" />
+    <result column="complaintContent" property="complaintContent" jdbcType="VARCHAR" />
+    <result column="complaintImg" property="complaintImg" jdbcType="VARCHAR" />
+    <result column="applyTime" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="reciveCarTime" property="reciveCarTime" jdbcType="TIMESTAMP" />
+    <result column="applyDistributionTime" property="applyDistributionTime" jdbcType="TIMESTAMP" />
+    <result column="deliverCarTime" property="deliverCarTime" jdbcType="TIMESTAMP" />
+    <result column="distributionTime" property="distributionTime" jdbcType="TIMESTAMP" />
+    <result column="receiveOrderTime" property="receiveOrderTime" jdbcType="TIMESTAMP" />
+    <result column="assertTime" property="assertTime" jdbcType="TIMESTAMP" />
+    <result column="comfirmAssertTime" property="comfirmAssertTime" jdbcType="TIMESTAMP" />
+    <result column="beginRepairTime" property="beginRepairTime" jdbcType="TIMESTAMP" />
+    <result column="endRepairTime" property="endRepairTime" jdbcType="TIMESTAMP" />
+    <result column="takeCarTime" property="takeCarTime" jdbcType="TIMESTAMP" />
+    <result column="payTime" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="completeTime" property="completeTime" jdbcType="TIMESTAMP" />
+    <result column="complaintTime" property="complaintTime" jdbcType="TIMESTAMP" />
+    <result column="unComplaintTime" property="unComplaintTime" jdbcType="TIMESTAMP" />
+    <result column="failReceiveOrderTime" property="failReceiveOrderTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selectOrderDetailByOrderNo" parameterType="java.lang.String" resultType="java.util.Map">
+  SELECT
+        cc.drivingLicense,#行驶证照片
+        cc.licensePlateNumber,#车牌号
+        cc.nameCarOwner,#车主姓名
+        cc.model AS brand,#品牌
+        co.carOwnerTel,#车主电话号码
+        co.orderNo,#订单编号
+        cme.NAME AS pricingName,#定损员
+        co.reciveCarTime AS timeReceiveCar,#最迟接车时间
+        co.deliverPlace,#交车地点
+        co.deliverLongitude,#交车经度
+        co.deliverLatitude,#交车纬度
+        cc.reasonSuccess,#车损前描述
+        co.accidentDescription,#车主描述
+        co.status AS orderStatus,#订单状态
+        cc.carPhotos,#车损钱照片
+        co.accidentImg,#用户提交车损照片
+        co.distributionTime,#分单时间
+        co.receiveOrderTime,#接单时间
+        co.deliverCarTime,#接车时间
+        co.amtAssert,#定损价格
+        co.damageExtent,#受损程度
+        co.damagePosition,#受损部位
+        co.assertDescription,#定损描述
+        co.assertImg,#商家定损照片
+        co.assertTime,#提交定损时间
+        co.explanationAssert,#定损审核说明
+        co.examineExplanation,#申请保险理赔审核说明
+        co.comfirmAssertTime,#完成定损时间
+        cmae.NAME AS maintenanceName,#维修人员
+        co.beginRepairTime,#开始维修人员
+        co.explanationRepair,#维修报告描述
+        co.repairImg,#维修后照片
+        co.endRepairTime,#维修完成时间
+        co.complaintContent,#投诉详情
+        co.complaintTime,#投诉时间
+        co.takeCarTime,#交车时间
+        co.commentScore,#评价星级
+        co.commentContent,#评价内容
+        co.labelContent,#评价标签内容
+        co.completeTime #评价时间
+        from cbh_order AS co
+        LEFT JOIN cbh_maintenanceshop AS cm ON co.maintenanceshopId=cm.id
+        LEFT JOIN middle_business_maintenanceshop AS mbm ON mbm.maintenanceshopId = cm.id
+        LEFT JOIN cbh_user_business AS cub ON cub.id = mbm.businessId
+        LEFT JOIN cbh_car AS cc ON co.carId=cc.id
+        LEFT JOIN cbh_maintenanceshop_employee AS cme ON co.assertmanId=cme.id
+        LEFT JOIN cbh_maintenanceshop_employee AS cmae ON co.repairmanId=cmae.id
+        WHERE
+        cub.toKen =#{token,jdbcType=VARCHAR}
+        and co.orderNo=#{orderNo,jdbcType=VARCHAR}
+        GROUP BY co.orderNo
+        LIMIT 1
+  </select>
+  <select id="selectByEventNo" parameterType="java.lang.String" resultType="com.zccbh.demand.pojo.merchants.CbhOrder">
+    SELECT *
+    FROM cbh_order
+    WHERE orderNo=#{orderNo,jdbcType=VARCHAR}
+    LIMIT 1
+  </select>
+</mapper>

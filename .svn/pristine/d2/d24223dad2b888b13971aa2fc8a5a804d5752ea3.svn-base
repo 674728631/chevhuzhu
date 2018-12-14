@@ -1,0 +1,269 @@
+package com.zccbh.demand.service.activities;
+
+import com.alibaba.fastjson.JSONObject;
+import com.zccbh.demand.mapper.activities.CarWashActivityMapper;
+import com.zccbh.demand.mapper.customer.UserCustomerMapper;
+import com.zccbh.test.liuzhen.HttpUtil;
+import com.zccbh.util.base.CommonField;
+import com.zccbh.util.base.HttpUtils;
+import com.zccbh.util.collect.Constant;
+import com.zccbh.util.collect.WxUtil;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class CarWashActivityService {
+
+    private Logger logger = LoggerFactory.getLogger(CarWashActivityService.class);
+
+    @Autowired
+    private UserCustomerMapper userCustomerMapper;
+
+    @Autowired
+    private CarWashActivityMapper carWashActivityMapper;
+
+    private final static int COUPON_MAX_NUM = 2;
+    private final static int COUPON_FEE = 1;
+
+    /**
+     * 判断用户参与资格
+     *
+     * @param userInfo
+     * @return
+     */
+    public Map<String, Object> qualification(Map<String, String> userInfo) throws Exception {
+        logger.info("判断用户= {} 参与资格>>>>", userInfo);
+        // 调用熊猫车服接口判断是否注册
+        Map<String, String> paramBogy = new HashMap<>();
+        paramBogy.put("tel", userInfo.get(CommonField.MOBILE_NUMBER));
+
+        Map<String, Object> rsMap = new HashMap<>();
+        rsMap.put("result", true);
+        rsMap.put("message", "OK");
+
+        String str = HttpUtil.doPost("https://carwash.pandacarlife.com/washceshi/Demo/check_reg", paramBogy); // 测试接口
+//        String str = HttpUtil.doPost("https://carwash.pandacarlife.com/wash/Demo/check_reg", paramBogy); // 正式接口
+        JSONObject returnBody = JSONObject.parseObject(str);
+        logger.info("熊猫车服判断用户注册接口调用结果>>>>>{}", returnBody);
+        if (null == returnBody || !"200".equals(returnBody.get("status").toString())) {
+            rsMap.put("result", false);
+            rsMap.put("message", returnBody.get("msg"));
+            return rsMap;
+        }
+
+        // 根据用户id 查询邀请记录，购买次数等
+        Map<String, Object> rs = userCustomerMapper.getInvitationSuccessTempParam(userInfo.get("id"));
+        int num = 0;
+        if (!CollectionUtils.isEmpty(rs))
+            num = Integer.valueOf(rs.get("num").toString());
+        if (num < 4) {
+            rsMap.put("result", false);
+            rsMap.put("message", "邀请次数不足，当前邀请次数为" + num);
+            return rsMap;
+        }
+        num = 0;
+        rs = carWashActivityMapper.getUserCouponMunber(userInfo.get("id"));
+        if (!CollectionUtils.isEmpty(rs))
+            num = Integer.valueOf(rs.get("number").toString());
+        rsMap.put("number", (COUPON_MAX_NUM - num) < 0 ? 0 : (COUPON_MAX_NUM - num));
+        if (num >= COUPON_MAX_NUM) {
+            rsMap.put("result", false);
+            rsMap.put("message", "已到最大购买次数，当前购买次数为" + num);
+            return rsMap;
+        }
+        return rsMap;
+    }
+
+    /**
+     * 一元洗车预支付接口
+     *
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    @Transactional
+    public String couponPay(Map<String, Object> param) throws Exception {
+
+        if (CollectionUtils.isEmpty(param))
+            throw new RuntimeException("参数异常");
+
+        int payMoney_int = Integer.valueOf(param.get("totalFee").toString()) * 100;
+        // 生成随机订单
+        String outTradeNo;
+        param.put("payStatus", 0);
+        param.put("couponStatus", 0);
+        param.put("couponNo", "");
+        int number = Integer.valueOf(param.get("number").toString());
+        String orderNo = "";
+        for (int i = 1; i <= number; i++) {
+            param.put("totalFee", COUPON_FEE);
+            logger.info("保存购买记录>>>>>>>>>>>>>>");
+            carWashActivityMapper.saveSingle(param);
+            orderNo += orderNo == "" ? String.valueOf(param.get("id")) : "|" + String.valueOf(param.get("id"));
+        }
+        String toCurrTime = Constant.toCurrTime();
+        if (toCurrTime.length() > 10) {
+            outTradeNo = toCurrTime.substring(toCurrTime.length() - 10, toCurrTime.length()) + "_" + orderNo;
+        } else {
+            outTradeNo = Constant.toCurrTime() + "_" + orderNo;
+        }
+        // 获取用户openid
+        Map<String, Object> userInfo = userCustomerMapper.getUserInfoById(Integer.valueOf(param.get("customerId").toString()));
+        if (CollectionUtils.isEmpty(userInfo))
+            throw new RuntimeException("查询用户失败！");
+
+        /*String result = WxUtil.sendPrepay(Constant.toNowTimeDate().getTime(),
+                Constant.toReadPro("chevhuzhuUrl") + "/activities/wxPayResult",
+                "127.0.0.1",
+                "1元洗车",
+                userInfo.get("openId").toString(), //用户openid
+                outTradeNo, // 订单
+                payMoney_int, //金额
+                WxUtil.SuJiShu(),
+                "1元洗车");
+        Map<String, Object> wxMap = WxUtil.resolveXml(result);//解析xml
+        logger.info("统一下单返回xml=", wxMap);
+        String json = null;
+        if (wxMap.get("prepay_id") != null)//获取prepay_id 封装返回,调H5支付所需参数
+            json = String.valueOf(WxUtil.coverH5Pay(wxMap.get("prepay_id")));
+        return json;*/
+        return null;
+    }
+
+    /**
+     * 微信支付回调接口
+     *
+     * @param wxReturnMap
+     * @return
+     */
+    @Transactional
+    public Map<String, Object> wxPayResult(Map<String, Object> wxReturnMap) {
+        Map<String, Object> outMap = new HashMap<>();
+        List<Map<String, Object>> couponList = new ArrayList<>();
+        outMap.put("couponList", couponList);
+
+        String noticeStr;
+        try {
+            noticeStr = WxUtil.setXML("SUCCESS", "ok");
+            if (!CollectionUtils.isEmpty(wxReturnMap) && null != wxReturnMap.get("return_code")) {
+                String return_code = wxReturnMap.get("return_code").toString(); // 返回状态码
+                logger.info("微信支付回调结果>>>>>>>>>{}", return_code);
+                if ("SUCCESS".equals(return_code)) {
+                    Map<String, Object> orderInfo = new HashMap<>();
+                    String outTradeNo = wxReturnMap.get("out_trade_no").toString().split("_")[1];// 商户订单号
+                    String[] orderNos = outTradeNo.split("|");
+                    for (String orderNo : orderNos) {
+                        orderInfo.put("id", orderNo);
+                        Map<String, Object> rs = carWashActivityMapper.findSingle(orderInfo);
+                        if (!CollectionUtils.isEmpty(rs)) {
+                            couponList.add(rs);
+                            orderInfo.put("transactionId", wxReturnMap.get("transaction_id").toString());// 微信支付订单号
+                            orderInfo.put("timeEnd", wxReturnMap.get("time_end").toString()); // 支付完成时间
+                            String result_code = wxReturnMap.get("result_code").toString();// 业务结果
+                            logger.info("支付结果={}>>>>", result_code);
+                            if ("SUCCESS".equals(result_code)) {
+                                orderInfo.put("payStatus", 1);
+                            } else {
+                                orderInfo.put("payStatus", 2);
+                            }
+                            orderInfo.put("version", rs.get("version"));
+                            int count = carWashActivityMapper.updateModel(orderInfo);
+                            if (count == 0) {
+                                logger.info("微信支付回调订单信息更新失败>>>>");
+                                noticeStr = WxUtil.setXML("FAIL", "FAILURE");
+                                outMap.put("noticeStr", noticeStr);
+                                return outMap;
+                            }
+                        }
+                    }
+                }
+            }
+            outMap.put("noticeStr", noticeStr);
+            return outMap;
+        } catch (Exception e) {
+            logger.error("支付回调异常", e);
+            noticeStr = WxUtil.setXML("FAIL", "FAILURE");
+            outMap.put("noticeStr", noticeStr);
+            return outMap;
+        }
+    }
+
+    public static void main(String[] args) {
+    }
+
+    /**
+     * 优惠券使用状态核销接口
+     *
+     * @param param
+     */
+    public int couponUseResult(Map<String, Object> param) {
+        logger.info("优惠券使用状态核销========>{]", param);
+        if (CollectionUtils.isEmpty(param))
+            return -1;
+        Map<String, Object> coupon = new HashMap<>();
+        coupon.put("customerPN", param.get("tel"));
+        coupon.put("couponStatus", param.get("ev_status"));
+        coupon.put("couponNo", param.get("guid"));
+        coupon.put("useTime", param.get("use_time"));
+        Map<String, Object> couponInfo = carWashActivityMapper.getCouponByNo(param.get("guid").toString());
+        if (CollectionUtils.isEmpty(couponInfo))
+            return -1;
+        coupon.put("version", couponInfo.get("version"));
+        return carWashActivityMapper.updateByNo(coupon);
+    }
+
+    /**
+     * 熊猫车服注册接口
+     *
+     * @param param
+     */
+    public void xiongMaoRegister(Map<String, Object> param) {
+//        String host = "https://carwash.pandacarlife.com";// 正式地址
+//        String path = "/wash/Demo/register";// 正式地址
+        String host = "https://carwash.pandacarlife.com"; // 测试地址
+        String path = "/washceshi/Demo/register";// 测试地址
+        String method = "POST";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json; charset=UTF-8");
+
+        List<Map<String, Object>> couponList = (List<Map<String, Object>>) param.get("couponList");
+        Map<String, String> paramBogy = new HashMap<>();
+        paramBogy.put("shopId", "10101");
+        if (!CollectionUtils.isEmpty(couponList)) {
+            paramBogy.put("tel", couponList.get(0).get("customerPN").toString());
+            paramBogy.put("num", couponList.size() + "");
+            try {
+                HttpResponse response = HttpUtils.doPost(host, path, method, headers, null, paramBogy);
+                JSONObject returnBody = JSONObject.parseObject(EntityUtils.toString(response.getEntity(), "utf-8"));
+                logger.info("熊猫车服注册接口调用结果>>>>>{}", returnBody);
+                if (null != returnBody && "200".equals(returnBody.get("status"))) {
+                    List<Map<String, Object>> couponListTemp = (List<Map<String, Object>>) returnBody.get("data");
+                    Map<String, Object> couponInfo = new HashMap<>();
+                    for (int i = 1; i <= couponListTemp.size(); i++) {
+                        couponInfo.clear();
+                        Map<String, Object> data = couponListTemp.get(i - 1);
+                        couponInfo.put("couponNo", data.get("guid"));
+                        couponInfo.put("validTime", data.get("valid_time"));
+                        couponInfo.put("id", couponList.get(i - 1).get("id"));
+                        couponInfo.put("version", couponList.get(i - 1).get("version"));
+                        carWashActivityMapper.updateModel(couponInfo);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("调用小猫车服注册接口失败", e);
+            }
+        }
+    }
+}

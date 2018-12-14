@@ -1,0 +1,32 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:b="http://www.springframework.org/schema/beans"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+           http://www.springframework.org/schema/security  
+           http://www.springframework.org/schema/security/spring-security.xsd">
+
+            <!--登录页面不过滤 -->
+            <http pattern="/index" security="none"/>
+            <http pattern="*.jpg" security="none" />
+            <http pattern="*.png" security="none" />
+            <http pattern="*.gif" security="none" />
+            <http pattern="*.css" security="none" />
+            <http pattern="*.js" security="none" />
+
+            <!-- <http access-denied-page="/index" auto-config="true"> -->
+            <http auto-config="true">
+            	<access-denied-handler error-page="/index"/>
+                <session-management session-fixation-protection="none"  invalid-session-url="/index">
+                    <concurrency-control error-if-maximum-exceeded="false" max-sessions="1"  expired-url="/index"/>
+                </session-management>
+            </http>
+            <!-- md5 -->
+            <b:bean id="passwordEncode" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+            <!-- salt -->
+            <b:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource" >
+                <b:property name="userPropertyToUse" value="username"/>
+            </b:bean>
+
+
+</b:beans>  

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zccbh.demand.mapper.merchants.CbhEventAssertMapper" >
+  <resultMap id="BaseResultMap" type="com.zccbh.demand.pojo.merchants.CbhEventAssert" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="eventNo" property="eventNo" jdbcType="VARCHAR" />
+    <result column="maintenanceshopEmployeeId" property="maintenanceshopEmployeeId" jdbcType="INTEGER" />
+    <result column="damageExtent" property="damageExtent" jdbcType="VARCHAR" />
+    <result column="damagePosition" property="damagePosition" jdbcType="VARCHAR" />
+    <result column="assertImg" property="assertImg" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="amtAssert" property="amtAssert" jdbcType="DECIMAL" />
+    <result column="timeAssert" property="timeAssert" jdbcType="TIMESTAMP" />
+    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selectByEventNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+          from cbh_event_assert
+        WHERE eventNo = #{eventNo,jdbcType=VARCHAR}
+  </select>
+</mapper>

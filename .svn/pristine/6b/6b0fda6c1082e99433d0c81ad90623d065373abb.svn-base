@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.user.MessageBackstageMapper">
+    <sql id="baseSql">
+        cmb.id,cmb.type,cmb.orderNo,cmb.title,cmb.content,cmb.isSolve,
+        cmb.createTime,cmb.orderStatus as eventStatus,
+    </sql>
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_message_backstage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="adminId != null and adminId != ''">adminId,</if>
+            <if test="orderNo != null and orderNo != ''">orderNo,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="isSolve != null and isSolve != ''">isSolve,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="orderStatus != null and orderStatus != ''">orderStatus,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="adminId != null and adminId != ''">#{adminId},</if>
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="isSolve != null and isSolve != ''">#{isSolve},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="orderStatus != null and orderStatus != ''">#{orderStatus},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_message_backstage
+        <set>
+            <if test="adminId != null and adminId != ''">adminId = #{adminId},</if>
+            <if test="orderNo != null and orderNo != ''">orderNo = #{orderNo},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="isSolve != null and isSolve != ''">isSolve = #{isSolve},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <select id="getMessageList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT a.* FROM (
+        (
+        SELECT <include refid="baseSql"></include>
+        ce.statusEvent AS orderStatus
+        from cbh_message_backstage AS cmb
+        LEFT JOIN cbh_event AS ce ON ce.eventNo=cmb.orderNo
+        JOIN cbh_user_admin AS ca ON cmb.adminId=ca.id
+        WHERE cmb.type=1 AND ca.toKen=#{token,jdbcType=VARCHAR}
+        UNION
+        SELECT <include refid="baseSql"></include>
+        co.status AS orderStatus
+        from cbh_message_backstage AS cmb
+        LEFT JOIN cbh_order AS co
+        ON co.orderNo=cmb.orderNo
+        JOIN cbh_user_admin AS ca ON cmb.adminId=ca.id
+        WHERE cmb.type=2 AND ca.toKen=#{token,jdbcType=VARCHAR}
+        )a)
+        ORDER BY a.isSolve ASC,a.createTime DESC;
+    </select>
+    
+    <select id="getMessageListByType" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT	a.* FROM
+			(
+				(
+					SELECT
+					<include refid="baseSql"></include>
+					ce.statusEvent AS orderStatus
+					FROM cbh_message_backstage AS cmb
+					LEFT JOIN cbh_event AS ce ON ce.eventNo = cmb.orderNo					
+					WHERE
+					 1=1
+					 <if test='type == "1"'>and cmb.type = 1</if>
+					 <if test = 'type == "2"'> and cmb.type = 2</if>
+					 <if test = 'type == "3"'>and cmb.type = 1</if>
+					UNION
+        			SELECT <include refid="baseSql"></include>
+        			co.status AS orderStatus
+        			from cbh_message_backstage AS cmb
+       				LEFT JOIN cbh_order AS co ON co.orderNo=cmb.orderNo
+        			WHERE
+					 1=1
+					 <if test='type == "1"'>and cmb.type = 1</if>
+					 <if test = 'type == "2"'> and cmb.type = 2</if>
+					 <if test = 'type == "3"'>and cmb.type = 2</if>
+				) a
+			)
+			ORDER BY
+			a.isSolve ASC,
+			a.createTime DESC
+    </select>
+    
+    <select id="selectByIdAndToken" parameterType="java.util.Map" resultType="com.zccbh.demand.pojo.user.MessageBackstage">
+        SELECT cmb.* from cbh_message_backstage AS cmb
+        JOIN cbh_user_admin AS ca ON cmb.adminId=ca.id
+        WHERE  ca.toKen=#{toKen,jdbcType=VARCHAR}
+        AND cmb.id=#{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectById" parameterType="java.util.Map" resultType="com.zccbh.demand.pojo.user.MessageBackstage">
+        SELECT cmb.* from cbh_message_backstage AS cmb        
+        WHERE cmb.id=#{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="countBackMsg" parameterType="java.util.Map" resultType="int">
+    	select count(*) from cbh_message_backstage where orderNo = #{orderNo} and orderStatus = #{orderStatus}
+    </select>
+</mapper>

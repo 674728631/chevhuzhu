@@ -1,0 +1,107 @@
+<html>
+<head>
+  <title>预估定损价</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+    window.addEventListener('resize', function(){
+      var deviceWidth = document.documentElement.clientWidth;
+      if(deviceWidth > 750) deviceWidth = 750;
+      document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+    });
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/preview.css">
+  <link rel="stylesheet" href="/hfive/css/datapicker.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/order_detail.css">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">预估定损价</div>
+    <a class="navbar-right fbox-cc hover" href="/hfive/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div class="container nav full fsize-14">
+    <script type="text/template" id="main-tpl">
+    <div class="item">
+      <div class="title fbox-ac fsize-16">车辆信息</div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single">品牌型号：<font class="txt-lv2">{@if model}${model}{@else}无{@/if}</font></div>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="title fbox-ac fsize-16" style="padding-top:.26rem;padding-bottom:.26rem;">车损事故报告</div>
+      <div class="content fsize-14">
+      {@if examineExplanation}
+      <font class="txt-red">A.平台审核说明：${examineExplanation}</font><br>B.事故描述：<font class="txt-lv2">${accidentDescription}</font>
+      {@else}
+      事故描述：<font class="txt-lv2">${accidentDescription}</font>
+      {@/if}
+      </div>
+      <div class="photo-box fbox wrap">
+        <div class="photo-item">
+          <a class="photo-img hover" href="javascript:;"><img src="${drivingLicense}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+        </div>
+        {@if accidentImg.length > 0}
+        {@each accidentImg as acImg}
+        <div class="photo-item">
+          <a class="photo-img hover" href="javascript:;"><img src="${acImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+        </div>
+        {@/each}
+        {@/if}
+      </div>
+    </div>
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <div class="btn strong fsize-14">亲！请根据页面信息，微信回复一个预估定损价</div>
+      </div>
+    </div>
+    </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/preview.js"></script>
+  <script src="/hfive/lib/datapicker.js"></script>
+  <script src="/hfive/js/baojia.js?v=6"></script>
+</body>
+</html>

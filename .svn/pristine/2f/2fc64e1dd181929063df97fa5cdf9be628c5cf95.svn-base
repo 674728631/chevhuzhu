@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车V互助管理端APP下载</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 640) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+            /* 在X5新内核Blink中，在排版页面的时候，会主动对字体进行放大，会检测页面中的主字体，当某一块字体在我们的判定规则中，认为字号较小，并且是页面中的主要字体，就会采取主动放大的操作。然而这不是我们想要的，可以采取给最大高度解决 */
+            max-height: 100000px;
+        }
+
+        body {
+            font-size: 0.25rem;
+            font-family: "Hiragino Sans GB W3";
+            color: #333333;
+        }
+
+        html, body, section, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, textarea, td {
+            border: 0 none;
+            color: inherit;
+            margin: 0;
+            padding: 0;
+            vertical-align: baseline;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: normal;
+        }
+
+        ul, ol, li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .img-responsive {
+            width: 100%;
+        }
+
+        header {
+            margin: 0.6rem 0.3rem;
+            height: 1.2rem;
+        }
+
+        header > a, header > div {
+            float: left;
+        }
+
+        header > a {
+            width: 1.2rem;
+            height: 1.2rem;
+            margin-right: 0.3rem;
+        }
+
+        header .text-box h3 {
+            font-weight: bold;
+            margin: 0.1rem 0;
+
+        }
+
+        .text-box p {
+            color: grey;
+margin-top:0.1rem;
+        }
+
+        .content-text {
+            margin: 0 0.3rem;
+            height: auto;
+        }
+
+        .content-text p {
+            color: grey;
+
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .de-swiper {
+            margin: 0.6rem 0;
+        }
+
+        .swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+            background-image: url("images/icon_left.png");
+        }
+
+        .swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+            background-image: url("images/icon_right.png");
+        }
+
+        .ff {
+            margin-left: 0.3rem;
+        }
+
+        .line {
+            margin: 0 0.3rem;
+            border-bottom: 1px solid gainsboro;
+        }
+
+        .bottom-content {
+            margin: 0.3rem 0.3rem 0.6rem;
+        }
+
+        .bottom-content > h3 {
+            margin-bottom: 0.6rem;
+            font-weight: bold;
+
+        }
+
+        .ma-box {
+            width: 2rem;
+            height: 2rem;
+            margin: 0 auto 0.3rem;
+        }
+
+        .bottom-content h4 {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .bottom-content p {
+            margin: 0.6rem 0 1.6rem;
+            line-height: 0.4rem;
+            color: grey;
+        }
+
+        footer {
+            width: 100%;.
+            height: 0.8rem;
+            text-align: center;
+            font-size: 16px;
+         
+            position: fixed;
+            color: #ffffff;
+            line-height:0.8rem;
+            bottom: 0;
+            left: 0;
+            background-color: #3196fe;
+	    z-index:998;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            width: 0.8rem;
+            height: 1.74rem;
+            margin-top: -0.72rem;
+            background-size: 100%;
+        }
+
+        .swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+            right: 0;
+        }
+
+        .swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+            left: 0;
+        }
+        #page-mask{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top:0;
+            z-index: 999;
+            background-color: rgba(80,80,80,0.6);
+            display: none;
+        }
+        #page-mask div{
+            width: 4.32rem;
+            height: 1.97rem;
+            position: absolute;
+            right: 0.5rem;
+            top:0.5rem;
+            z-index: 9999;
+
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="javascript:void(0)">
+        <img src="images/logo_gld.png" alt="" class="img-responsive">
+    </a>
+    <div class="text-box">
+        <h3>车V互助管理端</h3>
+        <p>私家车小维修互助平台</p>
+    </div>
+</header>
+<section class="content-text">
+    <p>“车V互助—中创车保汇信息技术有限公司旗下平台，专注解决车主小刮小擦理赔痛点，是保险之外的完美补充。<br>车V互助通过互助模式，精心打造车主VIP级汽车维修服务&大众专享福利为一体的互助平台。互助会员以9元会费加入平台，每年专享1000元互助金。”
+    </p>
+</section>
+<!-- Swiper -->
+<div class="swiper-container de-swiper">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide ff">
+            <img src="images/pic_zy5.png?1" alt="" class="img-responsive">
+        </div>
+        <div class="swiper-slide">
+            <img src="images/pic_zy6.png?1" alt="" class="img-responsive">
+        </div>
+        <div class="swiper-slide">
+            <img src="images/pic_zy7.png?1" alt="" class="img-responsive">
+        </div>
+        <div class="swiper-slide">
+            <img src="images/pic_zy8.png?1" alt="" class="img-responsive">
+        </div>
+    </div>
+    <!-- Add Pagination -->
+    <!--<div class="swiper-pagination"></div>-->
+    <!-- Add Arrows -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>
+<div class="line"></div>
+<section class="bottom-content">
+    <h3 hidden>应用下载</h3>
+    <p hidden>温馨提示：目前车V互助APP仅支持安卓版本下载，后期会支
+        持IOS苹果版本下载，敬请期待！
+    </p>
+</section>
+<footer onclick="enter()" id="downLoadBtn">
+    点击下载APP
+</footer>
+<!--蒙版-->
+<div id="page-mask" style="display: none">
+    <div>
+        <img src="images/this.png" alt="" class="img-responsive">
+    </div>
+</div>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="js/swiper.min.js"></script>
+<script src="../lib/zepto.js"></script>
+<script src="../js/common.js"></script>
+<script type="text/javascript">
+    <!--swiper配置-->
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 2.3,
+        spaceBetween: 5,
+        slidesPerGroup: 1,
+        slidesOffsetAfter: 30,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        }
+    });
+   /*蒙版show*/
+    var ele = document.getElementById("page-mask");
+    var downLoadBtn = document.getElementById("downLoadBtn");
+    function showMask() {
+        if(ele.style.display=="none"){
+            ele.style.display = "block";
+        }
+    };
+    ele.onclick=function () {
+        this.style.display = 'none'
+    };
+    //判断是否是微信浏览器的函数
+    function isWeiXin(){
+        //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+        var ua = window.navigator.userAgent.toLowerCase();
+        //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    window.onload = function(){
+      enter();
+      if (_config.is_wx && !_config.wx_config) {
+        configWXJSSDK(_config.wx_share, {
+          success: function() {
+            shareWX({
+              title: '车V互助管理端',
+              desc: '车V互助—中创车保汇信息技术有限公司旗下平台，专注解决车主小刮小擦理赔痛点，是保险之外的完美补充。车V互助通过互助模式，精心打造车主VIP级汽车维修服务&大众专享福利为一体的互助平台。互助会员以9元会费加入平台，每年专享1000元互助金。',
+              link: window.location.href.replace(/\?.*$/, '')
+            })
+          }
+        })
+      }
+    };
+    function enter(){
+        if(isWeiXin() && /(Android)/i.test(navigator.userAgent)){
+            showMask();
+        }else if(/(Android)/i.test(navigator.userAgent)){
+            window.location.href="http://www.chevhuzhu.com/app/android/chevhuzhugld.apk";
+        }else if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)){
+            window.location.href="https://itunes.apple.com/cn/app/id1436466890?mt=8";
+            console.log("apple");
+        }else{
+            console.log("pc");
+        }
+    }
+
+
+</script>
+
+
+</body>
+</html>

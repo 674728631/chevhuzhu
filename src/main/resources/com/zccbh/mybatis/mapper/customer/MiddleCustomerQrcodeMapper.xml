@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.customer.MiddleCustomerQrcodeMapper">
+
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO middle_customer_qrcode(customerId,qrcode) VALUES (#{customerId},#{qrcode})
+    </insert>
+
+	<update id="updateModel" parameterType="java.util.Map">
+        UPDATE middle_customer_qrcode
+        <set>
+            <if test="customerId != null">customerId = #{customerId,jdbcType=INTEGER},</if>
+            <if test="qrcode != null">qrcode = #{qrcode,jdbcType=VARCHAR},</if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+	  SELECT id,customerId,qrcode FROM middle_customer_qrcode
+      WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByCustomerId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT id,customerId,qrcode FROM middle_customer_qrcode
+        WHERE customerId = #{customerId,jdbcType=INTEGER}
+    </select>
+</mapper>

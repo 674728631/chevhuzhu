@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zccbh.demand.mapper.merchants.CbhMaintenanceshopEmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.zccbh.demand.pojo.merchants.CbhMaintenanceshopEmployee" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="maintenanceshopId" property="maintenanceshopId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="jobTitle" property="jobTitle" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="workYear" property="workYear" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="timeJoin" property="timeJoin" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createAt" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <select id="getAssertEmployee" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+        cme.id,
+        cme.NAME AS name
+    FROM
+        cbh_maintenanceshop_employee AS cme
+    LEFT JOIN cbh_maintenanceshop AS cm ON cm.id = cme.maintenanceshopId
+    LEFT JOIN middle_business_maintenanceshop AS mbm ON cm.id = mbm.maintenanceshopId
+    LEFT JOIN cbh_user_business AS cub ON cub.id = mbm.businessId
+    WHERE
+        cub.toKen = #{toKen,jdbcType=VARCHAR}
+      AND cme.status=1
+<!--        <choose>
+          <when test="type==1">
+            AND cme.type = 1
+          </when>
+          <when test="type==3">
+            AND cme.type = 3
+          </when>
+        </choose>-->
+    </select>
+  <select id="getEmployeeList" parameterType="java.lang.Integer" resultType="java.util.Map">
+    SELECT id,img,name,tel, jobTitle,
+    workYear,gender
+    FROM  cbh_maintenanceshop_employee
+    WHERE  maintenanceshopId = #{maintenanceshopId,jdbcType=INTEGER}
+    AND status=1
+      <if test="id !=null and id !=''">
+        AND id = #{id,jdbcType=INTEGER}
+      </if>
+  </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.order.RecordPaymentMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+       insert into cbh_record_payment_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null and customerId != ''">customerId,</if>
+            <if test="carId != null and carId != ''">carId,</if>
+            <if test="orderNo != null and orderNo != ''">orderNo,</if>
+            <if test="amt != null and amt != ''">amt,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="payTime != null and payTime != ''">payTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null and customerId != ''">#{customerId,jdbcType=INTEGER},</if>
+            <if test="carId != null and carId != ''">#{carId,jdbcType=INTEGER},</if>
+            <if test="orderNo != null and orderNo != ''">#{orderNo,jdbcType=VARCHAR},</if>
+            <if test="amt != null and amt != ''">#{amt,jdbcType=DECIMAL},</if>
+            <if test="description != null and description != ''">#{description,jdbcType=VARCHAR},</if>
+            <if test="status != null and status != ''">#{status,jdbcType=INTEGER},</if>
+            <if test="payTime != null and payTime != ''">#{payTime,jdbcType=DATE},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_record_payment_order
+        <set>
+            <if test="customerId != null and customerId != ''">customerId = #{customerId,jdbcType=INTEGER},</if>
+            <if test="carId != null and carId != ''">carId = #{carId,jdbcType=INTEGER},</if>
+            <if test="orderNo != null and orderNo != ''">orderNo = #{orderNo,jdbcType=VARCHAR},</if>
+            <if test="amt != null and amt != ''">amt = #{amt,jdbcType=DECIMAL},</if>
+            <if test="description != null and description != ''">description = #{description,jdbcType=VARCHAR},</if>
+            <if test="status != null and status != ''">status = #{status,jdbcType=INTEGER},</if>
+            <if test="payTime != null and payTime != ''">payTime = #{payTime,jdbcType=DATE},</if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

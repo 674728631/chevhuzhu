@@ -1,0 +1,358 @@
+<html>
+<head>
+  <title>订单详情</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=7">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/preview.css">
+  <link rel="stylesheet" href="/hfive/css/datapicker.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/order_detail.css?v=8">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">订单详情</div>
+    <a class="navbar-right fbox-cc hover" href="/hfive/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div class="container nav full fsize-14">
+    <script type="text/template" id="main-tpl">
+    <div class="step-box fbox-cc">
+      <div class="point"><p class="fbox-cc"><span>审核</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>接车</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>定损</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>维修</span></p></div>
+      <div class="point"><p class="fbox-cc"><span>交车</span></p></div>
+    </div>
+    <div class="item">
+      <div class="title fbox-ac fsize-16">
+        <p class="fbox-f1 txt-lv1">${licensePlateNumber}</p>
+        {@if isInvalid != 10}
+        <p class="txt-${status|build_baoxianOrderColor}">${status|build_baoxianOrderStatus}</p>
+        {@else}
+        <p class="txt-red">已废弃</p>
+        {@/if}
+      </div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single">车主：<font class="txt-lv2">${nameCarOwner}</font></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single">品牌：<font class="txt-lv2">{@if model}${model}{@else}无{@/if}</font></div>
+        </div>
+        {@if status == 2}
+        <div class="info fbox">
+          <div class="txt fbox single"><p>失败原因：</p><p class="fbox-f1 txt-red">${examineExplanation}</p></div>
+        </div>
+        {@else if status == 41 || status == 42 || status == 51 || status == 61 || status == 71 || status == 100}
+        <div class="info fbox">
+          <div class="txt fbox single">定损价格：<font class="txt-lv2">${amtAssert}元</font></div>
+        </div>
+        {@/if}
+      </div>
+      <!--{@if status == 11 || status == 12}
+      <div id="time-box">
+        <div class="time fsize-16 txt-white"><div class="avatar-box fbox-cc"><div class="avatar"><img src="${img2}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div></div>接单倒计时：<span id="time"></span></div>
+        <p class="desc">订单信息已经发送给商家，等待商家处理，请您耐心等待！如果${presetTime|build_stime}内商家没有接单，系统会重新分配订单！</p>
+      </div>
+      {@else if status == 21 || status == 22 || status == 23 || status == 31}
+      <div id="time-box" class="t2">
+        <div class="time fsize-16 txt-white"><div class="avatar-box fbox-cc"><div class="avatar"><img src="${img2}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div></div>接车倒计时：<span id="time"></span></div>
+        <p class="desc">商家已经接单，车管家将在规定时间内赶往您所在地点，为您定损。请保持电话的畅通，方便车管家与您联系。</p>
+      </div>
+      {@else if status == 41 || status == 51}
+      <div id="time-box" class="t2">
+        <div class="time ti2 fsize-16 txt-white">维修倒计时：<span id="time"></span></div>
+        <p class="desc">商家将在${presetTime|build_stime}内为您爱车完成维修，请及时关注维修进度，了解爱车维修动态。</p>
+      </div>
+      {@else if status == 52}
+      <div id="time-box" class="t2">
+        <div class="time fsize-16 txt-white"><div class="avatar-box fbox-cc"><div class="avatar"><img src="${img3}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div></div>维修倒计时：<span id="time"></span></div>
+        <p class="desc">商家将在${presetTime|build_stime}内为您爱车完成维修，请及时关注维修进度，了解爱车维修动态。</p>
+      </div>
+      {@/if}-->
+    </div>
+    {@if status == 71}
+    <div class="item">
+      <div class="title2 fbox-ac fsize-16"><span class="i-con i19"></span>投诉信息</div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single txt-blue">${complaintContent}</div>
+        </div>
+      </div>
+    </div>
+    {@/if}
+    {@if status == 10 || status == 11 || status == 12}
+    <div class="item">
+      <div class="title2 fbox-ac fsize-16"><span class="i-con i16"></span>接车信息</div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single">联系人：<font class="txt-lv2">${carOwnerName}</font></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single">手机号：<font class="txt-lv2">${carOwnerTel}</font></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>接车地址：</p><p class="fbox-f1 txt-lv2">${deliverPlace}</p></div>
+        </div>
+      </div>
+    </div>
+    {@else if status == 21 || status == 31}
+    <div class="item">
+      <div class="title2 fbox-ac fsize-16"><span class="i-con i17"></span>接单方信息</div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single"><p>定损方：</p><p class="fbox-f1 txt-lv2">{@if shopName}${shopName}{@else}佳佳{@/if}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>理赔管家：</p><p class="fbox-f1 txt-lv2">${assertmanName}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>手机号：</p><p class="fbox-f1 txt-lv2"><a class="hover txt-blue" href="tel:${shopTel}">${shopTel}</a></p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>地址：</p><p class="fbox-f1 tj txt-lv2">${address}</p><!--<p class="txt-green">　离您：${distance}米</p>--></div>
+        </div>
+      </div>
+    </div>
+    {@/if}
+    <div class="main">
+      <div class="title fbox-ac fsize-16"><span class="i-con i6"></span>车损事故详情</div>
+      <div class="content fsize-12">
+      {@if examineExplanation}
+      <font class="txt-red">A.平台审核说明：${examineExplanation}</font><br>B.事故描述：${accidentDescription}
+      {@else}
+      ${accidentDescription}
+      {@/if}
+      </div>
+      {@if accidentImg.length > 0}
+      <div class="photo-box fbox wrap">
+        {@each accidentImg as acImg}
+        <div class="photo-item">
+          <a class="photo-img hover" href="javascript:;"><img src="${acImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+        </div>
+        {@/each}
+      </div>
+      {@/if}
+    </div>
+    {@if status == 32}
+    <div class="item">
+      <div class="title2 fbox-ac fsize-16"><span class="i-con i18"></span>定损报告</div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single"><p>定损方：</p><p class="fbox-f1 txt-lv2">{@if shopName}${shopName}{@else}佳佳{@/if}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>手机号：</p><p class="fbox-f1 txt-lv2"><a class="hover txt-blue" href="tel:${shopTel}">${shopTel}</a></p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>理赔管家：</p><p class="fbox-f1 txt-lv2">${assertmanName}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>定损价格：</p><p class="fbox-f1 txt-lv2">${amtAssert}元</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>受损程度：</p><p class="fbox-f1 txt-lv2">${damageExtent}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>受损部位：</p><p class="fbox-f1 txt-lv2">${damagePosition}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>定损描述：</p><p class="fbox-f1 txt-lv2">${assertDescription}</p></div>
+        </div>
+      </div>
+      {@if assertImg.length > 0}
+      <div class="photo-box fbox wrap">
+        {@each assertImg as asImg}
+        <div class="photo-item">
+          <a class="photo-img hover" href="javascript:;"><img src="${asImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+        </div>
+        {@/each}
+      </div>
+      {@/if}
+    </div>
+    {@else if status == 41}
+    <div class="item">
+      <div class="title2 fbox-ac fsize-16"><span class="i-con i19"></span>定损方信息</div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single"><p>定损方：</p><p class="fbox-f1 txt-lv2">{@if shopName}${shopName}{@else}佳佳{@/if}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>理赔管家：</p><p class="fbox-f1 txt-lv2">${assertmanName}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>手机号：</p><p class="fbox-f1 txt-lv2"><a class="hover txt-blue" href="tel:${shopTel}">${shopTel}</a></p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>地址：</p><p class="fbox-f1 txt-lv2">${address}</p></div>
+        </div>
+      </div>
+    </div>
+    {@else if status == 42}
+    <div class="item">
+      <div class="title2 fbox-ac fsize-16"><span class="i-con i19"></span>维修信息</div>
+      <div class="content">
+        <div class="info fbox">
+          <div class="txt fbox single"><p>维修方：</p><p class="fbox-f1 txt-lv2">${shopName}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>手机号：</p><p class="fbox-f1 txt-lv2"><a class="hover txt-blue" href="tel:${shopTel}">${shopTel}</a></p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>维修人员：</p><p class="fbox-f1 txt-lv2">${repairmanName}</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>从业年限：</p><p class="fbox-f1 txt-lv2">${workYear}年</p></div>
+        </div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>地址：</p><p class="fbox-f1 txt-lv2">${address}</p></div>
+        </div>
+      </div>
+    </div>
+    {@else if status == 51 || status == 61 || status == 71 || status == 100}
+    <div class="item">
+      <div class="title2 fbox-ac fsize-16"><span class="i-con i19"></span>维修报告</div>
+      <div class="content fsize-12"><div class="info"><div class="txt fbox single">${explanationRepair}</div></div></div>
+      {@if repairImg.length > 0}
+      <div class="photo-box fbox wrap">
+        {@each repairImg as rpImg}
+        <div class="photo-item">
+          <a class="photo-img hover" href="javascript:;"><img src="${rpImg}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_photo.png')"></a>
+        </div>
+        {@/each}
+      </div>
+      {@/if}
+    </div>
+    {@/if}
+    {@if status == 51 || status == 61 || status == 71 || status == 100}
+    <div class="main">
+      <div class="content2">
+        <div class="info fbox single fsize-16 fstrong">{@if status == 51}交车信息{@else}维修商家信息{@/if}：</div>
+        <div class="info fbox">
+          <div class="txt fbox single"><p>店铺名称：</p><p class="fbox-f1 txt-lv2">${shopName}</p></div>
+        </div>
+        {@if shopTel}
+        <div class="info fbox">
+          <div class="txt fbox single"><p>联系电话：</p><p class="fbox-f1 txt-lv2"><a class="hover txt-blue" href="tel:${shopTel}">${shopTel}</a></p></div>
+        </div>
+        {@/if}
+        <div class="info fbox">
+          <div class="txt fbox single"><p>地址：</p><p class="fbox-f1 txt-lv2">${address}</p></div>
+        </div>
+      </div>
+    </div>
+    {@/if}
+    {@if status == 100}
+    <div class="main">
+      <div class="content2">
+        <div class="info fbox single fsize-16 fstrong">我的评价：</div>
+        <div class="info fbox tl wrap">
+          <div id="star-box" class="fbox-ac txt">
+            <span class="i-star"></span>
+            <span class="i-star{@if commentScore < 2} empty{@/if}"></span>
+            <span class="i-star{@if commentScore < 3} empty{@/if}"></span>
+            <span class="i-star{@if commentScore < 4} empty{@/if}"></span>
+            <span class="i-star{@if commentScore < 5} empty{@/if}"></span>
+            <p>　<span id="star">${commentScore}</span>星</p>
+          </div>
+        </div>
+        {@if labelContent}
+        <div id="tag-box" class="fbox wrap fsize-12">
+          {@each labelContent as it}
+          <a class="active" href="javascript:;">${it}</a>
+          {@/each}
+        </div>
+        {@/if}
+        {@if commentContent}
+        <div class="info fbox">
+          <div class="txt fbox single txt-orange">${commentContent}</div>
+        </div>
+        {@/if}
+      </div>
+    </div>
+    {@/if}
+    <div class="main">
+      <div class="content2">
+        <div>订单号：<font class="txt-lv2">${orderNo}</font></div>
+        <div class="txt">
+          <p>${status|build_baoxianOrderTimeName}：<font class="txt-lv2">${_|build_baoxianOrderTime, 'yyyy-MM-dd hh:mm:ss'}</font></p>
+        </div>
+      </div>
+    </div>
+    <div id="map-layer" class="hide"><div id="map-container">
+      <div id="map-main"></div>
+      <div id="map-bottom" class="fbox-ac">
+        <p id="map-address" class="fbox-f1 fsize-16"></p>
+        <a id="map-confirm" class="btn strong hover fsize-14" href="javascript:;">确定</a>
+      </div>
+    </div></div>
+    {@if isInvalid != 10}
+    {@if status == 2}
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <a class="btn strong hover" href="/hfive/view/baoxian_order_add.html?oid=${orderNo}">去修改</a>
+      </div>
+    </div>
+    {@else if status == 3}
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <a id="btn-apply" class="btn strong hover" href="javascript:;">填写联系信息</a>
+      </div>
+    </div>
+    {@else if status == 21}
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <div class="btn fbox-cc fbox-f1 txt-lv3 fsize-14">维修中心接车前请确认是否是维修中心人员</div>
+        <a id="btn-pay" class="btn strong hover" href="javascript:;">维修中心已接车</a>
+      </div>
+    </div>
+    {@else if status == 51}
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <a id="btn-report" class="btn fbox-f1 hover" href="javascript:;">我要投诉</a>
+        <a id="btn-confirm" class="btn strong fbox-f2 hover" href="javascript:;">支付维修款</a>
+      </div>
+    </div>
+    {@else if status == 61}
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <a id="btn-score" class="btn strong hover" href="/hfive/view/baoxian_score.html?id=${orderNo}">给维修小哥送上您的评价</a>
+      </div>
+    </div>
+    {@else if status == 71}
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <a id="btn-resolve" class="btn hover txt-blue" href="javascript:;">投诉问题已解决</a>
+      </div>
+    </div>
+    {@/if}
+    {@/if}
+    </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=37"></script>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.4&key=aa654029339dfdfce8e12ebf759d305e"></script> 
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/preview.js"></script>
+  <script src="/hfive/lib/datapicker.js"></script>
+  <script src="/hfive/js/baoxian_order_detail.js?v=2"></script>
+</body>
+</html>

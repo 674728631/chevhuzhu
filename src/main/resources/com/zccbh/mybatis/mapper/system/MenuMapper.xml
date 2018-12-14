@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.system.MenuMapper">
+    <select id="findEntityMore" parameterType="java.util.Map" resultType="com.zccbh.demand.pojo.system.Menu">
+        SELECT
+          id,name,url,icon,type,grade,parentId,status,createAt
+        FROM
+        sys_menu
+        WHERE status = 1
+        <if test="type != null"> AND type = #{type,jdbcType=INTEGER}</if>
+        <if test="idArr != null and idArr != ''"> AND id in (${idArr})</if>
+    </select>
+
+</mapper>

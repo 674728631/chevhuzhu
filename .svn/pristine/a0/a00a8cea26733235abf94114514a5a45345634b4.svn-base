@@ -1,0 +1,63 @@
+<html>
+<head>
+  <title>案例</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=7">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/publicity.css?v=3">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">案例</div>
+    <a class="navbar-right fbox-cc hover" href="/hfive/view/index.html"><span class="i-con i-home"></span></a>
+  </div></div>
+  <div id="container" class="container nav-top ffull fsize-14">
+    <script type="text/template" id="main-tpl">
+    <div class="tabbox"><div class="tabbox-layer">
+      <div class="tabbox-tab">
+        <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+        <div class="list-box"></div>
+        <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_order.png"><p class="fsize-16">暂无事件</p></div></div>
+      </div>
+    </div></div>
+    </script>
+  </div>
+  <script type="text/template" id="list-tpl">
+  {@each list as it}
+  <a class="hover fbox-ac e-${it.orderNo} e-move" href="/hfive/view/baoxian_publicity_detail.html?id=${it.orderNo}">
+    <div class="avatar"><img src="${it.portrait}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div>
+    <div class="minfo fbox-f1 fsize-12">
+      <p class="fsize-14">{@if it.nameCarOwner}${it.nameCarOwner}　{@/if}<span class="txt-blue">${it.licensePlateNumber}</span></p>
+      {@if it.amtAssert}<div class="fbox wrap spec fsize-14"><p class="p1">维修价格：<span class="txt-lv2">${it.amtAssert}元</span></p></div>{@/if}
+    </div>
+    <span class="arr arr-gray arr-right"></span>
+  </a>
+  {@/each}
+  </script>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=37"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js"></script>
+  <script src="/hfive/js/baoxian_publicity.js"></script>
+</body>
+</html>

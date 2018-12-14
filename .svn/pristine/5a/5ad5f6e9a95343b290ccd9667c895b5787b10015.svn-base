@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.activities.CouponModelMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_coupon_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelNum != null and modelNum != ''">modelNum,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="num != null">num,</if>
+            <if test="amount != null">amount,</if>
+            <if test="meetPrice != null">meetPrice,</if>
+            <if test="type != null">type,</if>
+            <if test="inviterAmount != null">inviterAmount,</if>
+            <if test="inviterCompensation != null">inviterCompensation,</if>
+            <if test="createBy != null">createBy,</if>
+            <if test="createAt != null">createAt,</if>
+            <if test="verifyBy != null">verifyBy,</if>
+            <if test="verifyTime != null">verifyTime,</if>
+            <if test="rejectReason != null and rejectReason != ''">rejectReason,</if>
+            <if test="updateTime != null">updateTime,</if>
+            <if test="isDel != null">isDel,</if>
+            <if test="delTime != null">delTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="modelNum != null and modelNum != ''">#{modelNum,jdbcType=VARCHAR},</if>
+            <if test="name != null and name != ''">#{name,jdbcType=VARCHAR},</if>
+            <if test="description != null and description != ''">#{description,jdbcType=VARCHAR},</if>
+            <if test="num != null">#{num,jdbcType=INTEGER},</if>
+            <if test="amount != null">#{amount,jdbcType=DECIMAL},</if>
+            <if test="meetPrice != null">#{meetPrice,jdbcType=DECIMAL},</if>
+            <if test="type != null">#{type,jdbcType=INTEGER},</if>
+            <if test="inviterAmount != null">#{inviterAmount,jdbcType=DECIMAL},</if>
+            <if test="inviterCompensation != null">#{inviterCompensation,jdbcType=DECIMAL},</if>
+            <if test="createBy != null">#{createBy,jdbcType=INTEGER},</if>
+            <if test="createAt != null">#{createAt,jdbcType=DATE},</if>
+            <if test="verifyBy != null">#{verifyBy,jdbcType=INTEGER},</if>
+            <if test="verifyTime != null">#{verifyTime,jdbcType=DATE},</if>
+            <if test="rejectReason != null and rejectReason != ''">#{rejectReason,jdbcType=VARCHAR},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=DATE},</if>
+            <if test="isDel != null">#{isDel,jdbcType=INTEGER},</if>
+            <if test="delTime != null">#{delTime,jdbcType=DATE},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_coupon_model
+        <set>
+            <if test="name != null and name != ''">name = #{name,jdbcType=VARCHAR},</if>
+            <if test="description != null and description != ''">description = #{description,jdbcType=VARCHAR},</if>
+            <if test="num != null">num = #{num,jdbcType=INTEGER},</if>
+            <if test="amount != null">amount = #{amount,jdbcType=DECIMAL},</if>
+            <if test="meetPrice != null">meetPrice = #{meetPrice,jdbcType=DECIMAL},</if>
+            <if test="type != null">type = #{type,jdbcType=INTEGER},</if>
+            <if test="inviterAmount != null">inviterAmount = #{inviterAmount,jdbcType=DECIMAL},</if>
+            <if test="inviterCompensation != null">inviterCompensation = #{inviterCompensation,jdbcType=DECIMAL},</if>
+            <if test="createBy != null">createBy = #{createBy,jdbcType=INTEGER},</if>
+            <if test="createAt != null">createAt = #{createAt,jdbcType=DATE},</if>
+            <if test="verifyBy != null">verifyBy = #{verifyBy,jdbcType=INTEGER},</if>
+            <if test="verifyTime != null">verifyTime = #{verifyTime,jdbcType=DATE},</if>
+            <if test="rejectReason != null and rejectReason != ''">rejectReason = #{rejectReason,jdbcType=VARCHAR},</if>
+            <if test="updateTime != null">updateTime = #{updateTime,jdbcType=DATE},</if>
+            <if test="isDel != null">isDel = #{isDel,jdbcType=INTEGER},</if>
+            <if test="delTime != null">delTime = #{delTime,jdbcType=DATE},</if>
+        </set>
+        WHERE id = #{modelId,jdbcType=INTEGER}
+    </update>
+
+    <select id="findMore" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT *
+        FROM cbh_coupon_model
+        WHERE isDel = 0
+        <if test="searchInfo != null and searchInfo != ''">AND name LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%')</if>
+    </select>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT * FROM cbh_coupon_model
+        WHERE isDel = 0 AND id = #{modelId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByModelId" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from cbh_coupon_model c where c.id = #{modelId}
+    </select>
+
+    <select id="selectUserCoupon" resultType="java.util.Map">
+        select id,shopId,status,couponNo,name,modelId from cbh_coupon where shopId is null and isDel  = 0 modelId is not null
+    </select>
+</mapper>

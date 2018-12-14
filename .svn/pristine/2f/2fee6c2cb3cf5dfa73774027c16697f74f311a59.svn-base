@@ -1,0 +1,176 @@
+<html>
+<head>
+  <title>个人中心</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/profile.css?v=16">
+</head>
+<body>
+  <div class="container nav-bottom ffull fsize-14 txt-lv1">
+  <script type="text/template" id="main-tpl">
+    <div class="tabbox fsize-14"><div class="tabbox-layer">
+      <div class="tabbox-tab">
+        <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+        <div class="profile">
+          {@if login}
+          <div class="fbox-ac">  
+            <a class="avatar-box" href="/hfive/view/profile_edit.html"><div class="avatar"><img src="${portrait}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_avatar_2.png')"></div></a>
+            <div class="info fbox-f1">
+              <a class="fstrong txt-white fsize-16" href="/hfive/view/profile_edit.html">{@if userName}${userName}{@else}${phone}{@/if}</a>
+              {@if isJion === '已加入'}
+              <!--<p>您有<span class="txt-yellow">${guaranteeCarCount}</span>辆车加入保障计划<br>互助金余额<span class="txt-yellow">{@if amtCooperation}${amtCooperation}{@else}0{@/if}</span>元，共帮助<span class="txt-yellow">${helpCount}</span>人</p>-->
+              <p class="desc">加入互助<span class="txt-yellow">${joinDay}</span>天　共帮助<span class="txt-yellow">${helpCount}</span>人</p>
+              {@else}
+              <div class="spacebar"></div>
+              <a class="fbox-ac hover txt-white" href="/hfive/view/car_add.html">加入互助<span class="arr arr-right"></span></a>
+              {@/if}
+            </div>
+          </div>
+          <!--<a id="btn-msg" class="fbox-cc hover" href="/hfive/view/message.html">{@if isRead === '有'}<span class="tag"></span>{@/if}</a>-->
+          {@else}
+          <div class="fbox-ac">
+            <a class="avatar-box hover" href="/hfive/view/login.html?redir=$${'http://test.chevhuzhu.com/hfive/view/profile.html'|build_encodeUri}"><div class="avatar"><img src="/hfive/img/default_avatar_2.png" onload="resetImg(this)"></div></a>
+            <a class="fbox-ac info hover txt-white" href="/hfive/view/login.html?redir=$${'http://test.chevhuzhu.com/hfive/view/profile.html'|build_encodeUri}">请先登录<span class="arr arr-right arr-white"></span></a>
+          </div>
+          <!--<a id="btn-msg" class="fbox-cc hover" href="/hfive/view/message.html"></a>-->
+          {@/if}
+          {@if login}
+          <ul class="menu-box fbox tc shadow">
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/order.html"><span class="m-ico i5"></span><p>擦刮救助</p>{@if eventCount > 0}<span class="hide tag{@if eventCount > 9} lg{@/if}">{@if eventCount > 99}99+{@else}${eventCount}{@/if}</span>{@/if}</a></li>
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/rule_photo_baoxian.html"><span class="m-ico i8"></span><p>保险理赔</p></a></li>
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/wallet.html"><span class="m-ico i6"></span><p>我的账户</p></a></li>
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/wallet_history.html"><span class="m-ico i7"></span><p>互助记录</p></a></li>
+          </ul>
+          {@else}
+          <ul class="menu-box fbox tc shadow">
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/order.html"><span class="m-ico i5"></span><p>擦刮救助</p></a></li>
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/rule_photo_baoxian.html"><span class="m-ico i8"></span><p>保险理赔</p></a></li>
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/wallet.html"><span class="m-ico i6"></span><p>我的账户</p></a></li>
+            <li class="fbox-f1"><a class="hover" href="/hfive/view/wallet_history.html"><span class="m-ico i7"></span><p>互助记录</p></a></li>
+          </ul>
+          {@/if}
+        </div>
+        {@if login}
+          <div id="card-box">
+            <div id="card-content" class="fbox-ac">
+            {@if carList.length === 0}
+            <a class="car-card v1-0 full txt-lv1 hover shadow active" href="/hfive/view/car.html">
+              <p class="amt fsize-18">擦刮救助额度1000元</p>
+              <p class="desc fsize-18">去激活</p>
+            </a>
+            {@else}
+              {@if carFirst.status == 13 || carFirst.status == 20}
+                {@if invitationCount == 0}
+                <a class="car-card v1 txt-lv1 hover shadow active" href="/hfive/view/car.html{@if carFirst.status == 13}?type=2{@/if}">
+                  <p class="pnum fsize-20">${carFirst.licensePlateNumber}</p>
+                  <p class="amt">擦刮救助额度{@if carFirst.amtCompensation === undefined}1000{@else}${carFirst.amtCompensation}{@/if}元</p>
+                  {@if carFirst.status != 13 && carFirst.status != 20 && carFirst.status != 30 && carFirst.status != 31}<p class="desc">去激活</p>{@/if}
+                </a>
+                <a class="car-card v2-0 txt-lv1 hover shadow" href="/hfive/view/share.html">
+                  <p class="amt">擦刮救助额度1500元</p>
+                  <p class="desc">升级</p>
+                </a>
+                {@else if invitationCount < 4}
+                <a class="car-card v2 full txt-lv1 hover shadow active" href="/hfive/view/car.html{@if carFirst.status == 13}?type=2{@/if}">
+                  <p class="pnum fsize-20">${carFirst.licensePlateNumber}</p>
+                  <p class="amt fsize-18">擦刮救助额度{@if carFirst.amtCompensation === undefined}1000{@else}${carFirst.amtCompensation}{@/if}元</p>
+                  {@if carFirst.status != 13 && carFirst.status != 20 && carFirst.status != 30 && carFirst.status != 31}<p class="desc">去激活</p>{@/if}
+                </a>
+                {@else}
+                <a class="car-card v2 full txt-lv1 hover shadow active" href="/hfive/view/car.html{@if carFirst.status == 13}?type=2{@/if}">
+                  <p class="pnum fsize-20">${carFirst.licensePlateNumber}</p>
+                  <p class="amt fsize-18">擦刮救助额度{@if carFirst.amtCompensation === undefined}1000{@else}${carFirst.amtCompensation}{@/if}元</p>
+                  {@if carFirst.status != 13 && carFirst.status != 20 && carFirst.status != 30 && carFirst.status != 31}<p class="desc">去激活</p>{@/if}
+                </a>
+                {@/if}
+              {@else if carFirst.status == 30}
+                {@if invitationCount > 0}
+                <a class="car-card v2-0 full txt-lv1 hover shadow active" href="/hfive/view/car.html?type=2">
+                  <p class="pnum fsize-20">${carFirst.licensePlateNumber}</p>
+                  <p class="amt fsize-18">擦刮救助额度{@if carFirst.amtCompensation === undefined}1000{@else}${carFirst.amtCompensation}{@/if}元</p>
+                  <p class="desc quit">重新激活</p>
+                </a>
+                {@else}
+                <a class="car-card v1-0 full txt-lv1 hover shadow active" href="/hfive/view/car.html?type=2">
+                  <p class="pnum fsize-20">${carFirst.licensePlateNumber}</p>
+                  <p class="amt fsize-18">擦刮救助额度{@if carFirst.amtCompensation === undefined}1000{@else}${carFirst.amtCompensation}{@/if}元</p>
+                  <p class="desc quit">重新激活</p>
+                </a>
+                {@/if}
+              {@else}
+                <a class="car-card v1-0 full txt-lv1 hover shadow active" href="/hfive/view/car.html?type=2">
+                  <p class="pnum fsize-20">${carFirst.licensePlateNumber}</p>
+                  <p class="amt fsize-18">擦刮救助额度1000元</p>
+                  <p class="desc">去激活</p>
+                </a>
+              {@/if}
+            {@/if}
+            </div>
+          </div>
+          {@if carCharge}
+          <a class="btn-charge fbox-cc hover" href="/hfive/view/recharge.html?id=${carCharge.id}"><p class="fsize-16">${carCharge.licensePlateNumber}余额不足</p><div class="s1 fbox-ac"><p class="fsize-18">去充值</p><span class="arr3 arr-right arr-white"></span></div></a>
+          {@/if}
+          <!--<a class="main item link fbox-ac hover txt-lv2" href="/hfive/view/share.html"><span class="u-ico i10"></span><p class="fbox-f1">邀请好友</p><span class="fsize-12 subtxt">升级成1500元额度</span><span class="arr arr-right arr-gray"></span></a>-->
+          <a id="btn-share" class="main fbox-ac hover" href="/hfive/view/share.html"><div><p class="s1 fsize-16">会员特权升级</p><p class="s2 fsize-12">邀请好友免费加入</p></div><span class="fbox-cc fsize-14">马上邀请</span></a>
+        {@/if}
+        <a class="main item link fbox-ac hover txt-lv2" href="/hfive/view/coupon.html"><span class="u-ico i21"></span><p class="fbox-f1">1元洗车券</p><span class="fsize-12 subtxt">查看</span><span class="arr arr-right arr-gray"></span></a>
+        <a class="main item link fbox-ac hover txt-lv2" href="/hfive/view/help.html"><span class="u-ico i11"></span><p class="fbox-f1">常见问题</p><span class="fsize-12 subtxt">查看</span><span class="arr arr-right arr-gray"></span></a>
+        <a class="main item link fbox-ac hover txt-lv2" href="tel:4000812868"><span class="u-ico i12"></span><p class="fbox-f1">客服热线<span class="txt-blue">（400-0812-868）</span></p><span class="fsize-12 subtxt">拨打</span><span class="arr arr-right arr-gray"></span></a>
+        <!--<a class="main link fbox-ac hover txt-lv2" href="/hfive/view/shop.html"><span class="u-ico i9"></span><p class="fbox-f1">维修网点</p><span class="arr arr-right arr-gray"></span></a>-->
+      </div>
+    </div></div>
+  </script>
+  </div>
+  <div class="navbar-bottom"><ul class="navbar-content fbox">
+    <li class="fbox-cc fbox-f1"><a class="hover" href="/hfive/view/index.html"><span class="navbar-icon i1"></span>加入互助</a></li>
+    <li class="fbox-cc fbox-f1"><a class="hover" href="/hfive/view/publicity.html"><span class="navbar-icon i2"></span>互助公示</a></li>
+    <li class="fbox-cc fbox-f1"><a class="hover active" href="/hfive/view/profile.html"><span class="navbar-icon i3"></span>我的会员卡</a></li>
+  </ul></div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js"></script>
+  <script src="/hfive/js/profile.js?v=16"></script>
+</body>
+</html>

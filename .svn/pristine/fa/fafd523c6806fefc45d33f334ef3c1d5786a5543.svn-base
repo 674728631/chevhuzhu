@@ -1,0 +1,64 @@
+package com.zccbh.demand.controller.marketing;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.zccbh.demand.service.marketing.MarketingService;
+import com.zccbh.util.collect.Constant;
+
+import net.sf.json.JSONObject;
+
+/** 
+ * @ClassName: MarketingController 
+ * @Description: TODO(这里用一句话描述这个类的作用) 
+ * @author xiaowuge
+ * @date 2018年10月24日 下午5:27:21 
+ *  
+ */
+@Controller
+@RequestMapping("/marketing")
+public class MarketingController {
+	
+	@Autowired
+	private MarketingService marketingService;
+	
+	/**
+     * 营销统计页面
+     */
+    @RequestMapping(value = "/list.html",method = RequestMethod.GET)
+    public String listPage(ModelMap modelMap){
+        return "marketing/marketing-list";
+    }
+    
+    /**
+     * 获取局部数据--概况
+     * @author xiaowuge  
+     * @date 2018年10月26日  
+     * @version 1.0
+     */
+    @RequestMapping(value="/localShow",method=RequestMethod.POST)
+    @ResponseBody
+    public String localShow(HttpServletRequest request, @RequestBody String strJson){
+    	try {
+			Map<String, Object> parameModelMap = JSONObject.fromObject(strJson);
+			//获取微信关注数
+			Map<String, Object> resultMap = marketingService.localShow(parameModelMap);
+			return Constant.toReModel("0", "SUCCESSFUL", resultMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Constant.toReModel("4000","加载数据出错",e);
+		}
+    	
+    }
+
+}

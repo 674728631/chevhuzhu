@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.customer.ComplaintMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_complaint
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="tel != null and tel != ''">tel,</if>
+            <if test="typeUser != null">typeUser,</if>
+            <if test="typeQuestion != null">typeQuestion,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="img != null and img != ''">img,</if>
+            <if test="status != null">status,</if>
+            <if test="createAt != null">createAt,</if>
+            <if test="solveAt != null">solveAt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name,jdbcType=VARCHAR},</if>
+            <if test="tel != null and tel != ''">#{tel,jdbcType=VARCHAR},</if>
+            <if test="typeUser != null">#{typeUser,jdbcType=INTEGER},</if>
+            <if test="typeQuestion != null">#{typeQuestion,jdbcType=INTEGER},</if>
+            <if test="content != null and content != ''">#{content,jdbcType=VARCHAR},</if>
+            <if test="img != null and img != ''">#{img,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=INTEGER},</if>
+            <if test="createAt != null">#{createAt,jdbcType=DATE},</if>
+            <if test="solveAt != null">#{solveAt,jdbcType=DATE},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_complaint
+        <set>
+            <if test="name != null  and name != ''">name = #{name,jdbcType=VARCHAR},</if>
+            <if test="tel != null and tel != ''">tel = #{tel,jdbcType=VARCHAR},</if>
+            <if test="typeUser != null">typeUser = #{typeUser,jdbcType=INTEGER},</if>
+            <if test="typeQuestion != null">typeQuestion = #{typeQuestion,jdbcType=INTEGER},</if>
+            <if test="content != null and content != ''">content = #{content,jdbcType=VARCHAR},</if>
+            <if test="img != null and img != ''">img = #{img,jdbcType=VARCHAR},</if>
+            <if test="status != null">status = #{status,jdbcType=INTEGER},</if>
+            <if test="createAt != null">createAt = #{createAt,jdbcType=DATE},</if>
+            <if test="solveAt != null">solveAt = #{solveAt,jdbcType=DATE},</if>
+        </set>
+        WHERE id = #{complaintId,jdbcType=INTEGER}
+    </update>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT * FROM cbh_complaint
+        WHERE id = #{complaintId,jdbcType=INTEGER}
+    </select>
+
+    <select id="findMore" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT * FROM cbh_complaint
+        WHERE 1=1
+        <if test="status != null and status != ''"> and status IN (${status})</if>
+        <if test="searchInfo != null and searchInfo != ''"> AND (name LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR tel LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%'))</if>
+        ORDER BY createAt DESC
+    </select>
+
+    <select id="findCount" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+          COUNT(*) AS totalNum,
+          COUNT( CASE WHEN status=1 THEN status END) AS unSolveNum,
+          COUNT( CASE WHEN status=3 THEN status END) AS solveNum
+        FROM cbh_complaint
+        WHERE 1=1
+        <if test="searchInfo != null and searchInfo != ''"> AND (name LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR tel LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%'))</if>
+    </select>
+</mapper>

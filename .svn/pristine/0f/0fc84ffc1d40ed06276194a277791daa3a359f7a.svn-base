@@ -1,0 +1,152 @@
+
+
+/*待处理订单*/
+.order-box{
+    padding: 0;
+    height: 200px;
+    background-color: #fff;
+    box-shadow: 6px 6px 6px -5px #ccc;
+}
+.order-box h3,.data-total h3{
+    font-size: 15px;
+    height: 32px;
+    font-weight: bold;
+    line-height: 32px;
+    text-indent: 15px;
+}
+.order-deal{
+    height: 168px;
+    margin: 0;
+    padding: 0;
+}
+.order-deal li{
+    width: 20%;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+.order-deal li a{
+    width: 75%;
+    max-width: 166px;
+    height: 100px;
+    line-height: 50px;
+    display: block;
+    border-radius: 14px;
+    margin: 32px auto 0;
+
+}
+.order-deal li:nth-of-type(1) a{
+    background-color:#4DA2FF;
+}
+.order-deal li:nth-of-type(2) a{
+    background-color:#FFCC32;
+}
+.order-deal li:nth-of-type(3) a{
+    background-color:#83D688;
+}
+.order-deal li:nth-of-type(4) a{
+     background-color:#FF7A8B;
+ }
+.order-deal li:nth-of-type(5) a{
+    background-color:#9487F1;
+}
+.order-deal li a strong,.order-deal li a p{
+    display: block;
+    color: #ffffff;
+}
+.order-deal li a strong{
+    height: 40%;
+}
+.order-deal li a p{
+    height: 60%;
+}
+.order-deal li a strong{
+    font-size: 15px;
+}
+.order-deal li a p {
+    font-weight: bold;
+    font-size: 18px;
+}
+/*数据统计*/
+.data-total{
+    height: 376px;
+    background-color: #ffffff;
+    margin-top: 20px;
+    box-shadow: 6px 6px 6px -5px #ccc;
+}
+.data-tab{
+    height: 50px;
+    line-height: 50px;
+}
+.data-tab-btn,.data-tab-line{
+    height: 100%;
+}
+.data-tab-btn{
+    float: left;
+    width: 60%;
+    max-width: 800px;
+}
+.data-tab-line{
+    float: right;
+    width: 30%;
+}
+.data-tab-btn li{
+    float: left;
+    width: 13%;
+    padding-left: 15px;
+}
+.data-tab-btn li button{
+    width: 98px;
+    height: 30px;
+    background-color: #AAAAAA;
+    border-radius: 2px;
+    line-height: 30px;
+    border: none;
+    color: #ffffff;
+    outline: none;
+}
+.blue-bag{
+    background-color: #4DA2FF !important;
+}
+.data-tab-line li{
+    float: right;
+    width: 70px;
+    font-size: 15px;
+    text-align: center;
+    cursor: pointer;
+
+}
+.add-tab-sty{
+    border-bottom: 2px solid #4DA2FF;
+    color: #4DA2FF;
+}
+/*折线图*/
+.echarts-des{
+    padding-left: 15px;
+}
+.echarts-des p{
+    display: inline-block;
+}
+.echarts-des p:nth-of-type(2){
+    margin-left: 40px;
+}
+.margin-105{
+    margin-top: 53px;
+}
+/*时间弹窗*/
+.time-layer{
+    display: none;
+    width: 360px;
+}
+.time-layer .form-group {
+    height: 34px;
+}
+
+.time-layer .form-group {
+    margin: 12px auto;
+}
+.lay-form-time {
+    width: 350px;
+    margin-left: 10px;
+}
+

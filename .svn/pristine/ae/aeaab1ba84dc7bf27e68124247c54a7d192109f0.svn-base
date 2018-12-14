@@ -1,0 +1,90 @@
+<html>
+<head>
+  <title>延长互助权益</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  var _hmt = _hmt || [];(function(){var hm = document.createElement("script");hm.src="https://hm.baidu.com/hm.js?074bb24e94cc1a14248e7f87f21b34f2";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/recharge.css">
+</head>
+<body>
+  <div id="container" class="container full hide">
+    <script type="text/template" id="main-tpl">
+      <div id="main">
+        <img id="logo" src="/hfive/img/app_logo_2.jpg">
+        <div id="user-info" class="fbox-cc">
+          <div class="avatar"><img src="${user.portrait}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_avatar_2.png')"></div>
+          <div>
+            <p class="user-name fsize-16">{@if user.userName}${user.userName}{@else}${user.phone}{@/if}</p>
+            <p class="user-desc fsize-14">累计帮助${user.helpCount}人</p>
+          </div>
+        </div>
+        <div id="recharge-info">
+          <div id="publicity" class="fbox-ac">
+            <div class="fbox-f1"><p class="fbox-cc fsize-12 p1"><i class="i1"></i>平台救助金支出</p><p class="fsize-26 p2">${publicity.amtPaid}<span class="fsize-14"> 元</span></p></div>
+            <div class="fbox-f1"><p class="fbox-cc fsize-12 p1"><i class="i2"></i>救助会员</p><p class="fsize-26 p2">${publicity.finishCount}<span class="fsize-14"> 人</span></p></div>
+          </div>
+          <div id="car" class="shadow">
+            <p class="fsize-14 p1">感谢您的陪伴，您可以延长互助权益</p>
+            {@if car}
+            <p class="p2"><span class="fsize-22 s1">${car.licensePlateNumber}</span>{@if car.amtCooperation < 1} <span class="fsize-20 s2">余额不足</span>{@/if}</p>
+            <a class="btn-charge fsize-16 hover" href="/hfive/view/wallet.html?id=${car.id}">立即充值</a>
+            {@else}
+            <a class="btn-charge fsize-16 hover" href="/hfive/view/wallet.html">立即充值</a>
+            {@/if}
+          </div>
+          <div id="rule" class="fsize-12">
+            <p class="title fsize-14"><span>车V互助会员权益</span></p>
+            <p>1.1000元/年救助额度；</p>
+            <p>2.救助范围：擦刮、碰撞、玻璃损坏、爆胎、倒车镜损坏；</p>
+            <p>3.救助盛和通过后3小时内上门接车，48小时内交车；</p>
+            <p>4.其他会员的事故每次您自己分摊0.1-0.01元；</p>
+            <p>5.请保持互助金余额不低于0元，退出计划后再加入将重新进入30天观察期，观察期过后才可发起救助。</p>
+          </div>
+        </div>
+      </div>
+    </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="/hfive/js/recharge.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.event.EventRepairMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+
+        insert into cbh_event_repair
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventNo != null and eventNo != ''">eventNo,</if>
+            <if test="repairmanId != null">repairmanId,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="img != null and img != ''">img,</if>
+            <if test="timeBegin != null">timeBegin,</if>
+            <if test="timeEnd != null">timeEnd,</if>
+            <if test="createAt != null">createAt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eventNo != null and eventNo != ''">#{eventNo,jdbcType=VARCHAR},</if>
+            <if test="repairmanId != null">#{repairmanId,jdbcType=INTEGER},</if>
+            <if test="description != null and description != ''">#{description,jdbcType=VARCHAR},</if>
+            <if test="img != null and img != ''">#{img,jdbcType=VARCHAR},</if>
+            <if test="timeBegin != null">#{timeBegin,jdbcType=DATE},</if>
+            <if test="timeEnd != null">#{timeEnd,jdbcType=DATE},</if>
+            <if test="createAt != null">#{createAt,jdbcType=DATE},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_event_repair
+        <set>
+            <if test="eventNo != null and eventNo != ''">eventNo = #{eventNo,jdbcType=VARCHAR},</if>
+            <if test="repairmanId != null">repairmanId = #{repairmanId,jdbcType=INTEGER},</if>
+            <if test="description != null and description != ''">description = #{description,jdbcType=VARCHAR},</if>
+            <if test="img != null and img != ''">img = #{img,jdbcType=VARCHAR},</if>
+            <if test="timeBegin != null">timeBegin = #{timeBegin,jdbcType=DATE},</if>
+            <if test="timeEnd != null">timeEnd = #{timeEnd,jdbcType=DATE},</if>
+            <if test="createAt != null">createAt = #{createAt,jdbcType=DATE},</if>
+        </set>
+        WHERE eventNo = #{eventNo,jdbcType=VARCHAR}
+    </update>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT c.customerPN,car.nameCarOwner,car.licensePlateNumber,car.model,car.amtCompensation,
+        car.drivingLicense,car.carPhotos,emp.name AS empName,emp.tel AS empTel,
+        m.name AS shopName,m.tel,m.address,r.nameCarOwner AS receiveManName,r.telCarOwner,r.place,e.eventNo,e.statusEvent,a.accidentImg,
+        e.amtBusiness,a.timeApply,a.reasonSuccess AS applySuccess,a.accidentDescription,ass.amtAssert,ass.damageExtent,ass.damagePosition,ass.description,
+        ass.reasonAssert,ass.assertImg,rep.timeBegin,rep.timeEnd,rep.description AS repDescription,rep.img,emp2.name AS repairmanName,
+        emp2.tel AS reparimanTel,rr.timeReceiveEnd
+        FROM cbh_event e
+            LEFT JOIN cbh_event_apply a ON a.eventNo = e.eventNo
+            LEFT JOIN cbh_event_receivecar r ON r.eventNo = e.eventNo
+            LEFT JOIN cbh_event_assert ass ON ass.eventNo = e.eventNo
+            LEFT JOIN cbh_car car ON car.id = e.carId
+            LEFT JOIN cbh_user_customer c ON c.id = e.customerId
+            LEFT JOIN cbh_maintenanceshop m ON m.id = e.maintenanceshopId
+            LEFT JOIN cbh_maintenanceshop_employee emp ON emp.id = ass.maintenanceshopEmployeeId
+            LEFT JOIN cbh_event_repair rep ON rep.eventNo = e.eventNo
+            LEFT JOIN cbh_maintenanceshop_employee emp2 ON emp2.id = rep.repairmanId
+            LEFT JOIN cbh_event_receivecar rr ON rr.eventNo = e.eventNo AND rr.status = 3
+        WHERE r.status = 1 AND e.eventNo = #{eventNo,jdbcType=VARCHAR}
+            ORDER BY r.createAt DESC
+        LIMIT 1
+    </select>
+</mapper>

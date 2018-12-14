@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.activities.GiftMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+        insert into cbh_gift
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="drawNum != null and drawNum != ''">drawNum,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="prob != null ">prob,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+         	<if test="drawNum != null and drawNum != ''">#{drawNum,jdbcType=VARCHAR},</if>
+            <if test="name != null and name != ''">#{name,jdbcType=VARCHAR},</if>
+            <if test="prob != null ">#{prob,jdbcType=DECIMAL},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_gift
+        <set>
+ 			<if test="drawNum != null and drawNum != ''">drawNum = #{drawNum,jdbcType=VARCHAR},</if>
+            <if test="name != null and name != ''">name = #{name,jdbcType=VARCHAR},</if>
+            <if test="prob != null ">prob = #{prob,jdbcType=DECIMAL},</if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT g.*
+        FROM cbh_gift g
+        WHERE g.id = #{id,jdbcType = INTEGER}
+    </select>
+    
+    <select id="selectByDrawNum" parameterType="java.util.Map" resultType="java.util.Map">
+    	select g.* from cbh_gift g where g.drawNum = #{drawNum,jdbcType = VARCHAR}
+    </select>
+
+</mapper>

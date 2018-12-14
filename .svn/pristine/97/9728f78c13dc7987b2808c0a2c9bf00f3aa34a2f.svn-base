@@ -1,0 +1,59 @@
+.tabbox {
+  overflow: hidden; }
+
+.tabbox-layer {
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
+.tabbox-refresh {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  width: 100%;
+  height: 40px;
+  color: #b6b6b6; }
+  .tabbox-refresh .arr3 {
+    margin-left: .2rem;
+    width: 10px;
+    height: 10px;
+    -webkit-transition: -webkit-transform .3s;
+    transition: -webkit-transform .3s;
+    transition: transform .3s;
+    transition: transform .3s, -webkit-transform .3s; }
+    .tabbox-refresh .arr3.uturn {
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg); }
+
+.tabbox-tab {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; }
+
+.tabbox-tab.full {
+  height: 100%; }
+
+.tabbox-tab:nth-of-type(2) {
+  left: 100%; }
+
+.tabbox-tab:nth-of-type(3) {
+  left: 200%; }
+
+.tabbox-tab:nth-of-type(4) {
+  left: 300%; }
+
+.tabbox-tab:nth-of-type(5) {
+  left: 400%; }
+
+.tabbox-tab:nth-of-type(6) {
+  left: 500%; }
+
+.tabbox-tab:nth-of-type(7) {
+  left: 600%; }
+
+.tabbox-tab:nth-of-type(8) {
+  left: 700%; }
+
+.tabbox-tab:nth-of-type(9) {
+  left: 800%; }

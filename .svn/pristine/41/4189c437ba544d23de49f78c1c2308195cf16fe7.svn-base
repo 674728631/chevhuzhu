@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>邀你免费领取1000元小擦刮维修补贴金</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=7">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  var _hmt = _hmt || [];(function(){var hm = document.createElement("script");hm.src="https://hm.baidu.com/hm.js?074bb24e94cc1a14248e7f87f21b34f2";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/share2.css?v=3">
+</head>
+<body>
+  <div id="container" class="container full red fsize-14 txt-white">
+  <script type="text/template" id="main-tpl">
+  <div id="source" class="upper">
+    <div id="main">
+      <div id="avatar" class="avatar"><img src="${portrait}" onload="resetImg(this)" onerror="setDefaultAvatar(this, 'default_avatar_1.png')"></div>
+      <div id="nickname" class="fsize-12 ellipsis">${nickname}</div>
+      <p id="text1" class="fsize-14">小擦刮还报保险？家里有矿啊！</p>
+      <p id="text4" class="fsize-12"><span>车V互助—小擦刮不用走保险，不增加保险理赔次数</span></p>
+      <input id="phone" class="fsize-16" type="tel" maxlength="11" placeholder="请输入手机号">
+      <a id="btn-confirm" class="fbox-cc fsize-16 hover" href="javascript:;">立即领取</a>
+      <img id="logo" src="/hfive/img/chevhuzhu2.png">
+    </div>
+  </div>
+  </script>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=37"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/js/event_join2.js?v=5"></script>
+</body>
+</html>

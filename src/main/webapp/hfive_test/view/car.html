@@ -1,0 +1,267 @@
+<html>
+<head>
+  <title>我的车辆</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=9">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+    window.addEventListener('resize', function(){
+      var deviceWidth = document.documentElement.clientWidth;
+      if(deviceWidth > 750) deviceWidth = 750;
+      document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+    });
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/car.css?v=4">
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">我的车辆</div>
+  </div></div>
+  <div class="container nav ffull fsize-14 txt-lv1">
+    <div id="main">
+      <div id="menu-box" class="fbox">
+        <a class="fbox-cc fsize-16 txt-lv2 inhover" href="javascript:;" data-value="1"><p>保障中</p></a>
+        <a class="fbox-cc fsize-16 txt-lv2 inhover" href="javascript:;" data-value="2"><p>非保障中</p></a>
+      </div>
+      <div class="tabbox fsize-14"><div class="tabbox-layer">
+        <div class="tabbox-tab">
+          <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+          <div class="list-area"></div>
+          <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_noshop.png"><p class="fsize-16">您还没有添加车辆信息，立即加入互助吧！</p></div></div>
+        </div>
+        <div class="tabbox-tab">
+          <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+          <div class="list-area"></div>
+          <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_noshop.png"><p class="fsize-16">您还没有添加车辆信息，立即加入互助吧！</p></div></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <div class="btn-wrap">
+    <div class="btn-box fbox-ac">
+      <a class="fbox-f1 btn hover strong" href="/hfive/view/share.html">邀请好友免费加入</a>
+      <a id="btn-add" class="fbox-f1 btn hover" href="/hfive/view/car_add.html">新增车辆</a>
+    </div>
+  </div>
+  <script type="text/template" id="list-tpl">
+  {@each list as it}
+  {@if it.status == 1}
+  <div class="item main shadow">
+    <a class="main txt-lv1" href="javascript:;">
+      <div class="title fbox-ac fsize-16"><p class="fbox-f1">${it.licensePlateNumber}</p><p class="txt-${it.status|build_carColor}">${it.status|build_carStatus}</p></div>
+      <div class="content">
+        <div class="info" style="width:100%;">
+          <!--<div class="txt single fbox">车主姓名：<font class="fbox-f1">${it.nameCarOwner}</font></div>
+          <div class="txt single fbox">申请支付时间：<font class="fbox-f1">{@if it.createAt}${it.createAt.time|build_time, 'yyyy-MM-dd hh:mm:ss'}{@/if}</font></div>
+          <div class="txt single fbox">品牌型号：<font class="fbox-f1">{@if it.model}${it.model}{@else}无{@/if}</font></div>-->
+          {@if it.drvingCity}
+          <div class="txt single fbox">行驶城市：<font class="fbox-f1">${it.drvingCity}</font></div>
+          {@/if}
+          <div class="txt single fbox">加入成功可获得救助额度：<font class="fbox-f1">${lipei_max}元</font></div>
+        </div>
+      </div>
+    </a>
+    <div class="sub fbox-cc">
+      <a class="btn hover" href="/hfive/view/car_add.html?id=${it.id}">去修改</a>
+      <span class="bd"></span>
+      <a class="btn strong2 hover" href="/hfive/view/car_add_pay.html?id=${it.id}">去支付</a>
+    </div>
+  </div>
+  {@else if it.status == 2}
+  <div class="item main shadow">
+    <a class="main txt-lv1" href="javascript:;">
+      <div class="title fbox-ac fsize-16"><p class="fbox-f1">${it.licensePlateNumber}</p><p class="txt-${it.status|build_carColor}">${it.status|build_carStatus}</p></div>
+      <div class="content">
+        <div class="info" style="width:100%;">
+          <!--<div class="txt single fbox">车主姓名：<font class="fbox-f1">${it.nameCarOwner}</font></div>
+          <div class="txt single fbox">品牌型号：<font class="fbox-f1">{@if it.model}${it.model}{@else}无{@/if}</font></div>
+          <div class="txt single fbox">完成支付时间：<font class="fbox-f1 txt-lv2">{@if it.payTime}${it.payTime.time|build_time, 'yyyy-MM-dd hh:mm:ss'}{@/if}</font></div>-->
+          {@if it.drvingCity}
+          <div class="txt single fbox">行驶城市：<font class="fbox-f1">${it.drvingCity}</font></div>
+          {@/if}
+          {@if it.payAmt}
+          <div class="txt single fbox">支付金额：<font class="fbox-f1">${it.payAmt}元</font></div>
+          {@/if}
+          <div class="txt single fbox">加入成功可获得救助额度：<font class="fbox-f1">${lipei_max}元</font></div>
+        </div>
+      </div>
+    </a>
+    <div class="sub fbox">
+      <!--<a class="btn hover" href="/hfive/view/car_add.html?id=${it.id}">去修改</a>-->
+      <a class="btn strong2 hover single" href="/hfive/view/car_add2.html?id=${it.id}">添加照片</a>
+    </div>
+  </div>
+  {@else if it.status == 10}
+  <div class="item main shadow">
+    <a class="main txt-lv1" href="javascript:;">
+      <div class="title fbox-ac fsize-16"><p class="fbox-f1">${it.licensePlateNumber}</p><p class="txt-${it.status|build_carColor}">${it.status|build_carStatus}</p></div>
+      <div class="content">
+        <div class="info">
+          <!--<div class="txt single fbox">车主姓名：<font class="fbox-f1">${it.nameCarOwner}</font></div>
+          <div class="txt single fbox">品牌型号：<font class="fbox-f1">{@if it.model}${it.model}{@else}无{@/if}</font></div>
+          <div class="txt single fbox">审核说明：<font class="fbox-f1">将在一个工作日内完成审核，请耐心等待</font></div>
+          <div class="txt single fbox">提交审核时间：<font class="fbox-f1">{@if it.timeExamine}${it.timeExamine.time|build_time, 'yyyy-MM-dd hh:mm:ss'}{@/if}</font></div>-->
+          {@if it.drvingCity}
+          <div class="txt single fbox">行驶城市：<font class="fbox-f1">${it.drvingCity}</font></div>
+          {@/if}
+          {@if it.payAmt}
+          <div class="txt single fbox">支付金额：<font class="fbox-f1">${it.payAmt}元</font></div>
+          {@/if}
+          <div class="txt single fbox">加入成功可获得救助额度：<font class="fbox-f1">${lipei_max}元</font></div>
+        </div>
+      </div>
+    </a>
+  </div>
+  {@else if it.status == 12}
+  <div class="item main shadow">
+    <a class="main txt-lv1" href="javascript:;">
+      <div class="title fbox-ac fsize-16"><p class="fbox-f1">${it.licensePlateNumber}</p><p class="txt-${it.status|build_carColor}">${it.status|build_carStatus}</p></div>
+      <div class="content">
+        <div class="info">
+          <!--<div class="txt single fbox">车主姓名：<font class="fbox-f1">${it.nameCarOwner}</font></div>
+          <div class="txt single fbox">品牌型号：<font class="fbox-f1">{@if it.model}${it.model}{@else}无{@/if}</font></div>
+          <div class="txt single fbox">完成审核时间：<font class="fbox-f1">{@if it.timeExamine}${it.timeExamine.time|build_time, 'yyyy-MM-dd hh:mm:ss'}{@/if}</font></div>-->
+          {@if it.drvingCity}
+          <div class="txt single fbox">行驶城市：<font class="fbox-f1">${it.drvingCity}</font></div>
+          {@/if}
+          {@if it.payAmt}
+          <div class="txt single fbox">支付金额：<font class="fbox-f1">${it.payAmt}元</font></div>
+          {@/if}
+          <div class="txt single fbox">加入成功可获得救助额度：<font class="fbox-f1">${lipei_max}元</font></div>
+          <div class="txt single fbox txt-red">失败原因：<font class="fbox-f1">${it.reasonFailure}</font></div>
+        </div>
+      </div>
+    </a>
+    <div class="sub fbox">
+      <a class="btn strong2 hover single" href="/hfive/view/car_add2.html?id=${it.id}">去修改</a>
+    </div>
+  </div>
+  {@else if it.status == 13}
+  <div class="item main shadow">
+    <a class="main txt-lv1" href="javascript:;">
+      <div class="title fbox-ac fsize-16"><p class="fbox-f1">${it.licensePlateNumber}</p><p class="txt-${it.status|build_carColor}">${it.status|build_carStatus}</p></div>
+      <div class="content">
+        <div class="info">
+          <!--<div class="txt single fbox">车主姓名：<font class="fbox-f1">${it.nameCarOwner}</font></div>
+          <div class="txt single fbox">品牌型号：<font class="fbox-f1">{@if it.model}${it.model}{@else}无{@/if}</font></div>
+          <div class="txt single fbox">剩余救助额度：<font class="fbox-f1">${it.amtCompensation}元</font></div>
+          
+          {@if it.amtCooperation < 1 && it.typeGuarantee == 1}<div class="txt single fbox txt-red">您互助金余额已经小于1元，请及时充值，避免被退出计划</div>{@/if}
+          {@if it.timeBegin}<div class="txt single fbox">加入时间：<font class="fbox-f1 txt-lv2">${it.timeBegin.time|build_time, 'yyyy-MM-dd hh:mm:ss'}</font></div>{@/if}
+          {@if it.timeEnd}<div class="txt single fbox">保障期：<font class="fbox-f1 txt-lv2">${it.timeEnd.time|build_time, 'yyyy-MM-dd hh:mm:ss'}</font></div>{@/if}
+          {@if it.timeExamine}
+          <div class="txt single fbox">完成审核时间：<font class="fbox-f1">${it.timeExamine.time|build_time, 'yyyy-MM-dd hh:mm:ss'}</font></div>
+          <div class="txt single fbox txt-red">观察期还剩：<font class="fbox-f1">${it.timeExamine.time|build_days, 7}天</font></div>
+          {@/if}-->
+          {@if it.drvingCity}
+          <div class="txt single fbox">行驶城市：<font class="fbox-f1">${it.drvingCity}</font></div>
+          {@/if}
+          <!--{@if it.payAmt}
+          <div class="txt single fbox">支付金额：<font class="fbox-f1">${it.payAmt}元</font></div>
+          {@/if}-->
+          <div class="txt single fbox">互助金：<font class="fbox-f1">{@if it.amtCooperation}${it.amtCooperation}{@else}0{@/if}元</font></div>
+          <div class="txt single fbox">观察期剩余：<font class="fbox-f1">{@if it.observationEndTime}${it.observationEndTime.time|build_days}{@else}${it.payTime.time|build_days, 30}{@/if}天</font></div>
+          <div class="txt single fbox">可用救助额度：<font class="fbox-f1">${it.amtCompensation}元</font></div>
+          {@if it.reasonSuccess}
+          <div class="txt single fbox txt-red">平台审核说明：<font class="fbox-f1">${it.reasonSuccess}</font></div>
+          {@/if}
+        </div>
+      </div>      
+    </a>
+  </div>
+  {@else if it.status == 20}
+  <a class="item main txt-lv1 hover car-card v${it.levela}" href="{@if it.eventNo && it.statusEvent != 100 && it.eventIsInvalid != 10}{@if it.statusEvent == 2}/hfive/view/order_add.html?oid=${it.eventNo}{@else}/hfive/view/order_detail.html?id=${it.eventNo}{@/if}{@else if it.orderNo && it.statusOrder != 100 && it.orderIsInvalid != 10}{@if it.statusOrder == 2}/hfive/view/baoxian_order_add.html?oid=${it.orderNo}{@else}/hfive/view/baoxian_order_detail.html?id=${it.orderNo}{@/if}{@else}/hfive/view/order_add.html?id=${it.id}{@/if}">
+    <p class="pnum fsize-22">${it.licensePlateNumber}</p>
+    <p class="amt fsize-18">救助额度${it.amtCompensation}元</p>
+  </a>
+  {@else if it.status == 30}
+  <div class="item main shadow">
+    <a class="main txt-lv1" href="javascript:;">
+      <div class="title fbox-ac fsize-16"><p class="fbox-f1">${it.licensePlateNumber}</p><p class="txt-${it.status|build_carColor}">${it.status|build_carStatus}</p></div>
+      <div class="content">
+        <div class="info">
+          <!--<div class="txt single fbox">车主姓名：<font class="fbox-f1 txt-lv2">${it.nameCarOwner}</font></div>
+          <div class="txt single fbox">品牌型号：<font class="fbox-f1 txt-lv2">{@if it.model}${it.model}{@else}无{@/if}</font></div>
+          <div class="txt single fbox">剩余救助额度：<font class="fbox-f1 txt-lv2">${it.amtCompensation}元</font></div>
+          <div class="txt single fbox">互助金余额：<font class="fbox-f1 txt-lv2">${it.amtCooperation}元</font></div>
+          {@if it.reasonSignout == 1}
+          <div class="txt single fbox txt-red">因余额不足，已退出计划，请激活车V互助</div>
+          {@else if it.reasonSignout == 2}
+          <div class="txt single fbox txt-red">因包年保障期已到，已退出计划，请激活车V互助</div>
+          {@/if}
+          {@if it.timeBegin}
+          <div class="txt single fbox">加入时间：<font class="fbox-f1 txt-lv2">${it.timeBegin.time|build_time, 'yyyy-MM-dd hh:mm:ss'}</font></div>
+          {@/if}
+          {@if it.timeSignout}
+          <div class="txt single fbox">退出时间：<font class="fbox-f1 txt-lv2">${it.timeSignout.time|build_time, 'yyyy-MM-dd hh:mm:ss'}</font></div>
+          {@/if}-->
+          <div class="txt single fbox">互助金：<font class="fbox-f1">${it.amtCooperation}元</font></div>
+          <div class="txt single fbox">救助额度：<font class="fbox-f1">${it.amtCompensation}元</font></div>
+        </div>
+      </div>
+    </a>
+    <div class="sub fbox">
+      <a class="btn strong2 hover single" href="/hfive/view/car_add.html?id=${it.id}&rejoin=1">激活</a>
+    </div>
+  </div>
+  {@else if it.status == 31}
+  <div class="item main shadow">
+    <a class="main txt-lv1" href="javascript:;">
+      <div class="title fbox-ac fsize-16"><p class="fbox-f1">${it.licensePlateNumber}</p><p class="txt-${it.status|build_carColor}">${it.status|build_carStatus}</p></div>
+      <div class="content">
+        <div class="info">
+          <div class="txt single fbox">互助金：<font class="fbox-f1">${it.amtCooperation}元</font></div>
+          <div class="txt single fbox">救助额度：<font class="fbox-f1">${it.amtCompensation}元</font></div>
+        </div>
+      </div>
+    </a>
+  </div>
+  {@/if}
+  {@/each}
+  </script>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=41"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js?v=2"></script>
+  <script src="/hfive/js/car.js?v=5"></script>
+</body>
+</html>

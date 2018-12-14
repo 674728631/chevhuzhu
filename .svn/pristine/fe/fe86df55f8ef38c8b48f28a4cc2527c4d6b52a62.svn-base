@@ -1,0 +1,109 @@
+<html>
+<head>
+  <title>公示</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=8">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <link rel="stylesheet" href="/hfive/css/tabbox.css?v=1">
+  <link rel="stylesheet" href="/hfive/css/publicity.css?v=2">
+</head>
+<body>
+  <div id="container" class="container nav-bottom ffull fsize-14">
+    <script type="text/template" id="main-tpl">
+    <div id="top"><div class="container">
+      <div class="info top">
+        <div class="title fbox-ac fsize-16"><span class="i-con i4"></span>账户公示</div>
+        <div class="content fbox-ac tc">
+          <a class="item fbox-f1 hover" href="/hfive/view/publicity_bank.html"><p class="fsize-20">￥${amtTotal|build_round}</p><p class="txt-lv2 fsize-16">银行账户余额</p></a>
+          <div class="item fbox-f1"><p class="fsize-20">￥${amtPaid|build_round}</p><p class="txt-lv2 fsize-16">互助支出</p></div>
+          <!--<div class="item fbox-f1"><p class="fsize-20">￥${amtBalance}</p><p class="txt-lv2 fsize-16">余额</p></div>-->
+        </div>
+        <div class="title fbox-ac fsize-16"><span class="i-con i5"></span>事件公示</div>
+        <div class="content fbox-ac tc">
+          <!--<div class="item fbox-f1"><p class="fsize-20">${totalCount}件</p><p class="txt-lv2 fsize-16">事件总数</p></div>-->
+          <div class="item fbox-f1"><p class="fsize-20">${publicityCount}件</p><p class="txt-lv2 fsize-16">公示中</p></div>
+          <div class="item fbox-f1"><p class="fsize-20">${finishCount}件</p><p class="txt-lv2 fsize-16">已互助</p></div>
+        </div>
+      </div>
+      <div class="info"><div id="type-box" class="fbox-ac fsize-16">
+        <a class="fbox-cc hover" href="javascript:;" data-value="1">公示中</a>
+        <a class="fbox-cc hover" href="javascript:;" data-value="2">已互助</a>
+      </div></div>
+    </div></div>
+    <div class="tabbox"><div class="tabbox-layer">
+      <div class="tabbox-tab">
+        <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+        <div class="list-box"></div>
+        <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_order.png"><p class="fsize-16">暂无事件</p></div></div>
+      </div>
+      <div class="tabbox-tab">
+        <div class="tabbox-refresh fbox-cc fsize-14"><span class="txt">下拉刷新</span><span class="arr3 arr-bottom arr-darkgray"></span></div>
+        <div class="list-box"></div>
+        <div class="null-info tc hide"><div class="img-box"><img src="/hfive/img/icon_order.png"><p class="fsize-16">暂无事件</p></div></div>
+      </div>
+    </div></div>
+    </script>
+  </div>
+  <div class="navbar-bottom"><ul class="navbar-content fbox">
+    <li class="fbox-cc fbox-f1"><a class="hover" href="/hfive/view/index.html"><span class="navbar-icon i1"></span>加入互助</a></li>
+    <li class="fbox-cc fbox-f1"><a class="hover active" href="/hfive/view/publicity.html"><span class="navbar-icon i2"></span>互助公示</a></li>
+    <li class="fbox-cc fbox-f1"><a class="hover" href="/hfive/view/profile.html"><span class="navbar-icon i3"></span>我的会员卡</a></li>
+  </ul></div>
+  <script type="text/template" id="list-tpl">
+  {@each list as it}
+  <a class="hover fbox-ac e-${it.eventNo}" href="/hfive/view/publicity_detail.html?id=${it.eventNo}">
+    <div class="avatar"><img src="${it.portrait}" onload="resetImg(this)" onerror="setDefaultAvatar(this)"></div>
+    <div class="minfo fbox-f1 fsize-12">
+      <p class="fsize-14">${it.nameCarOwner}　<span class="txt-blue">${it.licensePlateNumber}</span></p>
+      <div class="fbox wrap spec fsize-14"><p class="p1">维修价格：<span class="txt-lv2">${it.amtAssert}元</span></p><p class="p2">全员分摊：<span class="txt-lv2">${it.amtShare}元</span></p></div>
+    </div>
+    <span class="arr arr-gray arr-right"></span>
+  </a>
+  {@/each}
+  </script>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=39"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="/hfive/lib/tabbox.js"></script>
+  <script src="/hfive/js/publicity.js?v=6"></script>
+</body>
+</html>

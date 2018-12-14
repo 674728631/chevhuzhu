@@ -1,0 +1,66 @@
+<html>
+<head>
+  <title>邀请好友</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=7">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">邀请好友</div>
+  </div></div>
+  <div id="container" class="container nav full">
+  <!--<script type="text/template" id="main-tpl">-->
+    <img src="/hfive/img/share_img_1.jpg?1" width="100%">
+    <div class="btn-wrap">
+      <div class="btn-box fbox-ac">
+        <a id="btn-confirm" class="btn strong hover" href="javascript:;">邀请好友</a>
+      </div>
+    </div>
+  <!--</script>-->
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=37"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script>
+    $('#btn-confirm').on('click', function(){
+      var $node = $('<div class="share-layer"></div>').on('click', function(){
+        $(this).remove();
+      });
+      $('body').append($node);
+      $node = null;
+    })
+    
+    if (_config.is_wx && !_config.wx_config) {
+      configWXJSSDK(_config.wx_share, {
+        success: function() {
+          shareWX({
+            title: _share_title,
+            desc: _share_desc,
+            link: _share_link
+          })
+        }
+      })
+    }
+  </script>
+</body>
+</html>

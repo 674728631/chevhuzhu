@@ -1,0 +1,81 @@
+<html>
+<head>
+  <title>商家端常见问题</title>
+  <meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/hfive/css/base.css?v=8">
+<script type="application/javascript" src="/hfive/lib/fastclick.js"></script>
+<script>
+  
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body);
+    }, false);
+  }
+  var deviceWidth = document.documentElement.clientWidth;
+  if(deviceWidth > 750) deviceWidth = 750;
+  document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+</script>
+  <style>
+  .desc {
+    padding: .1rem 0 .2rem .2rem;
+    line-height: 1.6;
+  }
+  </style>
+</head>
+<body>
+  <div class="navbar-top"><div class="navbar-content fbox-ac">
+    <a class="navbar-left fbox-cc hover" href="javascript:history.go(-1);"><span class="arr arr-left arr-white"></span></a>
+    <div class="navbar-center fbox-f1 tc fsize-18">商家端常见问题</div>
+  </div></div>
+  <div id="container" class="container nav-top full">
+    <div class="fsize-16 txt-blue" style="padding:.3rem;">
+      <p>Q：什么是车V互助？</p>
+      <p class="desc fsize-14 txt-lv2">车V互助是专注解决车主小刮擦理赔痛点，是保险之外的完美补充。</p>
+      <p>Q：如何成为车V互助理赔管家？</p>
+      <p class="desc fsize-14 txt-lv2">如果您是一、二类资质的汽修厂，请拨打客服热线<a class="hover txt-lv2" href="tel:4000812868">400-0812-868</a>进行咨询。</p>
+      <p>Q：如何接单？</p>
+      <p class="desc fsize-14 txt-lv2">当有订单信息，您可以点击【首页】接单按钮，或者点击【订单】对此订单进行相应操作。</p>
+      <p>Q：服务分规则是什么？</p>
+      <p class="desc fsize-14 txt-lv2">服务分初始和上限分数都是100分；服务分由车主评价、车主投诉和商家接车、维修完成时间是否超时等因素综合考核，具体内容如下：<br>（1）车主评价5星，加0.5分；4星减1分；小于等于3星减2分。<br>（2）车主投诉成立扣5分/单。<br>（3）超过3小时接车或者超过48小时维修完成，扣2分/单。<br>（4）服务分低于80分则系统停止分单给对应商家。</p>
+      <p>Q：接单、接车、维修完成倒计时的起始时间分别是多少？</p>
+      <p class="desc fsize-14 txt-lv2">接单倒计时10分钟、接车倒计时3小时、维修完成倒计时48小时。</p>
+      <p>Q：维修金额什么时候到账？</p>
+      <p class="desc fsize-14 txt-lv2">当车主支付完理赔订单金额后，您可以在App中【我的】-【我的钱包】中看到待结算金额，当车主确认接到车后，待结算金额会变成可提现金额，您就可以进行提现操作了。</p>
+      <p>Q：怎么进行提现？</p>
+      <p class="desc fsize-14 txt-lv2">【我的】-【我的钱包】中，进行提现到支付宝账户的操作，第一次提现时候需校验手机号后设置提现密码哦！</p>
+      <p>Q：遇到投诉纠纷怎么处理？</p>
+      <p class="desc fsize-14 txt-lv2">您可以拨打客服热线<a class="hover txt-lv2" href="tel:4000812868">400-0812-868</a>，客服人员会及时协助您处理！</p>
+    </div>
+  </div>
+  <script src="/hfive/lib/zepto.js"></script>
+<script src="/hfive/lib/juicer.js"></script>
+<script src="/hfive/js/common.js?v=40"></script>
+<script>
+  if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+    handleFontSize();
+  } else {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    } else if (document.attachEvent) {
+      document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+      document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+    }
+  }
+
+  function handleFontSize() {
+    // 设置网页字体为默认大小
+    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    // 重写设置网页字体大小的事件
+    WeixinJSBridge.on('menu:setfont', function() {
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zccbh.demand.mapper.order.OrderMapper">
+    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+       insert into cbh_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">orderNo,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="isInvalid != null and isInvalid != ''">isInvalid,</if>
+            <if test="customerId != null and customerId != ''">customerId,</if>
+            <if test="carId != null and carId != ''">carId,</if>
+            <if test="maintenanceshopId != null and maintenanceshopId != ''">maintenanceshopId,</if>
+            <if test="repairmanId != null and repairmanId != ''">repairmanId,</if>
+            <if test="assertmanId != null and assertmanId != ''">assertmanId,</if>
+            <if test="amtAssert != null and amtAssert != ''">amtAssert,</if>
+            <if test="amtBusiness != null and amtBusiness != ''">amtBusiness,</if>
+            <if test="accidentDescription != null and accidentDescription != ''">accidentDescription,</if>
+            <if test="accidentImg != null and accidentImg != ''">accidentImg,</if>
+            <if test="examineExplanation != null and examineExplanation != ''">examineExplanation,</if>
+            <if test="carOwnerName != null and carOwnerName != ''">carOwnerName,</if>
+            <if test="carOwnerTel != null and carOwnerTel != ''">carOwnerTel,</if>
+            <if test="deliverPlace != null and deliverPlace != ''">deliverPlace,</if>
+            <if test="deliverLongitude != null and deliverLongitude != ''">deliverLongitude,</if>
+            <if test="deliverLatitude != null and deliverLatitude != ''">deliverLatitude,</if>
+            <if test="takePlace != null and takePlace != ''">takePlace,</if>
+            <if test="takeLongitude != null and takeLongitude != ''">takeLongitude,</if>
+            <if test="takeLatitude != null and takeLatitude != ''">takeLatitude,</if>
+            <if test="reasonCancellations != null and reasonCancellations != ''">reasonCancellations,</if>
+            <if test="explanationCancellations != null and explanationCancellations != ''">explanationCancellations,</if>
+            <if test="damageExtent != null and damageExtent != ''">damageExtent,</if>
+            <if test="damagePosition != null and damagePosition != ''">damagePosition,</if>
+            <if test="assertImg != null and assertImg != ''">assertImg,</if>
+            <if test="assertDescription != null and assertDescription != ''">assertDescription,</if>
+            <if test="explanationAssert != null and explanationAssert != ''">explanationAssert,</if>
+            <if test="explanationRepair != null and explanationRepair != ''">explanationRepair,</if>
+            <if test="repairImg != null and repairImg != ''">repairImg,</if>
+            <if test="labelContent != null and labelContent != ''">labelContent,</if>
+            <if test="commentContent != null and commentContent != ''">commentContent,</if>
+            <if test="commentScore != null and commentScore != ''">commentScore,</if>
+            <if test="complaintContent != null and complaintContent != ''">complaintContent,</if>
+            <if test="uploadImgTime != null and uploadImgTime != ''">uploadImgTime,</if>
+            <if test="complaintImg != null and complaintImg != ''">complaintImg,</if>
+            <if test="applyTime != null and applyTime != ''">applyTime,</if>
+            <if test="examineTime != null and examineTime != ''">examineTime,</if>
+            <if test="reciveCarTime != null and reciveCarTime != ''">reciveCarTime,</if>
+            <if test="applyDistributionTime != null and applyDistributionTime != ''">applyDistributionTime,</if>
+            <if test="deliverCarTime != null and deliverCarTime != ''">deliverCarTime,</if>
+            <if test="distributionTime != null and distributionTime != ''">distributionTime,</if>
+            <if test="receiveOrderTime != null and receiveOrderTime != ''">receiveOrderTime,</if>
+            <if test="failReceiveOrderTime != null and failReceiveOrderTime != ''">failReceiveOrderTime,</if>
+            <if test="assertTime != null and assertTime != ''">assertTime,</if>
+            <if test="comfirmAssertTime != null and comfirmAssertTime != ''">comfirmAssertTime,</if>
+            <if test="beginRepairTime != null and beginRepairTime != ''">beginRepairTime,</if>
+            <if test="endRepairTime != null and endRepairTime != ''">endRepairTime,</if>
+            <if test="takeCarTime != null and takeCarTime != ''">takeCarTime,</if>
+            <if test="payTime != null and payTime != ''">payTime,</if>
+            <if test="completeTime != null and completeTime != ''">completeTime,</if>
+            <if test="complaintTime != null and complaintTime != ''">complaintTime,</if>
+            <if test="unComplaintTime != null and unComplaintTime != ''">unComplaintTime,</if>
+            <if test="solveComplaintTime != null and solveComplaintTime != ''">solveComplaintTime,</if>
+            <if test="invalidTime != null and invalidTime != ''">invalidTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">#{orderNo,jdbcType=VARCHAR},</if>
+            <if test="status != null and status != ''">#{status,jdbcType=INTEGER},</if>
+            <if test="isInvalid != null and isInvalid != ''">#{isInvalid,jdbcType=INTEGER},</if>
+            <if test="customerId != null and customerId != ''">#{customerId,jdbcType=INTEGER},</if>
+            <if test="carId != null and carId != ''">#{carId,jdbcType=INTEGER},</if>
+            <if test="maintenanceshopId != null and maintenanceshopId != ''">#{maintenanceshopId,jdbcType=INTEGER},</if>
+            <if test="repairmanId != null and repairmanId != ''">#{repairmanId,jdbcType=INTEGER},</if>
+            <if test="assertmanId != null and assertmanId != ''">#{assertmanId,jdbcType=INTEGER},</if>
+            <if test="amtAssert != null and amtAssert != ''">#{amtAssert,jdbcType=DECIMAL},</if>
+            <if test="amtBusiness != null and amtBusiness != ''">#{amtBusiness,jdbcType=DECIMAL},</if>
+            <if test="accidentDescription != null and accidentDescription != ''">#{accidentDescription,jdbcType=VARCHAR},</if>
+            <if test="accidentImg != null and accidentImg != ''">#{accidentImg,jdbcType=VARCHAR},</if>
+            <if test="examineExplanation != null and examineExplanation != ''">#{examineExplanation,jdbcType=VARCHAR},</if>
+            <if test="carOwnerName != null and carOwnerName != ''">#{carOwnerName,jdbcType=VARCHAR},</if>
+            <if test="carOwnerTel != null and carOwnerTel != ''">#{carOwnerTel,jdbcType=VARCHAR},</if>
+            <if test="deliverPlace != null and deliverPlace != ''">#{deliverPlace,jdbcType=VARCHAR},</if>
+            <if test="deliverLongitude != null and deliverLongitude != ''">#{deliverLongitude,jdbcType=VARCHAR},</if>
+            <if test="deliverLatitude != null and deliverLatitude != ''">#{deliverLatitude,jdbcType=VARCHAR},</if>
+            <if test="takePlace != null and takePlace != ''">#{takePlace,jdbcType=VARCHAR},</if>
+            <if test="takeLongitude != null and takeLongitude != ''">#{takeLongitude,jdbcType=VARCHAR},</if>
+            <if test="takeLatitude != null and takeLatitude != ''">#{takeLatitude,jdbcType=VARCHAR},</if>
+            <if test="reasonCancellations != null and reasonCancellations != ''">#{reasonCancellations,jdbcType=VARCHAR},</if>
+            <if test="explanationCancellations != null and explanationCancellations != ''">#{explanationCancellations,jdbcType=VARCHAR},</if>
+            <if test="damageExtent != null and damageExtent != ''">#{damageExtent,jdbcType=VARCHAR},</if>
+            <if test="damagePosition != null and damagePosition != ''">#{damagePosition,jdbcType=VARCHAR},</if>
+            <if test="assertImg != null and assertImg != ''">#{assertImg,jdbcType=VARCHAR},</if>
+            <if test="assertDescription != null and assertDescription != ''">#{assertDescription,jdbcType=VARCHAR},</if>
+            <if test="explanationAssert != null and explanationAssert != ''">#{explanationAssert,jdbcType=VARCHAR},</if>
+            <if test="explanationRepair != null and explanationRepair != ''">#{explanationRepair,jdbcType=VARCHAR},</if>
+            <if test="repairImg != null and repairImg != ''">#{repairImg,jdbcType=VARCHAR},</if>
+            <if test="labelContent != null and labelContent != ''">#{labelContent,jdbcType=VARCHAR},</if>
+            <if test="commentContent != null and commentContent != ''">#{commentContent,jdbcType=VARCHAR},</if>
+            <if test="commentScore != null and commentScore != ''">#{commentScore,jdbcType=INTEGER},</if>
+            <if test="complaintContent != null and complaintContent != ''">#{complaintContent,jdbcType=VARCHAR},</if>
+            <if test="complaintImg != null and complaintImg != ''">#{complaintImg,jdbcType=VARCHAR},</if>
+            <if test="uploadImgTime != null and uploadImgTime != ''">#{uploadImgTime,jdbcType=DATE},</if>
+            <if test="applyTime != null and applyTime != ''">#{applyTime,jdbcType=DATE},</if>
+            <if test="examineTime != null and examineTime != ''">#{examineTime,jdbcType=DATE},</if>
+            <if test="reciveCarTime != null and reciveCarTime != ''">#{reciveCarTime,jdbcType=DATE},</if>
+            <if test="applyDistributionTime != null and applyDistributionTime != ''">#{applyDistributionTime,jdbcType=DATE},</if>
+            <if test="deliverCarTime != null and deliverCarTime != ''">#{deliverCarTime,jdbcType=DATE},</if>
+            <if test="distributionTime != null and distributionTime != ''">#{distributionTime,jdbcType=DATE},</if>
+            <if test="receiveOrderTime != null and receiveOrderTime != ''">#{receiveOrderTime,jdbcType=DATE},</if>
+            <if test="failReceiveOrderTime != null and failReceiveOrderTime != ''">#{failReceiveOrderTime,jdbcType=DATE},</if>
+            <if test="assertTime != null and assertTime != ''">#{assertTime,jdbcType=DATE},</if>
+            <if test="comfirmAssertTime != null and comfirmAssertTime != ''">#{comfirmAssertTime,jdbcType=DATE},</if>
+            <if test="beginRepairTime != null and beginRepairTime != ''">#{beginRepairTime,jdbcType=DATE},</if>
+            <if test="endRepairTime != null and endRepairTime != ''">#{endRepairTime,jdbcType=DATE},</if>
+            <if test="takeCarTime != null and takeCarTime != ''">#{takeCarTime,jdbcType=DATE},</if>
+            <if test="payTime != null and payTime != ''">#{payTime,jdbcType=DATE},</if>
+            <if test="completeTime != null and completeTime != ''">#{completeTime,jdbcType=DATE},</if>
+            <if test="complaintTime != null and complaintTime != ''">#{complaintTime,jdbcType=DATE},</if>
+            <if test="unComplaintTime != null and unComplaintTime != ''">#{unComplaintTime,jdbcType=DATE},</if>
+            <if test="solveComplaintTime != null and solveComplaintTime != ''">#{solveComplaintTime,jdbcType=DATE},</if>
+            <if test="invalidTime != null and invalidTime != ''">#{invalidTime,jdbcType=DATE},</if>
+        </trim>
+    </insert>
+
+    <update id="updateModel" parameterType="java.util.Map">
+        UPDATE cbh_order
+        <set>
+            <if test="status != null and status != ''">status = #{status,jdbcType=INTEGER},</if>
+            <if test="isInvalid != null and isInvalid != ''">isInvalid = #{isInvalid,jdbcType=INTEGER},</if>
+            <if test="customerId != null and customerId != ''">customerId = #{customerId,jdbcType=INTEGER},</if>
+            <if test="carId != null and carId != ''">carId = #{carId,jdbcType=INTEGER},</if>
+            <if test="maintenanceshopId != null and maintenanceshopId != ''">maintenanceshopId = #{maintenanceshopId,jdbcType=INTEGER},</if>
+            <if test="repairmanId != null and repairmanId != ''">repairmanId = #{repairmanId,jdbcType=INTEGER},</if>
+            <if test="assertmanId != null and assertmanId != ''">assertmanId = #{assertmanId,jdbcType=INTEGER},</if>
+            <if test="amtAssert != null and amtAssert != ''">amtAssert = #{amtAssert,jdbcType=DECIMAL},</if>
+            <if test="amtBusiness != null and amtBusiness != ''">amtBusiness = #{amtBusiness,jdbcType=DECIMAL},</if>
+            <if test="accidentDescription != null and accidentDescription != ''">accidentDescription = #{accidentDescription,jdbcType=VARCHAR},</if>
+            <if test="accidentImg != null and accidentImg != ''">accidentImg = #{accidentImg,jdbcType=VARCHAR},</if>
+            <if test="examineExplanation != null and examineExplanation != ''">examineExplanation = #{examineExplanation,jdbcType=VARCHAR},</if>
+            <if test="examineExplanation2 != null">examineExplanation = NULL ,</if>
+            <if test="carOwnerName != null and carOwnerName != ''">carOwnerName = #{carOwnerName,jdbcType=VARCHAR},</if>
+            <if test="carOwnerTel != null and carOwnerTel != ''">carOwnerTel = #{carOwnerTel,jdbcType=VARCHAR},</if>
+            <if test="deliverPlace != null and deliverPlace != ''">deliverPlace = #{deliverPlace,jdbcType=VARCHAR},</if>
+            <if test="deliverLongitude != null and deliverLongitude != ''">deliverLongitude = #{deliverLongitude,jdbcType=VARCHAR},</if>
+            <if test="deliverLatitude != null and deliverLatitude != ''">deliverLatitude = #{deliverLatitude,jdbcType=VARCHAR},</if>
+            <if test="takePlace != null and takePlace != ''">takePlace = #{takePlace,jdbcType=VARCHAR},</if>
+            <if test="takeLongitude != null and takeLongitude != ''">takeLongitude = #{takeLongitude,jdbcType=VARCHAR},</if>
+            <if test="takeLatitude != null and takeLatitude != ''">takeLatitude = #{takeLatitude,jdbcType=VARCHAR},</if>
+            <if test="reasonCancellations != null and reasonCancellations != ''">reasonCancellations = #{reasonCancellations,jdbcType=VARCHAR},</if>
+            <if test="explanationCancellations != null and explanationCancellations != ''">explanationCancellations = #{explanationCancellations,jdbcType=VARCHAR},</if>
+            <if test="damageExtent != null and damageExtent != ''">damageExtent = #{damageExtent,jdbcType=VARCHAR},</if>
+            <if test="damagePosition != null and damagePosition != ''">damagePosition = #{damagePosition,jdbcType=VARCHAR},</if>
+            <if test="assertImg != null and assertImg != ''">assertImg = #{assertImg,jdbcType=VARCHAR},</if>
+            <if test="assertDescription != null and assertDescription != ''">assertDescription = #{assertDescription,jdbcType=VARCHAR},</if>
+            <if test="explanationAssert != null and explanationAssert != ''">explanationAssert = #{explanationAssert,jdbcType=VARCHAR},</if>
+            <if test="explanationRepair != null and explanationRepair != ''">explanationRepair = #{explanationRepair,jdbcType=VARCHAR},</if>
+            <if test="repairImg != null and repairImg != ''">repairImg = #{repairImg,jdbcType=VARCHAR},</if>
+            <if test="labelContent != null and labelContent != ''">labelContent = #{labelContent,jdbcType=VARCHAR},</if>
+            <if test="commentContent != null and commentContent != ''">commentContent = #{commentContent,jdbcType=VARCHAR},</if>
+            <if test="commentScore != null and commentScore != ''">commentScore = #{commentScore,jdbcType=INTEGER},</if>
+            <if test="complaintContent != null and complaintContent != ''">complaintContent = #{complaintContent,jdbcType=VARCHAR},</if>
+            <if test="complaintImg != null and complaintImg != ''">complaintImg = #{complaintImg,jdbcType=VARCHAR},</if>
+            <if test="uploadImgTime != null and uploadImgTime != ''">uploadImgTime = #{uploadImgTime,jdbcType=DATE},</if>
+            <if test="applyTime != null and applyTime != ''">applyTime = #{applyTime,jdbcType=DATE},</if>
+            <if test="examineTime != null and examineTime != ''">examineTime = #{examineTime,jdbcType=DATE},</if>
+            <if test="reciveCarTime != null and reciveCarTime != ''">reciveCarTime = #{reciveCarTime,jdbcType=DATE},</if>
+            <if test="applyDistributionTime != null and applyDistributionTime != ''">applyDistributionTime = #{applyDistributionTime,jdbcType=DATE},</if>
+            <if test="deliverCarTime != null and deliverCarTime != ''">deliverCarTime = #{deliverCarTime,jdbcType=DATE},</if>
+            <if test="distributionTime != null and distributionTime != ''">distributionTime = #{distributionTime,jdbcType=DATE},</if>
+            <if test="receiveOrderTime != null and receiveOrderTime != ''">receiveOrderTime = #{receiveOrderTime,jdbcType=DATE},</if>
+            <if test="failReceiveOrderTime != null and failReceiveOrderTime != ''">failReceiveOrderTime = #{failReceiveOrderTime,jdbcType=DATE},</if>
+            <if test="assertTime != null and assertTime != ''">assertTime = #{assertTime,jdbcType=DATE},</if>
+            <if test="comfirmAssertTime != null and comfirmAssertTime != ''">comfirmAssertTime = #{comfirmAssertTime,jdbcType=DATE},</if>
+            <if test="beginRepairTime != null and beginRepairTime != ''">beginRepairTime = #{beginRepairTime,jdbcType=DATE},</if>
+            <if test="endRepairTime != null and endRepairTime != ''">endRepairTime = #{endRepairTime,jdbcType=DATE},</if>
+            <if test="takeCarTime != null and takeCarTime != ''">takeCarTime = #{takeCarTime,jdbcType=DATE},</if>
+            <if test="payTime != null and payTime != ''">payTime = #{payTime,jdbcType=DATE},</if>
+            <if test="completeTime != null and completeTime != ''">completeTime = #{completeTime,jdbcType=DATE},</if>
+            <if test="complaintTime != null and complaintTime != ''">complaintTime = #{complaintTime,jdbcType=DATE},</if>
+            <if test="unComplaintTime != null and unComplaintTime != ''">unComplaintTime = #{unComplaintTime,jdbcType=DATE},</if>
+            <if test="solveComplaintTime != null and solveComplaintTime != ''">solveComplaintTime = #{solveComplaintTime,jdbcType=DATE},</if>
+            <if test="invalidTime != null and invalidTime != ''">invalidTime = #{invalidTime,jdbcType=DATE},</if>
+        </set>
+        WHERE orderNo = #{orderNo,jdbcType=VARCHAR}
+    </update>
+
+    <select id="findSingle" parameterType="java.util.Map" resultType="java.util.Map">
+	  SELECT o.*,c.licensePlateNumber,c.drivingLicense,c.VIN,c.engineNum,c.registerDate,c.issueDate,c.model,c.nameCarOwner,c.carPhotos,u.nickname,u.portrait,me1.`name` assertmanName,ms.logo,me2.`name` repairmanName,me2.workYear,ms.`name` shopName,ms.tel shopTel,ms.address from cbh_order o
+        LEFT JOIN cbh_car c on c.id=o.carId
+        LEFT JOIN cbh_user_customer u on u.id=c.customerId
+left JOIN cbh_maintenanceshop ms on ms.id=o.maintenanceshopId
+LEFT JOIN cbh_maintenanceshop_employee me1 on me1.id=o.assertmanId
+LEFT JOIN cbh_maintenanceshop_employee me2 on me2.id=o.repairmanId
+        WHERE o.orderNo = #{orderNo} limit 1
+    </select>
+
+    <select id="findUnfinishedOrder" parameterType="java.util.Map" resultType="java.util.Map">
+	   SELECT o.orderNo from (select e1.* from (select max(e.id) maxId from cbh_order e GROUP BY e.carId) e
+        LEFT JOIN cbh_order e1 on e1.id=e.maxId) o
+        WHERE o.carId=#{carId} and o.status!=61 and o.status!=100 and o.isInvalid=1
+UNION all
+ SELECT e.eventNo from (select e1.* from (select max(e.id) maxId from cbh_event e GROUP BY e.carId) e
+        LEFT JOIN cbh_event e1 on e1.id=e.maxId) e
+        WHERE e.carId=#{carId} and e.statusEvent!=71 and e.statusEvent!=100 and e.isInvalid=1
+    </select>
+
+    <select id="findMore" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT o.*,c.licensePlateNumber,c.model,c.nameCarOwner,u.nickname from cbh_order o
+        LEFT JOIN cbh_car c on c.id=o.carId
+        LEFT JOIN cbh_user_customer u on u.id=c.customerId
+        WHERE 1 = 1
+        <if test="customerId != null"> AND o.customerId = #{customerId,jdbcType=INTEGER}</if>
+        <if test="status != null"> AND o.status = #{status,jdbcType=INTEGER}</if>
+        <if test="id != null"> AND o.id = #{id,jdbcType=INTEGER}</if>
+        ORDER BY o.applyTime DESC
+    </select>
+    <select id="findPublicityList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT o.*,c.licensePlateNumber,c.model,c.nameCarOwner,c.carPhotos,u.nickname,u.portrait from cbh_order o
+        LEFT JOIN cbh_car c on c.id=o.carId
+        LEFT JOIN cbh_user_customer u on u.id=c.customerId
+        WHERE  o.status = 61 or o.status = 100
+        <if test="isInvalid != null  and isInvalid != ''">  and o.isInvalid =#{isInvalid}</if>
+        ORDER BY o.applyTime DESC
+    </select>
+
+    <select id="findOrderList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT o.orderNo,o.status,o.isInvalid,o.applyTime,c.customerPN,c.source AS sourceName,car.nameCarOwner,car.licensePlateNumber,car.model,m.name AS shopName FROM cbh_order o
+            LEFT JOIN cbh_user_customer c ON c.id = o.customerId
+            LEFT JOIN cbh_car car ON car.id = o.carId
+            LEFT JOIN cbh_maintenanceshop m ON m.id = o.maintenanceshopId
+        WHERE 1=1
+        <if test="status != null and status != ''"> and o.status IN (${status})</if>
+        <if test="isInvalid != null and isInvalid != ''"> and o.isInvalid IN (${isInvalid})</if>
+        <if test="searchInfo != null and searchInfo != ''"> AND (car.nameCarOwner LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR c.customerPN LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR car.licensePlateNumber LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR c.source LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%'))</if>
+        ORDER BY o.applyTime desc
+    </select>
+
+    <select id="findCount" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            COUNT(*) AS totalNum,
+            COUNT( CASE WHEN o.status=1 AND o.isInvalid=1 THEN o.status END) AS applyNum,
+            COUNT( CASE WHEN o.status=2 AND o.isInvalid=1 THEN o.status END) AS notPassNum,
+            COUNT( CASE WHEN o.status=3 AND o.isInvalid=1 THEN o.status END) AS passNum,
+            COUNT( CASE WHEN o.status=10 AND o.isInvalid=1 THEN o.status END) AS distributionNum,
+            COUNT( CASE WHEN o.status=11 AND o.isInvalid=1 THEN o.status END) AS receiveNum,
+            COUNT( CASE WHEN o.status=12 AND o.isInvalid=1 THEN o.status END) AS failReceiveNum,
+            COUNT( CASE WHEN o.status=21 AND o.isInvalid=1 THEN o.status END) AS deliverCarNum,
+            COUNT( CASE WHEN o.status=31 AND o.isInvalid=1 THEN o.status END) AS waitAssertNum,
+            COUNT( CASE WHEN o.status=32 AND o.isInvalid=1 THEN o.status END) AS assertNum,
+            COUNT( CASE WHEN o.status=41 AND o.isInvalid=1 THEN o.status END) AS waitRepairNum,
+            COUNT( CASE WHEN o.status=42 AND o.isInvalid=1 THEN o.status END) AS repairNum,
+            COUNT( CASE WHEN o.status=51 AND o.isInvalid=1 THEN o.status END) AS payNum,
+            COUNT( CASE WHEN o.status=61 AND o.isInvalid=1 THEN o.status END) AS commentNum,
+            COUNT( CASE WHEN o.status=71 AND o.isInvalid=1 THEN o.status END) AS complaintNum,
+            COUNT( CASE WHEN o.status=100 AND o.isInvalid=1 THEN o.status END) AS completeNum,
+            COUNT( CASE WHEN o.isInvalid=10 THEN o.status END) AS invalidNum
+        FROM cbh_order o
+        LEFT JOIN cbh_user_customer c ON c.id = o.customerId
+        LEFT JOIN cbh_car car ON car.id = o.carId
+        WHERE 1=1
+        <if test="searchInfo != null and searchInfo != ''"> AND (nameCarOwner LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR customerPN LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR licensePlateNumber LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%') OR c.source LIKE concat(#{searchInfo,jdbcType=VARCHAR},'%'))</if>
+    </select>
+
+    <select id="findDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT o.*,c.customerPN,c.portrait,c.source AS sourceName,car.nameCarOwner,car.licensePlateNumber,car.model,car.drivingLicense,car.carPhotos,
+          m.name AS shopName,m.tel,m.address,m.ratio,emp.name AS assertmanName,emp.tel AS assertmanTel,emp2.name AS repairmanName,emp2.tel AS repairmanTel
+        FROM cbh_order o
+            LEFT JOIN cbh_car car ON car.id = o.carId
+            LEFT JOIN cbh_user_customer c ON c.id = o.customerId
+            LEFT JOIN cbh_maintenanceshop m ON m.id = o.maintenanceshopId
+            LEFT JOIN cbh_maintenanceshop_employee emp ON emp.id = o.assertmanId
+            LEFT JOIN cbh_maintenanceshop_employee emp2 ON emp2.id = o.repairmanId
+        WHERE o.orderNo = #{orderNo,jdbcType=VARCHAR}
+            ORDER BY o.applyTime DESC
+    </select>
+    <select id="findOrderByRecordRechargeId" parameterType="String" resultType="java.util.Map">
+     select o.*,r.amt,r.`status` rStatus,u.customerPN,c.model,c.licensePlateNumber,m.accountId,m.id shopId,m.name shopName,cm.maintenanceshopId shopId1,m1.`name` shopName1 from cbh_record_payment_order r
+	LEFT JOIN cbh_order o on o.orderNo=r.orderNo
+LEFT JOIN cbh_car c on c.id=o.carId
+LEFT JOIN cbh_user_customer u on u.id=o.customerId
+LEFT JOIN cbh_maintenanceshop m on m.id=o.maintenanceshopId
+LEFT JOIN middle_customer_maintenanceshop cm on cm.openId=u.openId
+LEFT JOIN cbh_maintenanceshop m1 on cm.maintenanceshopId=m1.id
+	where r.id =#{id}
+    </select>
+
+    <select id="orderCount" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            c.datelist,
+            IFNULL(cevent.number, 0) AS numbers
+        FROM
+            sys_calendar c
+        LEFT JOIN (
+            SELECT
+                date_format(e.applyTime, '%Y-%m-%d') AS datelist,
+                COUNT(1) AS number
+            FROM
+                cbh_order e
+            WHERE
+                e.applyTime BETWEEN #{beginTime}
+            AND  #{endTime}
+            GROUP BY
+                date_format(e.applyTime, '%Y-%m-%d')
+        ) cevent ON c.datelist = cevent.datelist
+        WHERE
+            c.datelist BETWEEN #{beginTime}
+        AND #{endTime}
+        ORDER BY
+            c.datelist ASC
+    </select>
+
+    <select id="orderApplyFail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            c.datelist,
+            IFNULL(cevent.number, 0) AS numbers
+        FROM
+            sys_calendar c
+        LEFT JOIN (
+            SELECT
+                date_format(e.applyTime, '%Y-%m-%d') AS datelist,
+                COUNT(1) AS number
+            FROM
+                cbh_order e
+            WHERE
+                e.status = 2
+            AND e.applyTime BETWEEN #{beginTime}
+            AND  #{endTime}
+            GROUP BY
+                date_format(e.applyTime, '%Y-%m-%d')
+        ) cevent ON c.datelist = cevent.datelist
+        WHERE
+            c.datelist BETWEEN #{beginTime}
+        AND #{endTime}
+        ORDER BY
+            c.datelist ASC
+    </select>
+
+    <select id="orderApplySuccess" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            c.datelist,
+            IFNULL(cevent.number, 0) AS numbers
+        FROM
+            sys_calendar c
+        LEFT JOIN (
+            SELECT
+                date_format(e.applyTime, '%Y-%m-%d') AS datelist,
+                COUNT(1) AS number
+            FROM
+                cbh_order e
+            WHERE
+                e.status NOT IN (1,2)
+            AND  e.applyTime BETWEEN #{beginTime}
+            AND  #{endTime}
+            GROUP BY
+                date_format(e.applyTime, '%Y-%m-%d')
+        ) cevent ON c.datelist = cevent.datelist
+        WHERE
+            c.datelist BETWEEN #{beginTime}
+        AND #{endTime}
+        ORDER BY
+            c.datelist ASC
+    </select>
+</mapper>
