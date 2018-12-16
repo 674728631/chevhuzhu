@@ -178,5 +178,7 @@ public interface CarMapper extends BaseMapper {
      */
     int updateCompensateNum(Map<String, Object> map);
 
-    int updateCar4Year(@Param("id") int carId, @Param("NewAmtCooperation") BigDecimal amtCooperation, @Param("OldAmtCooperation") BigDecimal amtCooperation2);
+    int updateCar4Year(@Param("id") int carId, @Param("newAmtCooperation") BigDecimal amtCooperation,
+                       @Param("oldAmtCooperation") BigDecimal amtCooperation2,
+                       @Param("telCarOwner") String telCarOwner, @Param("status") int status);
 }

@@ -351,9 +351,10 @@ where u.id=#{customerId}
         SELECT
             u.id userId,
             u.customerPN,
+            u.openId,
             c.id carId,
             c.licensePlateNumber,
-            c.STATUS,
+            c.status,
             c.typeGuarantee
         FROM
             cbh_user_customer u,

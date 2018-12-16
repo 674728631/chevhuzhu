@@ -86,6 +86,9 @@ public class CoreService {
             // 菜单事件不做处理
             if (MessageUtil.EVENT_TYPE_VIEW.equalsIgnoreCase(Event))
                 return respMessage;
+            // 推送事件不做处理
+            if (MessageUtil.EVENT_TYPE_TEMP.equals(Event))
+                return respMessage;
 
             // 默认回复此文本消息
             // 获取微信昵称
@@ -257,6 +260,15 @@ public class CoreService {
                 // 是否关注过
                 shopInvitation = middleCustomerMaintenanceshopMapper.findMore(map);
             }
+
+            // e泊包年活动处理
+            String msg = eBoPackYearsActivity(Event, EventKey, fromUserName, nickname);
+            if (null != msg) {
+                logger.info("ebo用户================{}", msg);
+                respMessage = createTextMessage(fromUserName, toUserName, msg);
+                return respMessage;
+            }
+
             // 关注事件数据记录（拉新渠道记录）
             if (MessageUtil.EVENT_TYPE_SUBSCRIBE.equalsIgnoreCase(Event)) {
                 logger.info(">>>>>>>>> 未关注扫描带参二维码：{}", EventKey);
@@ -276,7 +288,7 @@ public class CoreService {
                 } else {
                     String message = nickname + "，终于等到您~~1000元擦刮救助额度已到账！小擦刮不用走保险，不增加保险理赔次数。现在" +
                             "<a href=\"" + Constant.toReadPro("realURL") + "hfive/view/index.html\">去领取 >></a>";
-                    respMessage = createTextMessage(fromUserName, toUserName,message);
+                    respMessage = createTextMessage(fromUserName, toUserName, message);
                     subUpdateMiddleModel(userList, shopInvitation, fromUserName, "-1");
                 }
             }
@@ -526,6 +538,14 @@ public class CoreService {
         logger.info("{}更新用户关注。", fromUserName);
     }
 
+    /**
+     * 欢迎消息创建
+     *
+     * @param nickname
+     * @param Event
+     * @param EventKey
+     * @return
+     */
     private String pushWelComeMessage(String nickname, String Event, String EventKey) {
         logger.info(">>>>>nickname：{}", nickname);
         String message = null;
@@ -576,7 +596,16 @@ public class CoreService {
         return message;
     }
 
-
+    /**
+     * 接收用户发送的文本消息内容处理
+     *
+     * @param requestMap
+     * @param Event
+     * @param fromUserName
+     * @param toUserName
+     * @return
+     * @throws Exception
+     */
     private String textEvent(Map<String, String> requestMap, String Event, String fromUserName, String toUserName) throws Exception {
         // 接收用户发送的文本消息内容
         String content = String.valueOf(requestMap.get("Content"));
@@ -625,4 +654,33 @@ public class CoreService {
         return respMessage;
     }
 
+    /**
+     * @param EventKey
+     * @param fromUserName
+     * @param nickname
+     * @return
+     */
+    private String eBoPackYearsActivity(String Event, String EventKey, String fromUserName, String nickname) {
+        // e泊车包年特殊处理
+        logger.info("e泊包年用户关注========================={}===========================>{}", fromUserName, EventKey);
+        if (EventKey != null && !"".equals(EventKey.trim())) {
+            String[] arr = EventKey.split("_");
+            boolean b = false;
+            if (MessageUtil.EVENT_TYPE_SCAN.equalsIgnoreCase(Event)) {//111/111_u_5
+                if (arr.length == 1 && "163".equals(arr[0]))
+                    b = true;
+            } else if (MessageUtil.EVENT_TYPE_SUBSCRIBE.equalsIgnoreCase(Event)) {//qrscene_111/qrscene_111_u_5
+                if (arr.length == 2 && "163".equals(arr[1]))
+                    b = true;
+            }
+            if (b) {
+                String subUrl = MessageFormat.format("<a href=\"{0}hfive/view/index.html\">", Constant.toReadPro("realURL"));
+                String message = String.format("尊敬的e泊包年用户%s,欢迎加入车v互助大家庭，点击查看车辆详情.%s 猛戳  >></a>",
+                        nickname, subUrl);
+                return message;
+            }
+        }
+
+        return null;
+    }
 }

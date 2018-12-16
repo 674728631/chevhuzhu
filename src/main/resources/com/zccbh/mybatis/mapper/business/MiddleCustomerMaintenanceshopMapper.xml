@@ -117,4 +117,10 @@
         </set>
         WHERE openId = #{openId,jdbcType=INTEGER}
     </update>
+    
+    <update id="updateSubscribeStatus4eBo" parameterType="Map">
+         UPDATE middle_customer_maintenanceshop
+         SET status= #{status},openId = #{openId}
+         WHERE customerId = #{customerId} AND maintenanceshopId = #{maintenanceshopId}
+    </update>
 </mapper>

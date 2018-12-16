@@ -579,6 +579,7 @@ public class CarService {
 		Date date1 = new Date(imestamp);
 		String observationEndTime = time.format(date1);
 		String cron = dateMap.get("second")+" "+dateMap.get("minute")+" "+dateMap.get("hour")+" "+ dateMap.get("day") +" "+ dateMap.get("month") +" ? *";
+		map.put("cron",cron);
 		QuartzUtils.addJob(sche,map.get("jobName").toString(), ObservationJob.class, map, cron);
 
 		usersService.addAmtCompensationByInvitation(String.valueOf(carMap.get("customerId")));

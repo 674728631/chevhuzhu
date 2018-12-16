@@ -93,6 +93,10 @@ public class MessageUtil {
      * 事件类型：用户点击 VIEW 类型按钮
      */
     public static final String EVENT_TYPE_VIEW = "VIEW";
+    /**
+     *
+     */
+    public static final String EVENT_TYPE_TEMP = "TEMPLATESENDJOBFINISH";
 
     /** 
      * 解析微信发来的请求（XML） 

@@ -12,13 +12,16 @@ package com.zccbh.test.exception;
 
 /**
  * 自定义异常类型
+ *
  * @author CatalpaFlat
  */
-public class CustomException extends Exception {
+public class CustomException extends RuntimeException {
 
-    private String code="500";
+    private String code = "500";
     private String message;
-    public CustomException(){}
+
+    public CustomException() {
+    }
 
     public CustomException(String code, String message) {
         this.code = code;
@@ -32,6 +35,7 @@ public class CustomException extends Exception {
     public String getCode() {
         return code;
     }
+
     public void setCode(String code) {
         this.code = code;
     }

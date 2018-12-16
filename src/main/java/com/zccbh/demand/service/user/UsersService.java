@@ -1,10 +1,14 @@
 package com.zccbh.demand.service.user;
 
 
+import com.zccbh.demand.controller.quartz.ObservationJob;
+import com.zccbh.demand.controller.quartz.QuartzUtils;
 import com.zccbh.demand.mapper.activities.MiddleCouponCustomerMapper;
+import com.zccbh.demand.mapper.activities.PackYearsCodeMapper;
 import com.zccbh.demand.mapper.business.MiddleCustomerMaintenanceshopMapper;
 import com.zccbh.demand.mapper.customer.*;
 import com.zccbh.demand.mapper.foundation.FoundationMapper;
+import com.zccbh.demand.service.basic.DictionaryService;
 import com.zccbh.demand.service.customer.InvitationService;
 import com.zccbh.demand.service.system.UserCustomerLogService;
 import com.zccbh.demand.service.weChat.PromotionService;
@@ -13,9 +17,14 @@ import com.zccbh.util.base.*;
 import com.zccbh.util.collect.Constant;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +84,7 @@ public class UsersService {
 
     @Autowired
     PromotionService promotionService;
-    
+
     @Autowired
     private UserCustomerLogService userCustomerLogService;
 
@@ -95,7 +104,6 @@ public class UsersService {
             headimgurl = nicknames.get("headimgurl");
             nickname = nicknames.get("nickname");
         }
-        //TODO
         // 手机号和验证码
         String phoneAndCode = request.getParameter("phoneAndCode");
         String iosDeviceId = null;
@@ -118,10 +126,14 @@ public class UsersService {
             String verificationCode = userIfno[1];
             Map<String, Object> hashMap = new HashMap<>();
             String str = "8888";
-            String lyg = "18284546956"; //TODO 测试号
+            String lyg = "18284546959"; //TODO 测试号
             if (Constant.toEmpty(str) || Constant.toEmpty(redisStr)) {
                 if (verificationCode.equals(redisStr)
                         || (lyg.equals(mobileNumber) && verificationCode.equals(str))) {
+
+                    // 删除验证码
+                    redisUtil.delect(mobileNumber);
+
                     Map<String, Object> resultMap = new HashMap<>();
                     // 查看是否注册
                     resultMap.put("customerPN", mobileNumber);
@@ -137,20 +149,20 @@ public class UsersService {
                     SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String date = time.format(new Date());
                     if (customer != null) {
-                    	
-                    	//用户登录日志
-                    	Map<String, Object> reqMap = new HashMap<>();
-                    	reqMap.put("customerId", customer.get("id"));
-                    	reqMap.put("customerPN", customer.get("customerPN"));
-                    	reqMap.put("source", customer.get("source"));
-                    	reqMap.put("createAt", customer.get("timeJoin"));
-                    	reqMap.put("currentStatus", customer.get("status"));
-                    	reqMap.put("optTime", DateUtils.formatDate(new Date()));
-                    	reqMap.put("optType", 2);
-                    	reqMap.put("optDesc", "用户登录");
-                    	reqMap.put("recordTime", DateUtils.formatDate(new Date()));
-                    	userCustomerLogService.saveUserCustomerLog(reqMap);
-                    	
+
+                        //用户登录日志
+                        Map<String, Object> reqMap = new HashMap<>();
+                        reqMap.put("customerId", customer.get("id"));
+                        reqMap.put("customerPN", customer.get("customerPN"));
+                        reqMap.put("source", customer.get("source"));
+                        reqMap.put("createAt", customer.get("timeJoin"));
+                        reqMap.put("currentStatus", customer.get("status"));
+                        reqMap.put("optTime", DateUtils.formatDate(new Date()));
+                        reqMap.put("optType", 2);
+                        reqMap.put("optDesc", "用户登录");
+                        reqMap.put("recordTime", DateUtils.formatDate(new Date()));
+                        userCustomerLogService.saveUserCustomerLog(reqMap);
+
                         logger.info("{} 用户登录>>>>>>>>>>>>>>>>", mobileNumber);
                         Map<String, Object> pMap = new HashMap<String, Object>();
                         //车妈妈那边第一次登录发送微信消息
@@ -214,13 +226,16 @@ public class UsersService {
                             e.printStackTrace();
                             logger.error("异常>>>>>>>>>", e);
                         }
+                        // 查询用户车辆列表
                         pMap.put("customerId", customer.get("id"));
                         List<Map<String, Object>> carList = carMapper.findCarList(pMap);
                         hashMap.put("carList", carList);
+
+                        // 第一次登录处理
                         String timeLogin = String.valueOf(customer.get("timeLogin"));
                         if (timeLogin.equals("null")) {
                             logger.info("第一次登录>>>>");
-                            Map<String, Object> rmap = new HashMap<String, Object>();
+                            Map<String, Object> rmap = new HashMap<>();
                             rmap.put("customerId", customer.get("id"));
                             List<Map<String, Object>> list = middleCouponCustomerMapper.findPayCoupon(rmap);
                             if (list != null && list.size() > 0) {
@@ -245,10 +260,14 @@ public class UsersService {
                         } else {
                             hashMap.put("chemamaHint", new ArrayList<String>());
                         }
-                        customer.put("openId", openid);
-                        String tg = String.valueOf(customer.get("tokenaging"));
-                        logger.info("用户{} token失效时间：{}", customer.get("id"), tg);
-                        Date tokenAging = time.parse(tg);
+
+
+                        // eBo包年新用户处理 middle表，车辆信息
+                        eBoPackYearsUserFirstLogin(openid, customer.get("id").toString());
+
+                        // 昵称头像获取
+                        if (null != openid)
+                            customer.put("openId", openid);
                         String associatorImg = String.valueOf(customer.get("portrait"));
                         String associatorNickname = String.valueOf(customer.get("nickname"));
                         //   String openid1 = String.valueOf(customer.get("openid"));
@@ -260,48 +279,19 @@ public class UsersService {
                             logger.info("用户昵称：{}", nickname);
                             customer.put("nickname", nickname);
                         }
-                        String token = String.valueOf(customer.get("token"));
-                        if (tokenAging != null && token != null) {
-                            if (DateUtils.booleanToken(tokenAging, new Date())) { //失效重新保存
-                                Date tokenTime = DateUtils.getTokenTime();
-                                String toKen = SecurityUtil.getToKen();
-                                customer.put("token", toKen);
-                                customer.put("tokenaging", tokenTime);
-                                customer.put("androidDeviceId", androidDeviceId);
-                                customer.put("iosDeviceId", iosDeviceId);
-                                userCustomerMapper.updateModel(customer);
-                                hashMap.put(CommonField.TOKEN, toKen);
-                                hashMap.put("associatorId", customer.get("id"));
-                                redisUtil.delect(mobileNumber);
-                                InsertLogin();
-                                return hashMap;
-//                                return getMap(customer, androidDeviceId, iosDeviceId, mobileNumber, toKen1);
-                            }
-                            Date tokenTime = DateUtils.getTokenTime();
-                            String toKen = SecurityUtil.getToKen();
-                            customer.put("token", toKen);
-                            customer.put("tokenaging", tokenTime);
-                            customer.put("androidDeviceId", androidDeviceId);
-                            customer.put("iosDeviceId", iosDeviceId);
-                            userCustomerMapper.updateModel(customer);
-                            hashMap.put(CommonField.TOKEN, token);
-                            hashMap.put("associatorId", customer.get("id"));
-                            redisUtil.delect(mobileNumber);
-                            InsertLogin();
-                            return hashMap;
-//                            return getMap(customer, androidDeviceId, iosDeviceId, mobileNumber, toKen);
-                        }
-                        // 保存token
+
+                        // token处理
+                        logger.info("用户{} token= {}失效时间：{}", customer.get("id"), customer.get("token"), customer.get("tokenaging"));
+                        // 不管token是否失效，重新登录都更换token
+                        String token = SecurityUtil.getToKen();
+                        customer.put("token", token);
                         Date tokenTime = DateUtils.getTokenTime();
-                        String toKen = SecurityUtil.getToKen();
-                        customer.put("token", toKen);
-                        customer.put("tokenaging", tokenTime);
+                        customer.put("tokenaging", time.format(tokenTime));
                         customer.put("androidDeviceId", androidDeviceId);
                         customer.put("iosDeviceId", iosDeviceId);
                         userCustomerMapper.updateModel(customer);
                         hashMap.put(CommonField.TOKEN, token);
                         hashMap.put("associatorId", customer.get("id"));
-                        // 向wechat_log写数据
                         InsertLogin();
                         return hashMap;
                     }
@@ -334,7 +324,7 @@ public class UsersService {
                             logger.info("个人邀请用户注册完成>>>>>>>>>>>>>>>>>>>{}", rs);
                             if ("0".equals(rs)) { // 邀请成功
                                 logger.info("{}邀请{}成功！", paramModelMap.get("customerId"), mobileNumber);
-                                updateMiddleModel(openid, "-1", paramModelMap.get("newCustomerId").toString(),mobileNumber);
+                                updateMiddleModel(openid, "-1", paramModelMap.get("newCustomerId").toString(), mobileNumber);
                             } else { // 邀请失败
                                 logger.info("{}邀请{}失败！", paramModelMap.get("customerId"), mobileNumber);
                                 throw new RuntimeException("对不起，该活动已结束！");
@@ -353,13 +343,13 @@ public class UsersService {
                             logger.info(">>>>>>>>>>>>>>>>>自然用户注册>>>>>>>>>>>>>>>>>>>");
                             paramModelMap.put("source", "自然用户");
                             i = userCustomerMapper.saveSingle(paramModelMap);
-                            updateMiddleModel(openid, "-1", paramModelMap.get("id").toString(),mobileNumber);
+                            updateMiddleModel(openid, "-1", paramModelMap.get("id").toString(), mobileNumber);
                         }
                     } else {
                         logger.info(">>>>>>>>>>>>>>>>>自然用户注册>>>>>>>>>>>>>>>>>>>");
                         paramModelMap.put("source", "自然用户");
                         i = userCustomerMapper.saveSingle(paramModelMap);
-                        updateMiddleModel(openid, "-1", paramModelMap.get("id").toString(),mobileNumber);
+                        updateMiddleModel(openid, "-1", paramModelMap.get("id").toString(), mobileNumber);
                     }
                     Map<String, Object> rs = userCustomerMapper.getCustomerinfo(mobileNumber);
 //                    String invitedCustomerId = String.valueOf(paramModelMap.get("id"));
@@ -411,8 +401,8 @@ public class UsersService {
         Map<String, Object> param = new HashMap<>();
         param.put("invitedCustomerOpenID", openid);
         param.put("openId", openid);
-        List<Map<String,Object>> list = userCustomerMapper.getCustomerByOpenId(param);
-        if(!CollectionUtils.isEmpty(list))
+        List<Map<String, Object>> list = userCustomerMapper.getCustomerByOpenId(param);
+        if (!CollectionUtils.isEmpty(list))
             return null;
         Map<String, Object> outmap = invitationTempMapper.findSingle(param);
         if (null != outmap) {
@@ -421,60 +411,6 @@ public class UsersService {
         return null;
     }
 
-    /**
-     * 验证用户是否关注微信号
-     *
-     * @return
-     * @throws Exception
-     */
-    /*public  Map<String, Object>  isFocusWeChat(HttpServletRequest request) throws Exception {
-        String token = request.getParameter(CommonField.TOKEN);
-        if (org.apache.commons.lang3.StringUtils.isBlank(token)) {
-            JSONObject jsonObject = JSONPost.readJSONStringFromRequestBody(request);
-            token = Constant.toJsonValue(jsonObject, CommonField.TOKEN);
-        }
-
-        //验证token是否有效
-        Map<String, Object> orderDetails = new HashMap<>();
-        Boolean aBoolean =customerService.validationAccToken(token);
-        if (!aBoolean){
-            orderDetails.put(CommonField.VALIDATION_CODE, CommonField.TOKEN_FAILURE);
-            return orderDetails;
-        }
-        CbhYdCustomer customer = customerMapper.selectByToken(token);
-        if (customer != null) {
-            String openid = customer.getOpenid();
-            if (Constant.toEmpty(openid)){
-                Map<String, String> nickname = weiXinUtils.getNickname(openid);
-                String string = nickname.get("subscribe");
-                if (string.equals("1")){
-                    orderDetails.put("results",true);
-                    return orderDetails;
-                }
-                orderDetails.put("results",false);
-                return orderDetails;
-            }
-            orderDetails.put("results",false);
-            return orderDetails;
-        }
-        orderDetails.put("results",false);
-        return orderDetails;
-    }
-
-    private Map<String, Object> getMap(CbhYdCustomer customer,String androidDeviceId,String iosDeviceId,String mobileNumber,String token){
-        Map<String, Object> hashMap = new HashMap<>();
-        Date tokenTime = DateUtils.getTokenTime();
-        String toKen = SecurityUtil.getToKen();
-        customer.setToken(toKen);
-        customer.setTokenaging(tokenTime);
-        customer.setAndroidDeviceId(androidDeviceId);
-        customer.setIosDeviceId(iosDeviceId);
-        customerMapper.updateByPrimaryKey(customer);
-        hashMap.put(CommonField.TOKEN, token);
-        hashMap.put("associatorId", customer.getId());
-        redisUtil.delect(mobileNumber);
-        return hashMap;
-    }*/
     public void InsertLogin() throws Exception {
         logger.info("添加登录/注册人数>>>>>>");
         SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
@@ -530,7 +466,7 @@ public class UsersService {
         }
     }
 
-    private void updateMiddleModel(String opneId, String maintenanceshopId, String customerId,String customerTel) {
+    private void updateMiddleModel(String opneId, String maintenanceshopId, String customerId, String customerTel) {
         Map<String, Object> map = new HashMap<>();
         map.put("openId", opneId);
         try {
@@ -550,6 +486,91 @@ public class UsersService {
 //            }
         } catch (Exception e) {
             logger.error("", e);
+        }
+    }
+
+
+    @Autowired
+    private SchedulerFactoryBean schedulerFactory;
+    @Autowired
+    PackYearsCodeMapper packYearsCodeMapper;
+    @Autowired
+    DictionaryService dictionaryService;
+
+    /**
+     * ebo包年用户首次登录处理
+     *
+     * @param openid
+     * @param customerId
+     */
+    private void eBoPackYearsUserFirstLogin(String openid, String customerId) {
+        List<Map<String, Object>> codes = packYearsCodeMapper.getCarsByUserId(customerId);
+        if (!CollectionUtils.isEmpty(codes) && null != openid) {
+            // 车辆发送信息
+            codes.forEach(car -> {
+                logger.info("eBo包年--车辆信息 ：{}", car);
+                // 判断是否是eBo包年
+                if (null != car.get("messageFlag") && "50".equals(car.get("messageFlag").toString())) {
+                    String carId = car.get("id").toString();
+                    try {
+                        int status = (int) car.get("status");
+                        Map<String, String> messageMap = new HashMap<>();
+                        messageMap.put("openid", openid);
+                        if (13 == status) {
+                            logger.info("ebo用户首次登录发送观察期信息+++++++++++++++++++++++++++++++++++");
+                            int i = DateUtils.cutTwoDateToDay(new Date(), (Date) car.get("observationEndTime"));
+                            messageMap.put("licensePlateNumber", String.valueOf(car.get("licensePlateNumber")));
+                            messageMap.put("amtCompensation", String.valueOf(car.get("amtCompensation"))); //互助额度
+                            messageMap.put("day", "剩余" + String.valueOf(i));
+                            messageMap.put("money", String.valueOf(car.get("amtCooperation")));
+                            messageMap.put("dayTime", DateUtils.getStringDateTime((Date) car.get("payTime")));
+                            weiXinUtils.sendTemplate(11, messageMap);
+                            try {
+                                String jobName = "observationJob_" + carId;
+                                Scheduler sche = schedulerFactory.getScheduler();
+                                JobKey jobKey = JobKey.jobKey(jobName, "JOB_GROUP_SYSTEM");
+                                if (sche.checkExists(jobKey)) {
+                                    logger.info("ebo用户首次登录发送观察期信息发送成功，修改保障中定时器openid={}", openid);
+                                    JobDetail jobDetail = sche.getJobDetail(jobKey);
+                                    JobDataMap jobDataMap = jobDetail.getJobDataMap();
+                                    Map<String, Object> params = (Map<String, Object>) jobDataMap.get("params");
+                                    params.put("openid", openid);
+                                    logger.info("==================新jobDataMap={}", jobDataMap);
+                                    QuartzUtils.removeJob(sche, jobName);
+                                    String cron = params.get("cron").toString();
+                                    QuartzUtils.addJob(sche, jobName, ObservationJob.class, params, cron);
+                                }
+                            } catch (Exception e) {
+                                logger.error("修改定时器异常", e);
+                            }
+                        } else if (20 == status) {
+                            Map dictionary = dictionaryService.findSingle(MapUtil.build().put("type","observationTime").over());
+                            messageMap.put("licensePlateNumber", String.valueOf(car.get("licensePlateNumber")));
+                            messageMap.put("observationTime",dictionary.get("value").toString());
+                            weiXinUtils.sendTemplate(13, messageMap);
+                        }
+                        messageMap.clear();
+                        logger.info("ebo车首次登录处理完成，修改车辆发送信息状态++++++++++++++++++++++++++++++++++++++++");
+                        messageMap.put("messageFlag", "2");
+                        messageMap.put("id", carId);
+                        carMapper.updateModel(messageMap);
+                    } catch (Exception e) {
+                        logger.error("ebo用户微信推送异常", e);
+                    }
+                }
+            });
+
+            // middle表关系更新
+            Map<String, Object> map = new HashMap<>();
+            map.put("openId", openid);
+            map.put("status", 1);
+            map.put("maintenanceshopId", "163");
+            map.put("customerId", customerId);
+            try {
+                middleCustomerMaintenanceshopMapper.updateSubscribeStatus4eBo(map);
+            } catch (Exception e) {
+                logger.error("", e);
+            }
         }
     }
 }

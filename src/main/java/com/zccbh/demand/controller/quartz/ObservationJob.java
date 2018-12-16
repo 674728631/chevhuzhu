@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,11 +86,13 @@ public class ObservationJob implements Job{
 					}
 				}
 			}
-			if(carMap.get("timeBegin") != null && DateUtils.getYearDate((Date)carMap.get("timeBegin")).compareTo(new Date()) == 1){
-				map.put("timeEnd", "2".equals(typeGuarantee)?DateUtils.getYearDate((Date)carMap.get("timeBegin")):"");
-			}else {
-				map.put("timeBegin", DateUtils.getDateTime());
-				map.put("timeEnd", "2".equals(typeGuarantee)?DateUtils.getYearDate(DateUtils.getDateTime()):"");
+
+			SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if (carMap.get("timeBegin") != null && DateUtils.getYearDate((Date) carMap.get("timeBegin")).compareTo(new Date()) == 1) {
+				map.put("timeEnd", "2".equals(typeGuarantee) ? time.format(DateUtils.getYearDate((Date) carMap.get("timeBegin"))) : "");
+			} else {
+				map.put("timeBegin", time.format(new Date()));
+				map.put("timeEnd", "2".equals(typeGuarantee) ? time.format(DateUtils.getYearDate(new Date())) : "");
 			}
 			map.put("id", params.get("carId").toString());
 			map.put("status",20);
@@ -122,4 +125,5 @@ public class ObservationJob implements Job{
 			logger.error("",e);
 		}
 	}
+
 }

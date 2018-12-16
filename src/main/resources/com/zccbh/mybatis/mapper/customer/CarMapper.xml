@@ -150,7 +150,8 @@
 
     <select id="findCarList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT ifnull(car.`level`,1) levela,car.*,c.customerPN,r.amt payAmt,e.statusEvent,e.eventNo,e.isInvalid
-        eventIsInvalid,o.status statusOrder,o.orderNo,o.isInvalid orderIsInvalid FROM cbh_car car
+        eventIsInvalid,o.status statusOrder,o.orderNo,o.isInvalid orderIsInvalid,
+        c.id AS userId FROM cbh_car car
         LEFT JOIN cbh_user_customer c ON car.customerId = c.id
         LEFT JOIN (select rr.createAt,rr.amt,rr.carId from (select MAX(r.id) id from cbh_record_recharge r where
         r.status=1 GROUP BY r.carId) r
@@ -637,7 +638,10 @@ where c.licensePlateNumber = #{licensePlateNumber}
     </update>
 
     <update id="updateCar4Year" parameterType="Map">
-        UPDATE cbh_car c SET c.amtCooperation = #{amtCooperation},c.typeGuarantee=2,c.timeEnd=date_add(c.timeBegin,interval 1 year)
-        WHERE c.id = #{id}
+        UPDATE cbh_car c SET c.amtCooperation = #{newAmtCooperation},
+        <if test="status == 20">c.timeEnd=date_add(c.timeBegin,interval 1 year),</if>
+        c.typeGuarantee = 2, c.telCarOwner = #{telCarOwner}
+        WHERE c.id = #{id} AND c.amtCooperation = #{oldAmtCooperation}
     </update>
+
 </mapper>

@@ -175,8 +175,18 @@ public class UserCustomerService {
                             Map<String, String> hashMap = new HashMap<>();
                             hashMap.put(CommonField.TOKEN, token);
                             hashMap.put(CommonField.MOBILE_NUMBER, String.valueOf(customer.get("customerPN")));
-                            hashMap.put("id", String.valueOf(customer.get("id")));
+                            String userId =  String.valueOf(customer.get("id"));
+                            hashMap.put("id", userId);
                             hashMap.put("flag", "1");
+                            try {
+                                Map<String,Object> tokenUp = new HashMap<>();
+                                Date tokenTime = DateUtils.getTokenTime();
+                                tokenUp.put("tokenaging", DateUtils.formatDate(tokenTime));
+                                tokenUp.put("id", userId);
+                                userCustomerMapper.updateModel(tokenUp);
+                            } catch (Exception e) {
+                                logger.error("更新token时间失败",e);
+                            }
                             return hashMap;
                         }
                         logger.info("token已失效>>>>>>");

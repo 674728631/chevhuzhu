@@ -3,23 +3,52 @@
 <mapper namespace="com.zccbh.demand.mapper.activities.PackYearsCodeMapper">
 
     <sql id="SELECT_ALL">
-        SELECT id,uuid,carId,customerId,use_status,use_time, create_time FROM cbh_packyears_code WHERE 1=1
+        SELECT id,code,carId,customerId,use_status,use_time, create_time FROM cbh_packyears_code WHERE 1=1
     </sql>
 
-    <insert id="saveSingle" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveUserAndCar" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO cbh_packyears_code
-          (uuid,carId,customerId,use_status,)
-        VALUES (#{uuid},#{carId},#{customerId},#{use_status})
+          (carId,customerId)
+        VALUES (#{carId},#{customerId})
     </insert>
 
     <select id="queryByCode" parameterType="Map" resultType="Map">
         <include refid="SELECT_ALL"/>
-        AND uuid = #{uuid}
+        AND code = #{code}
     </select>
 
     <update id="updateCode4Use" parameterType="String">
-        UPDATE cbh_packyears_code SET customerId = #{customerId} AND carId = #{carId} AND use_status = #{use_status} AND use_time = sysdate()
-        WHERE uuid = #{uuid}
+        UPDATE cbh_packyears_code SET use_status = #{use_status}, use_time = sysdate()
+        WHERE code = #{code}
     </update>
 
+    <update id="saveCode" parameterType="Map">
+        UPDATE cbh_packyears_code SET use_status = #{use_status} , code = #{code}
+        WHERE id = #{id} AND customerId = #{customerId} AND carId = #{carId}
+    </update>
+
+    <select id="getCodesByCarIdAndUserId" parameterType="String" resultType="Map">
+        <include refid="SELECT_ALL"/>
+        AND carId = #{carId} AND customerId = #{customerId}
+    </select>
+
+    <select id="getCarsByUserId" parameterType="String" resultType="Map">
+        SELECT
+            cpc.code,
+            cc.id,
+            cc.messageFlag,
+            cc.status,
+            cc.observationEndTime,
+            cc.licensePlateNumber,
+            cc.amtCompensation,
+            cc.amtCooperation,
+            cc.payTime
+        FROM
+            cbh_packyears_code cpc,
+            cbh_car cc
+        WHERE
+            cc.id = cpc.carId
+            AND cc.customerId = cpc.customerId
+            AND cpc.customerId = #{customerId}
+    </select>
 </mapper>
